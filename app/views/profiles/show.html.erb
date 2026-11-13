@@ -1,0 +1,113 @@
+<% content_for :title, "Saját profil" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Saját profil</h1>
+    <p class="page-subtitle">
+      Felhasználónév: <strong><%= @user.username %></strong> ·
+      Szerepkör: <strong><%= @user.role %></strong>
+    </p>
+  </div>
+  <%= link_to "Új rekord beküldése", new_record_path, class: "btn btn-primary" %>
+</div>
+
+<% if @user.errors.any? %>
+  <div class="error-box">
+    <strong>Hiba történt a mentés során:</strong>
+    <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<div class="form-row">
+  <div class="card" style="flex: 1 1 320px;">
+    <h2 class="section-title" style="margin-top: 0;">Profiladatok</h2>
+    <%= form_with model: @user, url: profile_path, method: :patch, local: true do |f| %>
+      <div class="form-group">
+        <%= f.label :display_name, "Megjelenített név *", class: "form-label" %>
+        <%= f.text_field :display_name, class: "form-control", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, (Setting.email_system? ? "E-mail cím *" : "E-mail cím (opcionális)"), class: "form-label" %>
+        <%= f.email_field :email, class: "form-control", required: Setting.email_system? %>
+      </div>
+
+      <%= f.submit "Adatok mentése", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+
+  <div class="card" style="flex: 1 1 320px;">
+    <h2 class="section-title" style="margin-top: 0;">Jelszócsere</h2>
+    <%= form_with url: profile_password_path, method: :patch, local: true do %>
+      <div class="form-group">
+        <%= label_tag :current_password, "Jelenlegi jelszó *", class: "form-label" %>
+        <%= password_field_tag :current_password, nil, class: "form-control", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :password, "Új jelszó * (min. 8 karakter)", class: "form-label" %>
+        <%= password_field_tag :password, nil, class: "form-control", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= label_tag :password_confirmation, "Új jelszó megerősítése *", class: "form-label" %>
+        <%= password_field_tag :password_confirmation, nil, class: "form-control", required: true %>
+      </div>
+
+      <%= submit_tag "Jelszó frissítése", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<h2 class="section-title">Saját beküldött rekordok</h2>
+
+<% if @records.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>Versenyszám</th>
+          <th>Eredmény</th>
+          <th>Teljesítés</th>
+          <th>Státusz / Megjegyzés</th>
+          <th>Műveletek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @records.each do |record| %>
+          <tr>
+            <td><%= link_to record.category.name, category_path(record.category), class: "category-link" %></td>
+            <td class="record-value"><%= record.category.display_record_value(record) %></td>
+            <td class="meta-text"><%= record.achieved_at.strftime("%Y-%m-%d") %></td>
+            <td>
+              <%= status_badge(record.status) %>
+              <% if record.admin_comment.present? %>
+                <div class="form-hint"><strong>Admin megjegyzés:</strong> <%= record.admin_comment %></div>
+              <% end %>
+            </td>
+            <td>
+              <% if record.pending? || admin? %>
+                <div class="actions-inline">
+                  <%= link_to "Szerkesztés", edit_record_path(record), class: "btn btn-outline btn-sm" %>
+                  <%= button_to "Törlés", record_path(record), method: :delete,
+                    data: { turbo_confirm: "Biztosan törlöd ezt a rekordot?" },
+                    class: "btn btn-danger btn-sm" %>
+                </div>
+              <% else %>
+                <span class="meta-text">–</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Még nem küldtél be rekordot.</p>
+  </div>
+<% end %>

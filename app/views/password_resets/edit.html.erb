@@ -1,0 +1,31 @@
+<% content_for :title, "Új jelszó beállítása" %>
+
+<div class="auth-box">
+  <h1 class="auth-title">Új jelszó beállítása</h1>
+
+  <% if @user.errors.any? %>
+    <div class="error-box">
+      <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @user, url: password_reset_path(token: @token), method: :patch, local: true do |f| %>
+    <div class="form-group">
+      <%= f.label :password, "Új jelszó * (min. 8 karakter)", class: "form-label" %>
+      <%= f.password_field :password, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation, "Új jelszó megerősítése *", class: "form-label" %>
+      <%= f.password_field :password_confirmation, class: "form-control", required: true %>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit "Jelszó mentése", class: "btn btn-primary btn-block" %>
+    </div>
+  <% end %>
+</div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="hu">
   <head>
-    <title>Palrekord</title>
+    <title><%= content_for?(:title) ? "#{yield(:title)} – PálRecord" : "PálRecord" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +11,41 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <div class="header-inner">
+        <%= link_to "PálRecord", root_path, class: "brand-link" %>
+
+        <nav class="header-nav">
+          <% if logged_in? %>
+            <%= link_to "Új rekord", new_record_path, class: "btn btn-primary" %>
+            <%= link_to "Profil (#{current_user.display_name})", profile_path, class: "btn btn-outline" %>
+            <% if admin? %>
+              <%= link_to "Admin", admin_root_path, class: "btn btn-outline" %>
+            <% end %>
+            <%= button_to "Kijelentkezés", logout_path, method: :delete, class: "btn btn-outline" %>
+          <% else %>
+            <%= link_to "Bejelentkezés", login_path, class: "btn btn-outline" %>
+            <%= link_to "Regisztráció", register_path, class: "btn btn-primary" %>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <% if flash[:notice].present? %>
+          <div class="flash flash-notice"><%= flash[:notice] %></div>
+        <% end %>
+        <% if flash[:alert].present? %>
+          <div class="flash flash-alert"><%= flash[:alert] %></div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      PálRecord · Baráti rekordgyűjtő
+    </footer>
   </body>
 </html>

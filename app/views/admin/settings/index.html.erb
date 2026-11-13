@@ -1,0 +1,45 @@
+<% content_for :title, "Admin – Rendszerbeállítások" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Adminisztráció – Rendszerbeállítások</h1>
+    <p class="page-subtitle">Futásidőben kapcsolható működési szabályok.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<div class="table-wrap">
+  <table class="minimal-table">
+    <thead>
+      <tr>
+        <th>Kulcs</th>
+        <th>Leírás</th>
+        <th>Jelenlegi érték</th>
+        <th>Művelet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @settings.each do |setting| %>
+        <tr>
+          <td><code><%= setting.key %></code></td>
+          <td class="meta-text"><%= setting.description.presence || Setting::DEFAULTS.dig(setting.key, :description) %></td>
+          <td>
+            <% if setting.boolean_value? %>
+              <span class="badge badge-approved">true (Bekapcsolva)</span>
+            <% else %>
+              <span class="badge badge-muted">false (Kikapcsolva)</span>
+            <% end %>
+          </td>
+          <td>
+            <%= button_to(setting.boolean_value? ? "Kikapcsolás (false)" : "Bekapcsolás (true)",
+              admin_setting_path(setting),
+              method: :patch,
+              params: { setting: { value: (!setting.boolean_value?).to_s } },
+              class: "btn btn-outline btn-sm") %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

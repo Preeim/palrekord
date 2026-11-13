@@ -1,0 +1,94 @@
+<% if record.errors.any? %>
+  <div class="error-box">
+    <strong>A rekord mentése nem sikerült:</strong>
+    <ul>
+      <% record.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: record, multipart: true, local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :category_id, "Versenyszám *", class: "form-label" %>
+    <%= f.select :category_id,
+      @categories.map { |c| [ "#{c.name} (#{c.unit} · #{value_type_hint(c.value_type)})", c.id ] },
+      { prompt: "-- Válassz versenyszámot --" },
+      class: "form-control", required: true %>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <%= f.label :value, "Elért érték *", class: "form-label" %>
+      <%= f.text_field :value, class: "form-control", required: true, placeholder: "pl. 18.42, 04:12.00 vagy 125.0" %>
+      <div class="form-hint">Add meg az értéket a választott kategória formátumában (mértékegység nélkül).</div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :achieved_at, "Teljesítés dátuma *", class: "form-label" %>
+      <%= f.date_field :achieved_at, class: "form-control", required: true %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :note, "Megjegyzés / tanúk", class: "form-label" %>
+    <%= f.text_area :note, class: "form-control", placeholder: "Körülmények, helyszín, jelenlévő tanúk..." %>
+  </div>
+
+  <div class="card" style="background: #fafafa;">
+    <h3 style="margin: 0 0 12px 0; font-size: 15px;">Verifikációs melléklet (opcionális)</h3>
+
+    <%= f.fields_for :attachments do |af| %>
+      <% if af.object.persisted? %>
+        <div class="form-group">
+          <strong>Meglévő melléklet (<%= af.object.file_type %>):</strong>
+          <% if af.object.file_attachment? %>
+            <%= link_to(af.object.original_filename.presence || af.object.file_type, attachment_path(af.object), target: "_blank") %>
+          <% elsif af.object.link? %>
+            <%= link_to af.object.file_path_or_url, af.object.file_path_or_url, target: "_blank", rel: "noopener noreferrer" %>
+          <% elsif af.object.text? %>
+            <span><%= af.object.text_content %></span>
+          <% end %>
+          <div style="margin-top: 6px;">
+            <label><%= af.check_box :_destroy %> Melléklet törlése</label>
+          </div>
+        </div>
+      <% else %>
+        <div class="form-group">
+          <%= af.label :file_type, "Melléklet típusa", class: "form-label" %>
+          <%= af.select :file_type,
+            [
+              ["-- Nincs melléklet --", ""],
+              ["Kép feltöltése (IMAGE)", "IMAGE"],
+              ["PDF dokumentum (PDF)", "PDF"],
+              ["Szöveges igazolás (TEXT)", "TEXT"],
+              ["Külső link / videó URL (LINK)", "LINK"]
+            ],
+            {},
+            class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= af.label :uploaded_file, "Fájl kiválasztása (IMAGE vagy PDF esetén)", class: "form-label" %>
+          <%= af.file_field :uploaded_file, class: "form-control", accept: "image/png,image/jpeg,image/gif,image/webp,application/pdf" %>
+        </div>
+
+        <div class="form-group">
+          <%= af.label :file_path_or_url, "Külső URL (LINK esetén)", class: "form-label" %>
+          <%= af.url_field :file_path_or_url, class: "form-control", placeholder: "https://..." %>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <%= af.label :text_content, "Szöveges igazolás (TEXT esetén)", class: "form-label" %>
+          <%= af.text_area :text_content, class: "form-control", placeholder: "Írd ide a szöveges igazolást..." %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="actions-inline">
+    <%= f.submit(record.persisted? ? "Rekord frissítése" : "Rekord beküldése", class: "btn btn-primary") %>
+    <%= link_to "Mégse", (record.persisted? ? profile_path : root_path), class: "btn btn-outline" %>
+  </div>
+<% end %>

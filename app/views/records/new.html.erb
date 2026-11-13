@@ -1,0 +1,18 @@
+<% content_for :title, "Új rekord beküldése" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Új rekord beküldése</h1>
+    <p class="page-subtitle">
+      <% if Setting.require_record_approval? %>
+        A beküldött rekord adminisztrátori jóváhagyás után kerül fel a ranglistára.
+      <% else %>
+        A beküldött rekord azonnal megjelenik a ranglistán.
+      <% end %>
+    </p>
+  </div>
+</div>
+
+<div class="card">
+  <%= render "form", record: @record %>
+</div>

@@ -1,0 +1,87 @@
+<% content_for :title, "Admin – Rekordok" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Adminisztráció – Rekordok elbírálása</h1>
+    <p class="page-subtitle">Beküldött eredmények jóváhagyása és elutasítása.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<div class="actions-inline" style="margin-bottom: 16px;">
+  <%= link_to "Függőben (#{@pending_count})", admin_records_path(status: "PENDING"), class: "btn btn-sm #{@status_filter == 'PENDING' ? 'btn-primary' : 'btn-outline'}" %>
+  <%= link_to "Elfogadva (#{@approved_count})", admin_records_path(status: "APPROVED"), class: "btn btn-sm #{@status_filter == 'APPROVED' ? 'btn-primary' : 'btn-outline'}" %>
+  <%= link_to "Elutasítva (#{@rejected_count})", admin_records_path(status: "REJECTED"), class: "btn btn-sm #{@status_filter == 'REJECTED' ? 'btn-primary' : 'btn-outline'}" %>
+  <%= link_to "Összes", admin_records_path(status: "ALL"), class: "btn btn-sm #{@status_filter == 'ALL' ? 'btn-primary' : 'btn-outline'}" %>
+</div>
+
+<% if @records.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>Versenyző / Versenyszám</th>
+          <th>Eredmény &amp; Dátum</th>
+          <th>Verifikáció &amp; Megjegyzés</th>
+          <th>Elbírálás</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @records.each do |record| %>
+          <tr>
+            <td>
+              <div><strong><%= record.user.display_name %></strong> (<%= record.user.username %>)</div>
+              <div class="meta-text"><%= link_to record.category.name, category_path(record.category) %></div>
+              <div style="margin-top: 4px;"><%= status_badge(record.status) %></div>
+            </td>
+            <td>
+              <div class="record-value"><%= record.category.display_record_value(record) %></div>
+              <div class="meta-text"><%= record.achieved_at.strftime("%Y-%m-%d") %></div>
+            </td>
+            <td>
+              <% if record.note.present? %>
+                <div class="meta-text" style="margin-bottom: 6px;"><%= record.note %></div>
+              <% end %>
+              <% if record.attachments.any? %>
+                <ul class="attachment-list">
+                  <% record.attachments.each do |att| %>
+                    <li>
+                      <% if att.file_attachment? %>
+                        <%= link_to(att.original_filename.presence || att.file_type, attachment_path(att), target: "_blank", rel: "noopener") %>
+                      <% elsif att.link? %>
+                        <%= link_to "Link", att.file_path_or_url, target: "_blank", rel: "noopener noreferrer" %>
+                      <% elsif att.text? %>
+                        <%= att.text_content %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <span class="empty-state">Nincs melléklet</span>
+              <% end %>
+            </td>
+            <td style="min-width: 240px;">
+              <%= form_with model: [:admin, record], url: admin_record_path(record, return_status: @status_filter), method: :patch, local: true do |f| %>
+                <%= f.text_field :admin_comment, value: record.admin_comment, class: "form-control", placeholder: "Megjegyzés / elutasítás indoklása..." %>
+                <div class="actions-inline" style="margin-top: 6px;">
+                  <%= f.button "Jóváhagyás", name: "record[status]", value: "APPROVED", class: "btn btn-primary btn-sm" %>
+                  <%= f.button "Elutasítás", name: "record[status]", value: "REJECTED", class: "btn btn-outline btn-sm" %>
+                </div>
+              <% end %>
+              <div style="margin-top: 6px;">
+                <%= button_to "Törlés", admin_record_path(record, return_status: @status_filter), method: :delete,
+                  data: { turbo_confirm: "Biztosan véglegesen törlöd ezt a rekordot?" },
+                  class: "btn btn-danger btn-sm" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Nincs megjeleníthető rekord ebben a szűrőben.</p>
+  </div>
+<% end %>

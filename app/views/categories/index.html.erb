@@ -1,0 +1,52 @@
+<% content_for :title, "Kategóriák" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Kategóriák</h1>
+    <p class="page-subtitle">Válassz egy versenyszámot a teljes ranglista megtekintéséhez.</p>
+  </div>
+
+  <% if can_create_category? %>
+    <%= link_to "Új versenyszám", new_category_path, class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<% if @categories.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>Kategória neve</th>
+          <th>Rendezés (sort_by)</th>
+          <th>Top 1 eredmény</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @categories.each do |category| %>
+          <% top = category.top_record %>
+          <tr>
+            <td>
+              <%= link_to category.name, category_path(category), class: "category-link" %>
+              <% if category.is_archived? %>
+                <span class="badge badge-muted">Archivált</span>
+              <% end %>
+            </td>
+            <td class="meta-text"><%= category.sort_by_label %></td>
+            <td>
+              <% if top.present? %>
+                <div class="record-value"><%= category.display_record_value(top) %></div>
+                <div class="record-user"><%= top.user.display_name %></div>
+              <% else %>
+                <span class="empty-state">Még nincs elfogadott rekord</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Még nincs felvett versenyszám.</p>
+  </div>
+<% end %>

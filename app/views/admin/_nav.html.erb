@@ -1,0 +1,6 @@
+<nav class="admin-nav">
+  <%= link_to "Rekordok elbírálása", admin_records_path, class: (controller_name == "records" ? "active" : "") %>
+  <%= link_to "Felhasználók", admin_users_path, class: (controller_name == "users" ? "active" : "") %>
+  <%= link_to "Meghívókódok", admin_invite_codes_path, class: (controller_name == "invite_codes" ? "active" : "") %>
+  <%= link_to "Beállítások", admin_settings_path, class: (controller_name == "settings" ? "active" : "") %>
+</nav>

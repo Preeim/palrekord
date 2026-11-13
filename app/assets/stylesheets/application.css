@@ -1,15 +1,460 @@
 /*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
+ * PálRecord – Minimalista stílusrendszer
  *
  *= require_tree .
  *= require_self
  */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #111111;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  color: #111111;
+}
+
+.site-header {
+  background-color: #fafafa;
+  border-bottom: 1px solid #dddddd;
+}
+
+.header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.brand-link {
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #111111;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.header-nav form {
+  margin: 0;
+  display: inline;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.site-footer {
+  background-color: #fafafa;
+  border-top: 1px solid #dddddd;
+  text-align: center;
+  padding: 18px 16px;
+  font-size: 12px;
+  color: #666666;
+}
+
+/* Gombok */
+.btn {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  border-radius: 3px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: #222222;
+  color: #ffffff;
+  border-color: #222222;
+}
+
+.btn-primary:hover {
+  background-color: #000000;
+}
+
+.btn-outline {
+  background-color: #ffffff;
+  color: #111111;
+  border-color: #bbbbbb;
+}
+
+.btn-outline:hover {
+  background-color: #f4f4f4;
+}
+
+.btn-danger {
+  background-color: #ffffff;
+  color: #991b1b;
+  border-color: #dc2626;
+}
+
+.btn-danger:hover {
+  background-color: #fef2f2;
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  padding: 9px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Flash üzenetek és hibadobozok */
+.flash {
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+}
+
+.flash-notice {
+  background-color: #f5f5f5;
+  border-color: #cccccc;
+  color: #111111;
+}
+
+.flash-alert {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #7f1d1d;
+}
+
+.error-box {
+  background-color: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  color: #7f1d1d;
+  font-size: 13px;
+}
+
+.error-box ul {
+  margin: 6px 0 0 18px;
+  padding: 0;
+}
+
+/* Oldalfejléc */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.page-title {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.page-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: #666666;
+}
+
+.section-title {
+  margin: 28px 0 12px 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #111111;
+}
+
+/* Táblázatok */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.minimal-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.minimal-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #555555;
+  text-transform: uppercase;
+  padding: 10px 8px;
+  border-top: 1.5px solid #cccccc;
+  border-bottom: 1.5px solid #cccccc;
+}
+
+.minimal-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #eeeeee;
+  vertical-align: top;
+}
+
+.minimal-table tbody tr:last-child td {
+  border-bottom-color: #cccccc;
+}
+
+.category-link {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111111;
+  text-decoration: underline;
+}
+
+.meta-text {
+  font-size: 13px;
+  color: #555555;
+}
+
+.record-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.record-user {
+  font-size: 12px;
+  color: #666666;
+}
+
+.empty-state {
+  font-size: 13px;
+  font-style: italic;
+  color: #888888;
+}
+
+/* Autentikációs doboz */
+.auth-box {
+  max-width: 380px;
+  margin: 24px auto;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 24px;
+  background-color: #ffffff;
+}
+
+.auth-title {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.auth-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #eeeeee;
+  text-align: center;
+  font-size: 13px;
+  color: #444444;
+}
+
+.auth-footer a {
+  font-weight: 600;
+}
+
+.auth-sublink {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: #555555;
+}
+
+/* Űrlapok és kártyák */
+.card {
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  padding: 20px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #111111;
+  background-color: #ffffff;
+  border: 1px solid #bbbbbb;
+  border-radius: 3px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #222222;
+}
+
+textarea.form-control {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-hint {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #666666;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-row > .form-group {
+  flex: 1 1 200px;
+}
+
+.actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.actions-inline form {
+  margin: 0;
+  display: inline;
+}
+
+/* Jelvények (badges) */
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+}
+
+.badge-pending {
+  background-color: #fefce8;
+  border-color: #eab308;
+  color: #713f12;
+}
+
+.badge-approved {
+  background-color: #f0fdf4;
+  border-color: #22c55e;
+  color: #14532d;
+}
+
+.badge-rejected {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+  color: #7f1d1d;
+}
+
+.badge-muted {
+  background-color: #f5f5f5;
+  border-color: #cccccc;
+  color: #555555;
+}
+
+/* Admin navigáció */
+.admin-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.admin-nav a {
+  padding: 6px 12px;
+  font-size: 13px;
+  text-decoration: none;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  background-color: #ffffff;
+}
+
+.admin-nav a.active {
+  background-color: #222222;
+  border-color: #222222;
+  color: #ffffff;
+}
+
+.temp-password-box {
+  background-color: #fafafa;
+  border: 1px solid #222222;
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.temp-password-box code {
+  font-size: 15px;
+  font-weight: 700;
+  background-color: #eeeeee;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.attachment-list {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12px;
+}

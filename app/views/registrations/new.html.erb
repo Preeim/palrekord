@@ -1,0 +1,59 @@
+<% content_for :title, "Regisztráció" %>
+
+<div class="auth-box">
+  <h1 class="auth-title">Regisztráció</h1>
+
+  <% if @user.errors.any? %>
+    <div class="error-box">
+      <strong>A regisztráció nem sikerült:</strong>
+      <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @user, url: register_path, method: :post, local: true do |f| %>
+    <div class="form-group">
+      <%= f.label :username, "Felhasználónév *", class: "form-label" %>
+      <%= f.text_field :username, class: "form-control", required: true, autofocus: true, placeholder: "pl. bence99" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :display_name, "Megjelenített név (becenév) *", class: "form-label" %>
+      <%= f.text_field :display_name, class: "form-control", required: true, placeholder: "pl. Nagy Bence" %>
+    </div>
+
+    <div class="form-group">
+      <% email_required = Setting.email_system? %>
+      <%= f.label :email, (email_required ? "E-mail cím *" : "E-mail cím (opcionális)"), class: "form-label" %>
+      <%= f.email_field :email, class: "form-control", required: email_required, placeholder: "bence@example.com" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password, "Jelszó * (min. 8 karakter)", class: "form-label" %>
+      <%= f.password_field :password, class: "form-control", required: true, placeholder: "••••••••" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation, "Jelszó megerősítése *", class: "form-label" %>
+      <%= f.password_field :password_confirmation, class: "form-control", required: true, placeholder: "••••••••" %>
+    </div>
+
+    <% if Setting.require_invite_code? %>
+      <div class="form-group">
+        <%= label_tag :invite_code, "Meghívókód *", class: "form-label" %>
+        <%= text_field_tag :invite_code, params[:invite_code], class: "form-control", required: true, placeholder: "pl. PAL-8F3K9A" %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.submit "Fiók létrehozása", class: "btn btn-primary btn-block" %>
+    </div>
+  <% end %>
+
+  <div class="auth-footer">
+    Már van fiókod? <%= link_to "Bejelentkezés", login_path %>
+  </div>
+</div>

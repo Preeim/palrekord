@@ -1,0 +1,94 @@
+<% content_for :title, "Admin – Felhasználók" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Adminisztráció – Felhasználók</h1>
+    <p class="page-subtitle">Szerepkörök, felfüggesztés és ideiglenes jelszó generálása.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<% if flash[:temp_password_value].present? %>
+  <div class="temp-password-box">
+    <strong>Egyszeri ideiglenes jelszó (<%= flash[:temp_password_user] %>):</strong>
+    <code><%= flash[:temp_password_value] %></code>
+    <div class="form-hint">Másold ki és add át a felhasználónak. A következő belépéskor kötelező lesz megváltoztatnia.</div>
+  </div>
+<% end %>
+
+<div class="table-wrap">
+  <table class="minimal-table">
+    <thead>
+      <tr>
+        <th>Felhasználó</th>
+        <th>E-mail</th>
+        <th>Szerepkör</th>
+        <th>Állapot</th>
+        <th>Utolsó belépés</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td>
+            <div><strong><%= user.display_name %></strong></div>
+            <div class="meta-text">@<%= user.username %></div>
+          </td>
+          <td class="meta-text"><%= user.email.presence || "–" %></td>
+          <td>
+            <span class="badge <%= user.admin? ? 'badge-approved' : 'badge-muted' %>"><%= user.role %></span>
+          </td>
+          <td>
+            <% if user.is_active? %>
+              <span class="badge badge-approved">Aktív</span>
+            <% else %>
+              <span class="badge badge-rejected">Felfüggesztve</span>
+            <% end %>
+            <% if user.must_change_password? %>
+              <div class="form-hint">Jelszócsere vár</div>
+            <% end %>
+          </td>
+          <td class="meta-text">
+            <%= user.last_login_at ? user.last_login_at.strftime("%Y-%m-%d %H:%M") : "Még nem lépett be" %>
+          </td>
+          <td>
+            <div class="actions-inline">
+              <% next_role = user.admin? ? "TAG" : "ADMIN" %>
+              <% unless user.admin? && user.last_active_admin? %>
+                <%= button_to(user.admin? ? "Tag-gá minősít" : "Adminná tesz",
+                  admin_user_path(user),
+                  method: :patch,
+                  params: { user: { role: next_role } },
+                  class: "btn btn-outline btn-sm") %>
+              <% end %>
+
+              <% unless user == current_user %>
+                <%= button_to(user.is_active? ? "Felfüggeszt" : "Aktivál",
+                  admin_user_path(user),
+                  method: :patch,
+                  params: { user: { is_active: !user.is_active? } },
+                  class: "btn btn-outline btn-sm") %>
+              <% end %>
+
+              <%= button_to "Ideiglenes jelszó",
+                reset_password_admin_user_path(user),
+                method: :post,
+                data: { turbo_confirm: "Biztosan új ideiglenes jelszót generálsz #{user.username} részére?" },
+                class: "btn btn-outline btn-sm" %>
+
+              <% unless user == current_user || user.last_active_admin? %>
+                <%= button_to "Törlés",
+                  admin_user_path(user),
+                  method: :delete,
+                  data: { turbo_confirm: "Biztosan törlöd #{user.username} fiókját és minden rekordját?" },
+                  class: "btn btn-danger btn-sm" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

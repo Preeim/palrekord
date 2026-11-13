@@ -1,0 +1,87 @@
+<% content_for :title, @category.name %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">
+      <%= @category.name %>
+      <% if @category.is_archived? %>
+        <span class="badge badge-muted">Archivált</span>
+      <% end %>
+    </h1>
+    <p class="page-subtitle">
+      Mértékegység: <strong><%= @category.unit %></strong> ·
+      Rendezés: <strong><%= @category.sort_by_label %></strong>
+    </p>
+  </div>
+
+  <div class="actions-inline">
+    <%= link_to "← Vissza", root_path, class: "btn btn-outline" %>
+    <% if logged_in? && !@category.is_archived? %>
+      <%= link_to "Rekord beküldése", new_record_path(category_id: @category.id), class: "btn btn-primary" %>
+    <% end %>
+    <% if admin? %>
+      <%= link_to "Kategória szerkesztése", edit_category_path(@category), class: "btn btn-outline" %>
+    <% end %>
+  </div>
+</div>
+
+<% if @category.description.present? %>
+  <div class="card">
+    <strong>Szabályzat / leírás:</strong>
+    <div><%= simple_format(h(@category.description)) %></div>
+  </div>
+<% end %>
+
+<h2 class="section-title">Ranglista (Elfogadott rekordok)</h2>
+
+<% if @records.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Versenyző</th>
+          <th>Eredmény</th>
+          <th>Teljesítés</th>
+          <th>Verifikáció</th>
+          <th>Megjegyzés</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @records.each_with_index do |record, index| %>
+          <tr>
+            <td><strong><%= index + 1 %>.</strong></td>
+            <td><%= record.user.display_name %></td>
+            <td class="record-value"><%= @category.display_record_value(record) %></td>
+            <td class="meta-text"><%= record.achieved_at.strftime("%Y-%m-%d") %></td>
+            <td>
+              <% if record.attachments.any? %>
+                <ul class="attachment-list">
+                  <% record.attachments.each do |attachment| %>
+                    <li>
+                      <% if attachment.file_attachment? %>
+                        <%= link_to(attachment.original_filename.presence || attachment.file_type, attachment_path(attachment), target: "_blank", rel: "noopener") %>
+                        (<%= attachment.file_type %>)
+                      <% elsif attachment.link? %>
+                        <%= link_to "Külső hivatkozás", attachment.file_path_or_url, target: "_blank", rel: "noopener noreferrer" %>
+                      <% elsif attachment.text? %>
+                        <span><%= truncate(attachment.text_content, length: 80) %></span>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% else %>
+                <span class="empty-state">Nincs</span>
+              <% end %>
+            </td>
+            <td class="meta-text"><%= record.note.presence || "–" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Még nincs elfogadott rekord ebben a versenyszámban.</p>
+  </div>
+<% end %>

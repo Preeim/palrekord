@@ -1,0 +1,29 @@
+<% content_for :title, "Elfelejtett jelszó" %>
+
+<div class="auth-box">
+  <h1 class="auth-title">Elfelejtett jelszó</h1>
+
+  <% if @email_system %>
+    <p class="meta-text">Add meg a fiókodhoz tartozó e-mail címet, és küldünk egy 15 percig érvényes visszaállító hivatkozást.</p>
+
+    <%= form_with url: password_reset_path, method: :post, local: true do %>
+      <div class="form-group">
+        <%= label_tag :email, "E-mail cím", class: "form-label" %>
+        <%= email_field_tag :email, params[:email], class: "form-control", required: true, placeholder: "bence@example.com" %>
+      </div>
+
+      <div class="form-group">
+        <%= submit_tag "Visszaállító link küldése", class: "btn btn-primary btn-block" %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="flash flash-notice">
+      Az automatikus e-mailes jelszó-visszaállítás jelenleg ki van kapcsolva a rendszerben.
+      Elfelejtett jelszó esetén kérj egy ideiglenes jelszót az <strong>Adminisztrátortól</strong>.
+    </div>
+  <% end %>
+
+  <div class="auth-footer">
+    <%= link_to "Vissza a bejelentkezéshez", login_path %>
+  </div>
+</div>

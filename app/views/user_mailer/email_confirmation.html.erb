@@ -1,0 +1,7 @@
+<h1>Üdvözlünk a PálRecordon, <%= @user.display_name %>!</h1>
+
+<p>A regisztrációd befejezéséhez kérjük, erősítsd meg az e-mail címedet az alábbi hivatkozásra kattintva (24 óráig érvényes):</p>
+
+<p><%= link_to "E-mail cím megerősítése", @confirmation_url %></p>
+
+<p>Ha a link nem működik, másold be a böngészőbe:<br><%= @confirmation_url %></p>
