@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 900" width="1280" height="900" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    <!-- Crow's foot / many marker -->
+    <marker id="many" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 6 L 10 1 M 0 6 L 10 6 M 0 6 L 10 11" stroke="#475569" stroke-width="1.6" fill="none"/>
+    </marker>
+    <!-- One marker -->
+    <marker id="one" viewBox="0 0 12 12" refX="4" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 5 1 L 5 11" stroke="#475569" stroke-width="1.8" fill="none"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="900" fill="#f8fafc"/>
+
+  <!-- Title -->
+  <text x="40" y="34" font-size="20" font-weight="700" fill="#0f172a">PálRecord – Entitás-kapcsolati Diagram (MySQL)</text>
+  <text x="40" y="54" font-size="12" fill="#64748b">PK = Elsődleges kulcs | FK = Idegen kulcs | UK = Egyedi kulcs (UNIQUE)</text>
+
+  <!-- ==================== RELATIONSHIPS ==================== -->
+  <!-- INVITE_CODES (1) -> USERS (0..N) [invite_code_id] -->
+  <path d="M 380 140 L 470 140" stroke="#475569" stroke-width="1.8" fill="none" marker-start="url(#one)" marker-end="url(#many)"/>
+  <rect x="392" y="122" width="66" height="16" rx="3" fill="#f8fafc"/>
+  <text x="425" y="134" font-size="10" text-anchor="middle" fill="#475569">invite_code_id</text>
+
+  <!-- USERS (1) -> INVITE_CODES (0..N) [created_by_id] -->
+  <path d="M 470 250 L 380 250" stroke="#475569" stroke-width="1.8" fill="none" marker-start="url(#one)" marker-end="url(#many)"/>
+  <rect x="392" y="232" width="66" height="16" rx="3" fill="#f8fafc"/>
+  <text x="425" y="244" font-size="10" text-anchor="middle" fill="#475569">created_by_id</text>
+
+  <!-- USERS (1) -> CATEGORIES (0..N) [created_by_id] -->
+  <path d="M 470 390 L 425 390 L 425 510 L 380 510" stroke="#475569" stroke-width="1.8" fill="none" marker-start="url(#one)" marker-end="url(#many)"/>
+  <rect x="390" y="438" width="70" height="16" rx="3" fill="#f8fafc"/>
+  <text x="425" y="450" font-size="10" text-anchor="middle" fill="#475569">created_by_id</text>
+
+  <!-- USERS (1) -> RECORDS (0..N) [user_id, reviewed_by_id] -->
+  <path d="M 640 430 L 640 480" stroke="#475569" stroke-width="1.8" fill="none" marker-start="url(#one)" marker-end="url(#many)"/>
+  <rect x="575" y="446" width="130" height="16" rx="3" fill="#f8fafc"/>
+  <text x="640" y="458" font-size="10" text-anchor="middle" fill="#475569">user_id / reviewed_by_id</text>
+
+  <!-- CATEGORIES (1) -> RECORDS (0..N) [category_id] -->
+  <path d="M 380 600 L 470 600" stroke="#475569" stroke-width="1.8" fill="none" marker-start="url(#one)" marker-end="url(#many)"/>
+  <rect x="395" y="582" width="60" height="16" rx="3" fill="#f8fafc"/>
+  <text x="425" y="594" font-size="10" text-anchor="middle" fill="#475569">category_id</text>
+
+  <!-- RECORDS (1) -> ATTACHMENTS (0..N) [record_id] -->
+  <path d="M 810 600 L 900 600" stroke="#475569" stroke-width="1.8" fill="none" marker-start="url(#one)" marker-end="url(#many)"/>
+  <rect x="828" y="582" width="54" height="16" rx="3" fill="#f8fafc"/>
+  <text x="855" y="594" font-size="10" text-anchor="middle" fill="#475569">record_id</text>
+
+  <!-- ==================== TABLE: INVITE_CODES ==================== -->
+  <g transform="translate(40, 80)" filter="url(#shadow)">
+    <rect width="340" height="270" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#1e293b"/>
+    <text x="16" y="23" font-size="14" font-weight="700" fill="#ffffff">invite_codes</text>
+    <text x="324" y="23" font-size="11" text-anchor="end" fill="#94a3b8">Meghívókódok</text>
+
+    <g font-size="12" fill="#334155">
+      <text x="16" y="58" font-weight="700" fill="#0f172a">PK</text><text x="46" y="58">id</text><text x="324" y="58" text-anchor="end" fill="#64748b">bigint</text>
+      <text x="16" y="82" font-weight="700" fill="#2563eb">UK</text><text x="46" y="82">code</text><text x="324" y="82" text-anchor="end" fill="#64748b">varchar(64) NOT NULL</text>
+      <text x="46" y="106">label</text><text x="324" y="106" text-anchor="end" fill="#64748b">varchar(100)</text>
+      <text x="46" y="130">max_uses</text><text x="324" y="130" text-anchor="end" fill="#64748b">int (NULL=korlátlan)</text>
+      <text x="46" y="154">uses_count</text><text x="324" y="154" text-anchor="end" fill="#64748b">int DEFAULT 0</text>
+      <text x="46" y="178">expires_at</text><text x="324" y="178" text-anchor="end" fill="#64748b">datetime(6)</text>
+      <text x="46" y="202">is_active</text><text x="324" y="202" text-anchor="end" fill="#64748b">boolean DEFAULT true</text>
+      <text x="16" y="226" font-weight="700" fill="#d97706">FK</text><text x="46" y="226">created_by_id</text><text x="324" y="226" text-anchor="end" fill="#64748b">bigint → users.id</text>
+      <text x="46" y="250" fill="#64748b">created_at / updated_at</text><text x="324" y="250" text-anchor="end" fill="#64748b">datetime(6)</text>
+    </g>
+  </g>
+
+  <!-- ==================== TABLE: USERS ==================== -->
+  <g transform="translate(470, 80)" filter="url(#shadow)">
+    <rect width="340" height="350" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#1d4ed8"/>
+    <text x="16" y="23" font-size="14" font-weight="700" fill="#ffffff">users</text>
+    <text x="324" y="23" font-size="11" text-anchor="end" fill="#bfdbfe">Felhasználók</text>
+
+    <g font-size="12" fill="#334155">
+      <text x="16" y="58" font-weight="700" fill="#0f172a">PK</text><text x="46" y="58">id</text><text x="324" y="58" text-anchor="end" fill="#64748b">bigint</text>
+      <text x="16" y="82" font-weight="700" fill="#2563eb">UK</text><text x="46" y="82">username</text><text x="324" y="82" text-anchor="end" fill="#64748b">varchar(50) NOT NULL</text>
+      <text x="46" y="106">display_name</text><text x="324" y="106" text-anchor="end" fill="#64748b">varchar(100) NOT NULL</text>
+      <text x="16" y="130" font-weight="700" fill="#2563eb">UK</text><text x="46" y="130">email</text><text x="324" y="130" text-anchor="end" fill="#64748b">varchar(255) NULLABLE</text>
+      <text x="46" y="154">password_digest</text><text x="324" y="154" text-anchor="end" fill="#64748b">varchar(255) NOT NULL</text>
+      <text x="46" y="178">role</text><text x="324" y="178" text-anchor="end" fill="#64748b">varchar(20) 'TAG'|'ADMIN'</text>
+      <text x="46" y="202">is_active</text><text x="324" y="202" text-anchor="end" fill="#64748b">boolean DEFAULT true</text>
+      <text x="46" y="226">must_change_password</text><text x="324" y="226" text-anchor="end" fill="#64748b">boolean DEFAULT false</text>
+      <text x="46" y="250">confirmed_at</text><text x="324" y="250" text-anchor="end" fill="#64748b">datetime(6) NULLABLE</text>
+      <text x="46" y="274">last_login_at</text><text x="324" y="274" text-anchor="end" fill="#64748b">datetime(6) NULLABLE</text>
+      <text x="16" y="298" font-weight="700" fill="#d97706">FK</text><text x="46" y="298">invite_code_id</text><text x="324" y="298" text-anchor="end" fill="#64748b">bigint → invite_codes.id</text>
+      <text x="46" y="326" fill="#64748b">created_at / updated_at</text><text x="324" y="326" text-anchor="end" fill="#64748b">datetime(6)</text>
+    </g>
+  </g>
+
+  <!-- ==================== TABLE: SETTINGS ==================== -->
+  <g transform="translate(900, 80)" filter="url(#shadow)">
+    <rect width="340" height="170" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#475569"/>
+    <text x="16" y="23" font-size="14" font-weight="700" fill="#ffffff">settings</text>
+    <text x="324" y="23" font-size="11" text-anchor="end" fill="#cbd5e1">Rendszerbeállítások</text>
+
+    <g font-size="12" fill="#334155">
+      <text x="16" y="58" font-weight="700" fill="#0f172a">PK</text><text x="46" y="58">id</text><text x="324" y="58" text-anchor="end" fill="#64748b">bigint</text>
+      <text x="16" y="82" font-weight="700" fill="#2563eb">UK</text><text x="46" y="82">key</text><text x="324" y="82" text-anchor="end" fill="#64748b">varchar(100) NOT NULL</text>
+      <text x="46" y="106">value</text><text x="324" y="106" text-anchor="end" fill="#64748b">varchar(255) NOT NULL</text>
+      <text x="46" y="130">description</text><text x="324" y="130" text-anchor="end" fill="#64748b">varchar(255)</text>
+      <text x="46" y="154" fill="#64748b">created_at / updated_at</text><text x="324" y="154" text-anchor="end" fill="#64748b">datetime(6)</text>
+    </g>
+  </g>
+
+  <!-- ==================== TABLE: CATEGORIES ==================== -->
+  <g transform="translate(40, 480)" filter="url(#shadow)">
+    <rect width="340" height="270" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#0f766e"/>
+    <text x="16" y="23" font-size="14" font-weight="700" fill="#ffffff">categories</text>
+    <text x="324" y="23" font-size="11" text-anchor="end" fill="#99f6e4">Versenyszámok</text>
+
+    <g font-size="12" fill="#334155">
+      <text x="16" y="58" font-weight="700" fill="#0f172a">PK</text><text x="46" y="58">id</text><text x="324" y="58" text-anchor="end" fill="#64748b">bigint</text>
+      <text x="16" y="82" font-weight="700" fill="#2563eb">UK</text><text x="46" y="82">name</text><text x="324" y="82" text-anchor="end" fill="#64748b">varchar(150) NOT NULL</text>
+      <text x="46" y="106">description</text><text x="324" y="106" text-anchor="end" fill="#64748b">text</text>
+      <text x="46" y="130">unit</text><text x="324" y="130" text-anchor="end" fill="#64748b">varchar(30) NOT NULL</text>
+      <text x="46" y="154">value_type</text><text x="324" y="154" text-anchor="end" fill="#64748b">INT|DOUBLE|TIME|DATE</text>
+      <text x="46" y="178">sort_direction</text><text x="324" y="178" text-anchor="end" fill="#64748b">varchar(10) 'ASC'|'DESC'</text>
+      <text x="46" y="202">is_archived</text><text x="324" y="202" text-anchor="end" fill="#64748b">boolean DEFAULT false</text>
+      <text x="16" y="226" font-weight="700" fill="#d97706">FK</text><text x="46" y="226">created_by_id</text><text x="324" y="226" text-anchor="end" fill="#64748b">bigint → users.id</text>
+      <text x="46" y="250" fill="#64748b">created_at / updated_at</text><text x="324" y="250" text-anchor="end" fill="#64748b">datetime(6)</text>
+    </g>
+  </g>
+
+  <!-- ==================== TABLE: RECORDS ==================== -->
+  <g transform="translate(470, 480)" filter="url(#shadow)">
+    <rect width="340" height="360" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#b45309"/>
+    <text x="16" y="23" font-size="14" font-weight="700" fill="#ffffff">records</text>
+    <text x="324" y="23" font-size="11" text-anchor="end" fill="#fde68a">Beküldött eredmények</text>
+
+    <g font-size="12" fill="#334155">
+      <text x="16" y="58" font-weight="700" fill="#0f172a">PK</text><text x="46" y="58">id</text><text x="324" y="58" text-anchor="end" fill="#64748b">bigint</text>
+      <text x="16" y="82" font-weight="700" fill="#d97706">FK</text><text x="46" y="82">user_id</text><text x="324" y="82" text-anchor="end" fill="#64748b">bigint → users.id</text>
+      <text x="16" y="106" font-weight="700" fill="#d97706">FK</text><text x="46" y="106">category_id</text><text x="324" y="106" text-anchor="end" fill="#64748b">bigint → categories.id</text>
+      <text x="46" y="130">value</text><text x="324" y="130" text-anchor="end" fill="#64748b">varchar(100) NOT NULL</text>
+      <text x="46" y="154">sort_value</text><text x="324" y="154" text-anchor="end" fill="#64748b">decimal(16,4) NOT NULL</text>
+      <text x="46" y="178">achieved_at</text><text x="324" y="178" text-anchor="end" fill="#64748b">date NOT NULL</text>
+      <text x="46" y="202">note</text><text x="324" y="202" text-anchor="end" fill="#64748b">text</text>
+      <text x="46" y="226">status</text><text x="324" y="226" text-anchor="end" fill="#64748b">PENDING|APPROVED|REJECTED</text>
+      <text x="46" y="250">admin_comment</text><text x="324" y="250" text-anchor="end" fill="#64748b">text</text>
+      <text x="16" y="274" font-weight="700" fill="#d97706">FK</text><text x="46" y="274">reviewed_by_id</text><text x="324" y="274" text-anchor="end" fill="#64748b">bigint → users.id</text>
+      <text x="46" y="298">reviewed_at</text><text x="324" y="298" text-anchor="end" fill="#64748b">datetime(6)</text>
+      <text x="46" y="330" fill="#64748b">created_at / updated_at</text><text x="324" y="330" text-anchor="end" fill="#64748b">datetime(6)</text>
+    </g>
+  </g>
+
+  <!-- ==================== TABLE: ATTACHMENTS ==================== -->
+  <g transform="translate(900, 480)" filter="url(#shadow)">
+    <rect width="340" height="260" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#6d28d9"/>
+    <text x="16" y="23" font-size="14" font-weight="700" fill="#ffffff">attachments</text>
+    <text x="324" y="23" font-size="11" text-anchor="end" fill="#ddd6fe">Verifikációs anyagok</text>
+
+    <g font-size="12" fill="#334155">
+      <text x="16" y="58" font-weight="700" fill="#0f172a">PK</text><text x="46" y="58">id</text><text x="324" y="58" text-anchor="end" fill="#64748b">bigint</text>
+      <text x="16" y="82" font-weight="700" fill="#d97706">FK</text><text x="46" y="82">record_id</text><text x="324" y="82" text-anchor="end" fill="#64748b">bigint → records.id</text>
+      <text x="46" y="106">file_type</text><text x="324" y="106" text-anchor="end" fill="#64748b">IMAGE|PDF|TEXT|LINK</text>
+      <text x="46" y="130">file_path_or_url</text><text x="324" y="130" text-anchor="end" fill="#64748b">varchar(500)</text>
+      <text x="46" y="154">original_filename</text><text x="324" y="154" text-anchor="end" fill="#64748b">varchar(255)</text>
+      <text x="46" y="178">text_content</text><text x="324" y="178" text-anchor="end" fill="#64748b">text</text>
+      <text x="46" y="202">uploaded_at</text><text x="324" y="202" text-anchor="end" fill="#64748b">datetime(6) NOT NULL</text>
+      <text x="46" y="234" fill="#64748b">created_at / updated_at</text><text x="324" y="234" text-anchor="end" fill="#64748b">datetime(6)</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <!-- Background -->
+  <rect width="1200" height="760" fill="#ffffff"/>
+
+  <!-- HEADER -->
+  <rect x="0" y="0" width="1200" height="60" fill="#fafafa"/>
+  <line x1="0" y1="60" x2="1200" y2="60" stroke="#dddddd" stroke-width="1"/>
+  <text x="40" y="36" font-size="18" font-weight="700" fill="#111111">PálRecord</text>
+
+  <!-- Header Right Buttons -->
+  <rect x="935" y="16" width="108" height="28" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="989" y="34" font-size="13" text-anchor="middle" fill="#111111">Bejelentkezés</text>
+
+  <rect x="1055" y="16" width="105" height="28" rx="3" fill="#222222"/>
+  <text x="1107" y="34" font-size="13" text-anchor="middle" fill="#ffffff">Regisztráció</text>
+
+  <!-- CENTERED BOX (410, 95, w=380, h=575) -->
+  <rect x="410" y="95" width="380" height="575" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+
+  <text x="442" y="136" font-size="20" font-weight="700" fill="#111111">Regisztráció</text>
+
+  <!-- Username -->
+  <text x="442" y="170" font-size="13" font-weight="600" fill="#333333">Felhasználónév *</text>
+  <rect x="442" y="180" width="316" height="34" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="454" y="202" font-size="13" fill="#999999">pl. bence99</text>
+
+  <!-- Display Name -->
+  <text x="442" y="240" font-size="13" font-weight="600" fill="#333333">Megjelenített név (becenév) *</text>
+  <rect x="442" y="250" width="316" height="34" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="454" y="272" font-size="13" fill="#999999">pl. Nagy Bence</text>
+
+  <!-- Email (optional) -->
+  <text x="442" y="310" font-size="13" font-weight="600" fill="#333333">E-mail cím (opcionális)</text>
+  <rect x="442" y="320" width="316" height="34" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="454" y="342" font-size="13" fill="#999999">bence@example.com</text>
+
+  <!-- Password -->
+  <text x="442" y="380" font-size="13" font-weight="600" fill="#333333">Jelszó *</text>
+  <rect x="442" y="390" width="316" height="34" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="454" y="412" font-size="13" fill="#999999">••••••••</text>
+
+  <!-- Invite Code -->
+  <text x="442" y="450" font-size="13" font-weight="600" fill="#333333">Meghívókód *</text>
+  <rect x="442" y="460" width="316" height="34" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="454" y="482" font-size="13" fill="#999999">pl. PAL-8F3K9A</text>
+
+  <!-- Submit button -->
+  <rect x="442" y="518" width="316" height="38" rx="3" fill="#222222"/>
+  <text x="600" y="542" font-size="14" font-weight="600" text-anchor="middle" fill="#ffffff">Fiók létrehozása</text>
+
+  <!-- Bottom divider + toggle to Login -->
+  <line x1="442" y1="582" x2="758" y2="582" stroke="#eeeeee" stroke-width="1"/>
+  <text x="600" y="612" font-size="13" text-anchor="middle" fill="#444444">
+    Már van fiókod? <tspan font-weight="600" fill="#111111" text-decoration="underline">Bejelentkezés</tspan>
+  </text>
+
+  <!-- FOOTER -->
+  <rect x="0" y="704" width="1200" height="56" fill="#fafafa"/>
+  <line x1="0" y1="704" x2="1200" y2="704" stroke="#dddddd" stroke-width="1"/>
+  <text x="600" y="736" font-size="12" text-anchor="middle" fill="#666666">PálRecord · Baráti rekordgyűjtő</text>
+</svg>
