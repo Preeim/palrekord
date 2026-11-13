@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-# Környezeti változók betöltése (rbenv/rvm/path)
-[ -f ~/.profile ] && source ~/.profile
-[ -f ~/.bashrc ] && source ~/.bashrc
+# Ruby verziókezelők (rbenv / rvm / asdf / mise) betöltése nem-interaktív shellben is
+export PATH="$HOME/.rbenv/shims:$HOME/.rbenv/bin:$HOME/.local/share/mise/shims:$HOME/.asdf/shims:/usr/local/bin:$PATH"
+[ -s "$HOME/.rvm/scripts/rvm" ] && source "$HOME/.rvm/scripts/rvm"
 
 echo "=== Deploy inditasa: $(date) ==="
 
