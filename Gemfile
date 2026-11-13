@@ -5,6 +5,9 @@ ruby "~> 3.3.0"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.1.6"
 
+# Pin minitest to 5.25.x for Rails 7.1.6 compatibility
+gem "minitest", "~> 5.25"
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 

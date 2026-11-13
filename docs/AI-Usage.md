@@ -166,3 +166,20 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
 - **Módosított fájlok:**
   - `docs/AI-Usage.md` (módosítva)
+
+## 2026-11-13 20:50 – CI Minitest 6.1.0 / Rails 7.1.6 hiba javítása
+
+- **Prompt:** CI hiba volt. (`railties-7.1.6/lib/rails/test_unit/line_filtering.rb:7:in 'run': wrong number of arguments (given 3, expected 1..2) (ArgumentError)` ... `minitest-6.1.0`) Keresd meg a hibát.
+- **Értelmezés:** A GitHub Actions CI-ban a `bin/rails test` futtatásakor fellépő `ArgumentError` okának megkeresése és javítása.
+- **Elvégzett műveletek:**
+  - Azonosítottam, hogy a `Gemfile.lock` a `minitest` `6.1.0` verzióját tartalmazza, amelynek 3 argumentumos `run` hívása inkompatibilis a `railties` `7.1.6` `Rails::LineFiltering#run` metódusával (1..2 argumentum).
+  - A `Gemfile`-ban és a `Gemfile.lock`-ban rögzítettem a Rails 7.1.6-tal kompatibilis `minitest (~> 5.25)` (`5.25.4`) verziót.
+  - A `db/seeds.rb`-ben kizártam a tesztkörnyezetet (`return if Rails.env.test?`), hogy a CI `bin/rails db:prepare` lépése ne töltsön be minta kategóriákat a tesztek elé.
+  - A `test/test_helper.rb`-ben `parallelize(workers: 1)` beállításra váltottam a CI `DATABASE_URL` alapú tesztadatbázisának stabil futtatásához.
+  - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
+- **Módosított fájlok:**
+  - `Gemfile` (módosítva)
+  - `Gemfile.lock` (módosítva)
+  - `db/seeds.rb` (módosítva)
+  - `test/test_helper.rb` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)

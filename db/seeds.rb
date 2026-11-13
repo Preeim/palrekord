@@ -1,3 +1,5 @@
+return if Rails.env.test?
+
 # Alapértelmezett rendszerbeállítások
 Setting.ensure_defaults!
 
