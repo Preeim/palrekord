@@ -262,3 +262,32 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `docs/Látványtervek/kezdolap.svg` (módosítva)
   - `docs/Látványtervek/latvanyterv.md` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-14 22:58] – Adatstruktúra és látványtervek automatikus szinkronizálási szabályának felvétele
+
+- **Prompt:** "Irj egy új rule -t amiben azt kötöt ki hogy minden olyan változtatásnál ami a látványterv-be vagy adatstrukturákat változtatja azokat a változtatásokat frissitse is ott a dokumentácioba."
+- **Értelmezés:** Új kötelező munkaterületi szabály (`.agents/rules/docs-sync.md`) létrehozása, amely előírja az adatstruktúra-dokumentáció és a látványtervek automatikus frissítését és megjelölését minden séma- vagy UI-változtatáskor.
+- **Elvégzett műveletek:**
+  - Megvizsgálta a meglévő `.agents/rules/ai-usage.md` fejlécformátumát (`trigger: always_on`).
+  - Létrehozta a `.agents/rules/docs-sync.md` szabályfájlt az `Adatstruktúra` (`adatstruktura.md`, `er_diagram.svg`) és `Látványtervek` (`latvanyterv.md`, SVG látványtervek) kötelező szinkronizálására, a változások jelölésére (`🆕 [ÚJ – ...]` / `[ÚJ]`), valamint az SVG XML-ellenőrzésére vonatkozó előírásokkal.
+- **Módosított fájlok:**
+  - `.agents/rules/docs-sync.md` (létrehozva)
+  - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-14 23:19] – Verifikációs mellékletek és kezdő kategória bizonyítékok specifikációja
+
+- **Prompt:** "Csinálj ebből is egy specifikációt." (a verifikációs mellékletek menüs feltöltésének és a kezdő kategóriák védhető bizonyítékainak megtervezésére)
+- **Értelmezés:** Külön funkcióspecifikáció létrehozása `docs/Új Funkciók/Verifikáció/` mappában a `pontrendszer.md` stílusában, két vizuális SVG látványtervvel és a kapcsolódó `latvanyterv.md` / `adatstruktura.md` dokumentumok szinkronizálásával.
+- **Elvégzett műveletek:**
+  - Létrehozta a `docs/Új Funkciók/Verifikáció/verifikacio.md` specifikációt: célkitűzés, az 5-elemű menüs feltöltő (`Nincs melléklet`, `Fotó / Képernyőkép`, `Videó / Külső Link`, `Tanú / Jegyzőkönyv` sablongombbal, `PDF Dokumentum`), mind az 5 kezdő kategória (`100m sörfutás`, `Fekvenyomás max`, `Legtöbb megevett palacsinta`, `Planking kitartás`, `Rubik-kocka 3x3`) egyszerű és védhető bizonyítási szabályai + mintaadatai, dinamikus űrlap-logika, okos szerveroldali típusfelismerés és tervezett séma-bővítés (`recommended_file_type`, `verification_hint`).
+  - Elkészítette a `docs/Új Funkciók/Verifikáció/verifikacios_menu_urlap.svg` (`1200x820`) és a `docs/Új Funkciók/Verifikáció/kezdo_kategoriak_bizonyitekok.svg` (`1200x760`) vizuális látványterveket.
+  - A `.agents/rules/docs-sync.md` szabály szerint frissítette a `docs/Látványtervek/latvanyterv.md` (`5.` fejezet) és a `docs/Adatstruktúra/adatstruktura.md` (`2.4. categories` tervezett oszlop-megjegyzés) fájlokat `🆕 [TERVEZETT – Verifikáció]` jelöléssel.
+- **Módosított fájlok:**
+  - `docs/Új Funkciók/Verifikáció/verifikacio.md` (létrehozva)
+  - `docs/Új Funkciók/Verifikáció/verifikacios_menu_urlap.svg` (létrehozva)
+  - `docs/Új Funkciók/Verifikáció/kezdo_kategoriak_bizonyitekok.svg` (létrehozva)
+  - `docs/Látványtervek/latvanyterv.md` (módosítva)
+  - `docs/Adatstruktúra/adatstruktura.md` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)

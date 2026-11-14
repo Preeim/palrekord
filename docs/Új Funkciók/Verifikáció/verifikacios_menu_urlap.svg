@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="1200" height="820" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <!-- Background -->
+  <rect width="1200" height="820" fill="#ffffff"/>
+
+  <!-- HEADER (site-header) -->
+  <rect x="0" y="0" width="1200" height="60" fill="#fafafa"/>
+  <line x1="0" y1="60" x2="1200" y2="60" stroke="#dddddd" stroke-width="1"/>
+  <text x="40" y="37" font-size="18" font-weight="700" fill="#111111">PálRecord</text>
+  <rect x="1038" y="15" width="122" height="30" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="1099" y="34" font-size="12" text-anchor="middle" fill="#111111">← Vissza a listához</text>
+
+  <!-- PAGE TITLE + BADGE -->
+  <text x="40" y="100" font-size="22" font-weight="700" fill="#111111">Új rekord beküldése – Menüs verifikációs feltöltő</text>
+  <rect x="595" y="81" width="110" height="22" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="650" y="96" font-size="11" font-weight="700" text-anchor="middle" fill="#1e40af">[TERVEZETT UI]</text>
+
+  <!-- TOP RECORD FORM FIELDS (Category, Value, Date) -->
+  <rect x="40" y="118" width="1120" height="122" rx="5" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+
+  <text x="58" y="140" font-size="12" font-weight="700" fill="#333333">Versenyszám *</text>
+  <rect x="58" y="146" width="500" height="34" rx="3" fill="#fafafa" stroke="#cccccc" stroke-width="1"/>
+  <text x="70" y="167" font-size="13" font-weight="600" fill="#111111">Rubik-kocka 3x3 (mp · Törtszám)</text>
+  <text x="542" y="167" font-size="11" fill="#666666">▼</text>
+
+  <text x="580" y="140" font-size="12" font-weight="700" fill="#333333">Elért érték *</text>
+  <rect x="580" y="146" width="260" height="34" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="592" y="167" font-size="13" fill="#111111">28.45</text>
+
+  <text x="862" y="140" font-size="12" font-weight="700" fill="#333333">Teljesítés dátuma *</text>
+  <rect x="862" y="146" width="280" height="34" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="874" y="167" font-size="13" fill="#111111">2026-11-14</text>
+
+  <!-- [ÚJ 1] Category-specific Verification Hint Banner -->
+  <rect x="58" y="190" width="1084" height="38" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <rect x="68" y="200" width="44" height="18" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="0.8"/>
+  <text x="90" y="213" font-size="10" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ 1]</text>
+  <text x="122" y="214" font-size="12" font-weight="600" fill="#1e3a8a">Ajánlott bizonyítás ehhez a kategóriához: <tspan font-weight="400">1 közös fotó a kirakott kockáról és a timer kijelzőjéről (pl. csTimer idő + keverés).</tspan></text>
+
+  <!-- VERIFICATION MENU CARD (x=40, y=256, w=1120, h=208) -->
+  <rect x="40" y="256" width="1120" height="208" rx="6" fill="#fafafa" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="5,3"/>
+  <text x="58" y="280" font-size="15" font-weight="700" fill="#111111">Verifikációs bizonyíték megadása</text>
+  <rect x="330" y="265" width="44" height="18" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="0.9"/>
+  <text x="352" y="278" font-size="10" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ 2]</text>
+  <text x="384" y="278" font-size="11" font-weight="600" fill="#1d4ed8">Egykattintásos 5-elemű menü · Automatikusan kiválasztva a kategória ajánlott típusa (IMAGE)</text>
+
+  <!-- 5-TAB MENU BAR (x=58..1142 -> total 1084px) -->
+  <!-- Tab 1: Nincs melléklet -->
+  <rect x="58" y="294" width="180" height="36" rx="4" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="148" y="317" font-size="12" font-weight="600" text-anchor="middle" fill="#444444">Nincs melléklet</text>
+
+  <!-- Tab 2: Fotó / Képernyőkép [ACTIVE] -->
+  <rect x="248" y="294" width="236" height="36" rx="4" fill="#222222"/>
+  <text x="366" y="317" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">[Aktív] Fotó / Képernyőkép</text>
+
+  <!-- Tab 3: Videó / Link -->
+  <rect x="494" y="294" width="214" height="36" rx="4" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="601" y="317" font-size="12" font-weight="600" text-anchor="middle" fill="#333333">Videó / Külső Link</text>
+
+  <!-- Tab 4: Tanú / Jegyzőkönyv -->
+  <rect x="718" y="294" width="214" height="36" rx="4" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="825" y="317" font-size="12" font-weight="600" text-anchor="middle" fill="#333333">Tanú / Jegyzőkönyv</text>
+
+  <!-- Tab 5: PDF Dokumentum -->
+  <rect x="942" y="294" width="200" height="36" rx="4" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="1042" y="317" font-size="12" font-weight="600" text-anchor="middle" fill="#333333">PDF Dokumentum</text>
+
+  <!-- ACTIVE TAB CONTENT AREA (IMAGE ONLY) -->
+  <rect x="58" y="344" width="1084" height="104" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="76" y="368" font-size="13" font-weight="700" fill="#111111">Fotó vagy képernyőkép feltöltése *</text>
+  <rect x="76" y="378" width="136" height="32" rx="3" fill="#222222"/>
+  <text x="144" y="398" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">Fájl választása</text>
+  <rect x="220" y="378" width="520" height="32" rx="3" fill="#fafafa" stroke="#dddddd" stroke-width="1"/>
+  <text x="234" y="398" font-size="12" fill="#111111">kocka_cstimer_2845.jpg  (1.4 MB · érvényes JPG kép)</text>
+  <text x="76" y="432" font-size="11" fill="#555555">Engedélyezett: PNG, JPG, JPEG, GIF, WEBP (max. 10 MB). A többi melléklettípus mezője automatikusan el van rejtve.</text>
+
+  <!-- PREVIEW OF OTHER MENU STATES (y=486..732) -->
+  <text x="40" y="492" font-size="14" font-weight="700" fill="#1e3a8a">Más menüpontokra kattintva megjelenő egyedi űrlap-állapotok ([ÚJ 3]):</text>
+
+  <!-- State Card 1: Videó / Link -->
+  <rect x="40" y="508" width="356" height="222" rx="5" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <rect x="40" y="508" width="356" height="36" rx="5" fill="#f8fafc"/>
+  <line x1="40" y1="544" x2="396" y2="544" stroke="#dddddd" stroke-width="1"/>
+  <text x="58" y="531" font-size="13" font-weight="700" fill="#111111">Videó / Külső Link (LINK)</text>
+
+  <text x="58" y="570" font-size="12" font-weight="600" fill="#333333">Videó vagy megosztott link *</text>
+  <rect x="58" y="580" width="320" height="34" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="68" y="601" font-size="11" fill="#111111">https://youtube.com/shorts/sorfutas-1842</text>
+  <text x="58" y="636" font-size="11" fill="#555555">• Támogatott: http:// vagy https:// URL.</text>
+  <text x="58" y="656" font-size="11" fill="#555555">• Telefonos videó Google Fotókról, Drive-ról,</text>
+  <text x="66" y="672" font-size="11" fill="#555555">nem listázott YouTube Shorts vagy Strava link.</text>
+  <text x="58" y="704" font-size="11" font-weight="600" fill="#1d4ed8">Csak ez az 1 mező jelenik meg aktív LINK fülnél.</text>
+
+  <!-- State Card 2: Tanú / Jegyzőkönyv -->
+  <rect x="422" y="508" width="356" height="222" rx="5" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <rect x="422" y="508" width="356" height="36" rx="5" fill="#f8fafc"/>
+  <line x1="422" y1="544" x2="778" y2="544" stroke="#dddddd" stroke-width="1"/>
+  <text x="440" y="531" font-size="13" font-weight="700" fill="#111111">Tanú / Jegyzőkönyv (TEXT)</text>
+
+  <text x="440" y="570" font-size="12" font-weight="600" fill="#333333">Részletes jegyzőkönyv *</text>
+  <rect x="642" y="553" width="118" height="22" rx="3" fill="#eff6ff" stroke="#2563eb" stroke-width="0.9"/>
+  <text x="701" y="568" font-size="10" font-weight="700" text-anchor="middle" fill="#1d4ed8">+ Sablon beszúrása</text>
+
+  <rect x="440" y="582" width="320" height="84" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="450" y="602" font-size="11" fill="#111111">Jelenlévő tanú(k): Kovács Peti, Szabó Anna</text>
+  <text x="450" y="622" font-size="11" fill="#111111">Helyszín és időpont: Koliszint 3, 2026-11-14</text>
+  <text x="450" y="642" font-size="11" fill="#111111">Mérés módja: Papír strigula + tányér számolás</text>
+  <text x="440" y="692" font-size="11" fill="#555555">• Egykattintásos sablon gomb segíti a védhető</text>
+  <text x="448" y="708" font-size="11" fill="#555555">adatok (tanú, helyszín, eszköz) megadását.</text>
+
+  <!-- State Card 3: PDF & Nincs melléklet -->
+  <rect x="804" y="508" width="356" height="222" rx="5" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <rect x="804" y="508" width="356" height="36" rx="5" fill="#f8fafc"/>
+  <line x1="804" y1="544" x2="1160" y2="544" stroke="#dddddd" stroke-width="1"/>
+  <text x="822" y="531" font-size="13" font-weight="700" fill="#111111">PDF (PDF) &amp; Nincs melléklet ("")</text>
+
+  <text x="822" y="570" font-size="12" font-weight="600" fill="#333333">PDF fájl kiválasztása (max. 10 MB) *</text>
+  <rect x="822" y="580" width="320" height="34" rx="3" fill="#fafafa" stroke="#cccccc" stroke-width="1"/>
+  <text x="832" y="601" font-size="11" fill="#111111">verseny_eredmenylista.pdf  (420 KB)</text>
+
+  <rect x="822" y="630" width="320" height="82" rx="4" fill="#fafafa" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="834" y="650" font-size="12" font-weight="700" fill="#333333">Nincs melléklet mód:</text>
+  <text x="834" y="670" font-size="11" fill="#555555">• Elrejti az összes bizonyíték-mezőt.</text>
+  <text x="834" y="688" font-size="11" fill="#555555">• Nem küld üres mellékletet vagy hibát mentéskor.</text>
+  <text x="834" y="704" font-size="11" fill="#1d4ed8">• Szerveroldalon: automatikus típusfelismerés.</text>
+
+  <!-- FOOTER -->
+  <rect x="0" y="764" width="1200" height="56" fill="#fafafa"/>
+  <line x1="0" y1="764" x2="1200" y2="764" stroke="#dddddd" stroke-width="1"/>
+  <text x="600" y="796" font-size="12" text-anchor="middle" fill="#666666">PálRecord · Verifikációs mellékletek menüs feltöltése (Tervezett specifikáció)</text>
+</svg>

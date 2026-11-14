@@ -198,6 +198,11 @@ Adatbázisban tárolt, az Admin felületről futásidőben kapcsolható rendszer
 | `created_by_id` | `BIGINT` (FK → `users`) | Nem | `NULL` | **Index:** `index_categories_on_created_by_id`. 🆕 **`[ÚJ – Pontrendszer]`:** Havi kategórialimit (`monthly_category_limit`) ellenőrzéséhez használt mező (`ON DELETE SET NULL`). |
 | `created_at`, `updated_at` | `DATETIME(6)` | Igen | - | Rails időbélyegek. 🆕 **`[ÚJ – Pontrendszer]`:** A `created_at` határozza meg a szezonális besorolást (`seasons.starts_at..ends_at`) és a havi kvóta időablakát (`Time.current.all_month`). |
 
+> [!NOTE]
+> **🆕 `[TERVEZETT – Verifikáció]`:** A menüs bizonyíték-feltöltő specifikáció ([verifikacio.md](../Új%20Funkciók/Verifikáció/verifikacio.md)) megvalósításakor a `categories` tábla két opcionális oszloppal bővül (`db/schema.rb`-be a migráció futtatásakor kerül be):
+> - `recommended_file_type` (`VARCHAR(20)`, `NULL`) — Ajánlott bizonyítéktípus (`'IMAGE'`, `'LINK'`, `'TEXT'`, `'PDF'`).
+> - `verification_hint` (`VARCHAR(255)`, `NULL`) — Kategória-specifikus rövid bizonyítási útmutató.
+
 ---
 
 ### 2.5. `records` (Beküldött eredmények)

@@ -84,3 +84,20 @@ A pontrendszerhez kapcsolódó további képernyőelemek és nézetek (a közpon
 ![Kategória ranglista és Profil pontnézet](../Új%20Funkciók/Pontrendszer/kategoria_es_profil_pontok.svg)
 
 > További részletek és a teljes logaritmikus pontozási specifikáció: [Pontrendszer specifikáció](../Új%20Funkciók/Pontrendszer/pontrendszer.md)
+
+---
+
+## 5. Verifikációs mellékletek menüs feltöltése és bizonyítékok — 🆕 [TERVEZETT – Verifikáció]
+
+A rekordbeküldő (`records/_form.html.erb`) és a kezdő kategóriák (`db/seeds.rb`) verifikációs élményének tervezett egyszerűsítése:
+
+- **`[ÚJ 1]` Kategória bizonyítási ajánló sáv:** Versenyszám kiválasztásakor automatikusan megjelenik az elvárt, egyszerű bizonyítási mód (`verification_hint`), és a rendszer átáll az ajánlott menüpontra (`recommended_file_type`).
+- **`[ÚJ 2]` 5-elemű vízszintes verifikációs menü (`verification-menu`):** Egyszerű gombsor (`Nincs melléklet` | `Fotó / Képernyőkép` | `Videó / Külső Link` | `Tanú / Jegyzőkönyv` | `PDF Dokumentum`).
+- **`[ÚJ 3]` Egyetlen aktív mező + sablongomb:** Egyszerre csak a választott típushoz tartozó egyetlen beviteli mező jelenik meg, a `Tanú / Jegyzőkönyv` fülön a **„+ Sablon beszúrása”** gyorsgombbal.
+- **Kezdő kategóriák bizonyítási útmutatói:** Mind az 5 seed kategória (`100m sörfutás`, `Fekvenyomás max`, `Legtöbb megevett palacsinta`, `Planking kitartás`, `Rubik-kocka 3x3`) saját védhető bizonyítékot és mintaadatot kap.
+
+![Menüs verifikációs feltöltő látványterv](../Új%20Funkciók/Verifikáció/verifikacios_menu_urlap.svg)
+
+![Kezdő kategóriák és bizonyítékok áttekintő](../Új%20Funkciók/Verifikáció/kezdo_kategoriak_bizonyitekok.svg)
+
+> További részletek és a teljes bizonyítási séma: [Verifikációs specifikáció](../Új%20Funkciók/Verifikáció/verifikacio.md)
