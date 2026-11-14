@@ -1,4 +1,5 @@
 require "test_helper"
+require "cgi"
 require "tempfile"
 require "fileutils"
 
@@ -60,9 +61,7 @@ class EmailSystemAndAttachmentsFlowTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "erősítsd meg az e-mail címed"
 
     # Follow confirmation link from email
-    mail = ActionMailer::Base.deliveries.last
-    token = mail.text_part.body.to_s[/token=([^\s]+)/, 1]
-    assert_not_nil token
+    token = extract_token_from_mail(ActionMailer::Base.deliveries.last)
 
     get email_confirmation_path(token: token)
     assert_redirected_to login_path
@@ -92,9 +91,7 @@ class EmailSystemAndAttachmentsFlowTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to login_path
 
-    mail = ActionMailer::Base.deliveries.last
-    token = mail.text_part.body.to_s[/token=([^\s]+)/, 1]
-    assert_not_nil token
+    token = extract_token_from_mail(ActionMailer::Base.deliveries.last)
 
     get edit_password_reset_path(token: token)
     assert_response :success
@@ -171,5 +168,13 @@ class EmailSystemAndAttachmentsFlowTest < ActionDispatch::IntegrationTest
 
     get attachment_path(attachment)
     assert_response :success
+  end
+
+  private
+
+  def extract_token_from_mail(mail)
+    raw = mail.text_part.decoded[/token=([^\s]+)/, 1]
+    assert_not_nil raw
+    CGI.unescape(raw)
   end
 end

@@ -231,3 +231,16 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `test/system/user_journey_system_test.rb` (létrehozva)
   - `docs/Tesztelés/tesztelesi_terv.md` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)
+
+## 2026-11-14 21:57 – URL-kódolt token kinyerés javítása a mailer és e-mail integrációs tesztekben
+
+- **Prompt:** A CI futtatás (`bin/rails test`) 50 tesztből 48 sikeres és 2 sikertelen esetet jelzett (`UserMailerTest#test_password_reset_sends_reset_link_with_valid_token` és `EmailSystemAndAttachmentsFlowTest#test_email_system=true_allows_self-service_password_reset_and_invalidates_used_token`).
+- **Értelmezés:** A `generate_token_for(:password_reset)` Base64 paddinget (`=`) tartalmazó tokent állított elő, amelyet az URL helper `%3D`-re kódolt; a tesztek `CGI.unescape` nélkül nyerték ki a levélből, ezért a token-ellenőrzés elbukott (illetve duplán URL-kódolódott `%253D`-re).
+- **Elvégzett műveletek:**
+  - A `test/mailers/user_mailer_test.rb` fájlban hozzáadtam az `extract_token` segédmetódust `email.text_part.decoded` + `CGI.unescape` használatával.
+  - A `test/integration/email_system_and_attachments_flow_test.rb` fájlban hozzáadtam az `extract_token_from_mail` segédmetódust `mail.text_part.decoded` + `CGI.unescape` használatával.
+  - Naplóztam a javítást a `docs/AI-Usage.md` fájlban.
+- **Módosított fájlok:**
+  - `test/mailers/user_mailer_test.rb` (módosítva)
+  - `test/integration/email_system_and_attachments_flow_test.rb` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)
