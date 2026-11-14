@@ -2,6 +2,14 @@
 
 Ez a dokumentum a **PálRecord** alkalmazás véglegesített adatbázis-struktúráját és entitás-kapcsolati modelljét írja le **Rails 7.1 + MySQL (`mysql2`)** környezetre.
 
+> [!IMPORTANT]
+> **🆕 Új funkciók miatti adatbázis-változások (Pontrendszer, Szezonok és Havi Kategóriakvóta):**
+> A dokumentumban `🆕 [ÚJ – Pontrendszer]` jelöléssel láthatók az alábbi módosítások:
+> 1. **Új `seasons` tábla (`2.7.`):** Időszakos szezonok tárolása (`name` UNIQUE, `starts_at`, `ends_at`, `(starts_at, ends_at)` összetett index, `created_by_id` FK).
+> 2. **`settings` bővítése (`2.3.`):** Új alapértelmezett kulcs (`monthly_category_limit = '2'`) a tagok havi kategórialétrehozási kvótájához.
+> 3. **`categories` bővített lekérdezési szerep (`2.4.`):** A `created_at` mező határozza meg a szezonális besorolást (`starts_at <= created_at <= ends_at`), valamint `(created_by_id, created_at)` együtt adja a havi kvótaellenőrzést.
+> 4. **Dinamikus pontszámítás (`2.8.`):** A ranglistapontok nem denormalizált adatbázis-oszlopban tárolódnak, hanem a `LeaderboardCalculator` számítja őket `Rails.cache` gyorsítótárazással.
+
 ---
 
 ## 1. Entitás-kapcsolati Diagram (ERD)
@@ -17,8 +25,10 @@ erDiagram
     USERS ||--o{ RECORDS : "elbírál (reviewed_by_id)"
     USERS ||--o{ INVITE_CODES : "létrehoz (created_by_id)"
     USERS ||--o{ CATEGORIES : "létrehoz (created_by_id)"
+    USERS ||--o{ SEASONS : "[ÚJ] létrehoz (created_by_id)"
     INVITE_CODES ||--o{ USERS : "regisztrált vele (invite_code_id)"
     CATEGORIES ||--o{ RECORDS : "tartalmaz (category_id)"
+    SEASONS ||--o{ CATEGORIES : "[ÚJ] időszak (created_at BETWEEN starts_at AND ends_at)"
     RECORDS ||--o{ ATTACHMENTS : "igazolja (record_id)"
 
     USERS {
@@ -99,6 +109,15 @@ erDiagram
         datetime created_at
         datetime updated_at
     }
+    SEASONS {
+        bigint id PK
+        string name UK "NOT NULL ([ÚJ] Szezon neve)"
+        datetime starts_at "NOT NULL, IDX ([ÚJ] Szezon kezdete)"
+        datetime ends_at "NOT NULL, IDX ([ÚJ] Szezon vége)"
+        bigint created_by_id FK "NULLABLE (Admin user_id)"
+        datetime created_at
+        datetime updated_at
+    }
 ```
 
 </details>
@@ -159,8 +178,9 @@ Adatbázisban tárolt, az Admin felületről futásidőben kapcsolható rendszer
 - `email_system`: `'false'` — SMTP / e-mail megerősítés és önkiszolgáló jelszó-reset engedélyezése.
 - `require_invite_code`: `'true'` — Regisztrációhoz kötelező-e meghívókód.
 - `public_leaderboards`: `'true'` — Vendégek (nem belépve) láthatják-e a ranglistákat és verifikációkat.
-- `members_can_create_categories`: `'false'` — Tagok létrehozhatnak-e új versenyszámot (egyébként csak Admin).
+- `members_can_create_categories`: `'false'` — Tagok létrehozhatnak-e új versenyszámot (egyébként csak Admin). *(A pontrendszerhez tagi kategória-létrehozásnál `'true'` értékre állítható.)*
 - `require_record_approval`: `'true'` — Beküldött rekordok előzetes admin jóváhagyásra várjanak-e (`PENDING`).
+- 🆕 **`[ÚJ – Pontrendszer]`** `monthly_category_limit`: `'2'` — Tagok által egy naptári hónapban létrehozható új kategóriák maximális száma (`0` = korlátozva/letiltva, Admin felhasználókra nem vonatkozik).
 
 ---
 
@@ -174,9 +194,9 @@ Adatbázisban tárolt, az Admin felületről futásidőben kapcsolható rendszer
 | `unit` | `VARCHAR(30)` | Igen | - | Mértékegység (`mp`, `perc`, `kg`, `db`, `cm`, `pont`). |
 | `value_type` | `VARCHAR(20)` | Igen | `'DOUBLE'` | Érték típusa és validációja: `'INT'`, `'DOUBLE'`, `'TIME_DURATION'`, `'DATE'`. |
 | `sort_direction` | `VARCHAR(10)` | Igen | `'DESC'` | Rendezési irány: `'ASC'` (kisebb/korábbi jobb) vagy `'DESC'` (nagyobb/frissebb jobb). |
-| `is_archived` | `BOOLEAN` | Igen | `false` | Archivált kategóriába új rekord nem küldhető be. |
-| `created_by_id` | `BIGINT` (FK → `users`) | Nem | `NULL` | Létrehozó felhasználó. |
-| `created_at`, `updated_at` | `DATETIME(6)` | Igen | - | Rails időbélyegek. |
+| `is_archived` | `BOOLEAN` | Igen | `false` | Archivált kategóriába új rekord nem küldhető be. *(Archivált kategóriák pontjai kikerülnek a ranglistából.)* |
+| `created_by_id` | `BIGINT` (FK → `users`) | Nem | `NULL` | **Index:** `index_categories_on_created_by_id`. 🆕 **`[ÚJ – Pontrendszer]`:** Havi kategórialimit (`monthly_category_limit`) ellenőrzéséhez használt mező (`ON DELETE SET NULL`). |
+| `created_at`, `updated_at` | `DATETIME(6)` | Igen | - | Rails időbélyegek. 🆕 **`[ÚJ – Pontrendszer]`:** A `created_at` határozza meg a szezonális besorolást (`seasons.starts_at..ends_at`) és a havi kvóta időablakát (`Time.current.all_month`). |
 
 ---
 
@@ -213,3 +233,28 @@ Adatbázisban tárolt, az Admin felületről futásidőben kapcsolható rendszer
 | `text_content` | `TEXT` | Nem | `NULL` | Szöveges igazolás (`TEXT`) tartalma. |
 | `uploaded_at` | `DATETIME(6)` | Igen | `CURRENT_TIMESTAMP` | Feltöltés ideje. |
 | `created_at`, `updated_at` | `DATETIME(6)` | Igen | - | Rails időbélyegek. |
+
+---
+
+### 2.7. `seasons` (Szezonális versenyek) — 🆕 [ÚJ TÁBLA – Pontrendszer]
+
+Az időszakos versenyekhez tartozó szezonok definícióját tárolja (`db/migrate/20261114140001_create_seasons.rb`). Egy kategóriát akkor vesz figyelembe a szezonális ranglista, ha a kategória létrehozási ideje beleesik az adott szezon intervallumába (`seasons.starts_at <= categories.created_at <= seasons.ends_at`).
+
+| Oszlop | MySQL típus | Kötelező? | Alapértelmezett | Index / Megjegyzés |
+| :--- | :--- | :---: | :---: | :--- |
+| `id` | `BIGINT AUTO_INCREMENT` | Igen (PK) | - | Elsődleges kulcs |
+| `name` | `VARCHAR(120)` | Igen | - | **UNIQUE** (`index_seasons_on_name`). A szezon megnevezése (pl. `2026 Őszi Szezon`). |
+| `starts_at` | `DATETIME(6)` | Igen | - | **Index:** `index_seasons_on_starts_at`, valamint összetett `index_seasons_on_starts_at_and_ends_at`. Kezdő időpont. |
+| `ends_at` | `DATETIME(6)` | Igen | - | **Index:** `index_seasons_on_ends_at`, valamint összetett `index_seasons_on_starts_at_and_ends_at`. Záró időpont (`ends_at > starts_at`). |
+| `created_by_id` | `BIGINT` (FK → `users`) | Nem | `NULL` | **Index:** `index_seasons_on_created_by_id` (`ON DELETE SET NULL`). Létrehozó Admin felhasználó. |
+| `created_at`, `updated_at` | `DATETIME(6)` | Igen | - | Rails időbélyegek. |
+
+---
+
+### 2.8. Számított adatok és Gyorsítótárazás — 🆕 [ÚJ – Pontrendszer]
+
+A felhasználók ranglistapontjai **nem tárolódnak denormalizált oszlopban** (sem a `users`, sem a `records` táblában), hanem az adatbázis aktuális állapotából számolja ki a központi **`LeaderboardCalculator`** service:
+
+- **Források:** Aktív kategóriák (`categories.is_archived = false`, szezon esetén `created_at: starts_at..ends_at`), aktív felhasználók (`users.is_active = true`) jóváhagyott rekordjai (`records.status = 'APPROVED'`).
+- **Gyorsítótárazás (`Rails.cache`):** Az élő (`Örökös Élő`) és szezonális ranglisták kiszámított eredménye gyorsítótárba kerül, amelyet a `Record`, `Category`, `User` és `Season` modellek módosításakor automatikusan érvénytelenít az alkalmazás.
+- **Részletes képlet és szabályok:** Lásd a [Pontrendszer Specifikációt](../Új%20Funkciók/Pontrendszer/pontrendszer.md).

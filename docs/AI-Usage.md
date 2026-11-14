@@ -244,3 +244,21 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `test/mailers/user_mailer_test.rb` (módosítva)
   - `test/integration/email_system_and_attachments_flow_test.rb` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-14 22:44] – Adatstruktúra és látványtervek frissítése az új funkciókkal
+
+- **Prompt:** "Frissítsd az adatstruktúra md -t és a látványterveket. Jelöld meg az új funkciók miatt készült változtatásokat."
+- **Értelmezés:** A Pontrendszer, a Szezonális versenyek és a Havi kategória-létrehozási kvóta bevezetése miatt bekövetkezett adatbázis-séma és UI változások átvezetése az `adatstruktura.md`, az `er_diagram.svg`, a `latvanyterv.md` és a `kezdolap.svg` fájlokba, minden új elemet egyértelműen megjelölve (`🆕 [ÚJ – Pontrendszer]` és `[ÚJ]` jelvényekkel).
+- **Elvégzett műveletek:**
+  - Ellenőrizte a tényleges adatbázis-sémát (`db/schema.rb` és `db/migrate/20261114140001_create_seasons.rb`) a pontos oszlopnevek és indexek rögzítése érdekében.
+  - Frissítette a `docs/Adatstruktúra/er_diagram.svg` SVG diagramot az új `SEASONS` táblával (`[ÚJ TÁBLA]`), a `USERS -> SEASONS` (`[ÚJ] létrehoz`) és `SEASONS <-> CATEGORIES` idő intervallum-kapcsolattal, valamint a `SETTINGS` (`monthly_category_limit = '2'`) és `CATEGORIES` (`created_by_id`, `created_at`) kék `[ÚJ]` kiemeléseivel.
+  - Frissítette a `docs/Adatstruktúra/adatstruktura.md` specifikációt: összefoglaló `[!IMPORTANT]` doboz, kibővített Mermaid ERD, `monthly_category_limit` kulcs a `2.3. settings` részben, bővített megjegyzések a `2.4. categories` részben, valamint új `2.7. seasons` és `2.8. Számított adatok és Gyorsítótárazás` fejezetek.
+  - Újragenerálta a `docs/Látványtervek/kezdolap.svg` látványtervet a kétoszlopos elrendezéssel és `[ÚJ 1]`–`[ÚJ 4]` vizuális kiemelésekkel (fejléc élő pontszám, havi kvóta gomb, táblázatban szezon jelvény + max pont oszlop + Top 1 `+pt`, jobb oldali Leaderboard oldalsáv).
+  - Frissítette a `docs/Látványtervek/latvanyterv.md` leírást az új funkciók jelölésével (`🆕 [ÚJ – Pontrendszer]`), és hozzáadta a `4. Pontrendszer és Szezonok részletes nézetei` fejezetet a `kategoria_es_profil_pontok.svg` illusztrációval.
+- **Módosított fájlok:**
+  - `docs/Adatstruktúra/er_diagram.svg` (módosítva)
+  - `docs/Adatstruktúra/adatstruktura.md` (módosítva)
+  - `docs/Látványtervek/kezdolap.svg` (módosítva)
+  - `docs/Látványtervek/latvanyterv.md` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)
