@@ -72,9 +72,9 @@ a {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: 24px 20px;
 }
 
 .site-footer {
@@ -457,4 +457,271 @@ textarea.form-control {
   margin: 0;
   padding-left: 16px;
   font-size: 12px;
+}
+
+.form-control-sm {
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+/* Kezdőlap kétoszlopos elrendezés és Leaderboard */
+.home-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.home-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.home-sidebar {
+  flex: 0 0 360px;
+  width: 360px;
+}
+
+.card-table {
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
+.card-table .minimal-table th {
+  border-top: none;
+  background-color: #fafafa;
+  padding: 10px 12px;
+}
+
+.card-table .minimal-table td {
+  padding: 12px;
+}
+
+.card-table .minimal-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.quota-action-wrap {
+  text-align: right;
+}
+
+.quota-exhausted-btn {
+  opacity: 0.8;
+}
+
+.quota-hint-text {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #991b1b;
+}
+
+.category-badges {
+  margin-top: 4px;
+}
+
+.badge-season {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.badge-points-first {
+  background-color: #222222;
+  border-color: #222222;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.badge-points {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #111111;
+  font-weight: 700;
+}
+
+.leaderboard-card {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
+.leaderboard-card-header {
+  background-color: #fafafa;
+  border-bottom: 1px solid #dddddd;
+  padding: 12px 16px;
+}
+
+.leaderboard-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.leaderboard-card-body {
+  padding: 14px 16px;
+}
+
+.leaderboard-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.leaderboard-tab {
+  flex: 1;
+  text-align: center;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #bbbbbb;
+  border-radius: 3px;
+  background-color: #ffffff;
+  color: #333333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leaderboard-tab:hover {
+  background-color: #f4f4f4;
+}
+
+.leaderboard-tab.active {
+  background-color: #222222;
+  border-color: #222222;
+  color: #ffffff;
+}
+
+.season-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.season-selector-form {
+  margin-bottom: 12px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 9px 6px;
+}
+
+.minimal-table th.num-col,
+.minimal-table td.num-col {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.leaderboard-row-current {
+  background-color: #f3f4f6;
+}
+
+.leaderboard-row-current td {
+  font-weight: 600;
+}
+
+.row-secondary-attempt {
+  background-color: #fafafa;
+  color: #777777;
+}
+
+.leaderboard-info-box {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background-color: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 3px;
+  font-size: 11px;
+  color: #555555;
+}
+
+.leaderboard-info-box strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #333333;
+}
+
+.leaderboard-info-box ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.leaderboard-info-box li + li {
+  margin-top: 3px;
+}
+
+/* Profil pontkártyák */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 16px 18px;
+  background-color: #ffffff;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #555555;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.2;
+}
+
+.stat-rank {
+  font-size: 13px;
+  color: #444444;
+}
+
+.stat-hint {
+  font-size: 11px;
+  color: #777777;
+}
+
+@media (max-width: 920px) {
+  .home-layout {
+    flex-direction: column;
+  }
+
+  .home-sidebar {
+    width: 100%;
+    flex: 1 1 auto;
+  }
+
+  .quota-action-wrap {
+    text-align: left;
+  }
+}
+
+@media (max-width: 820px) {
+  .profile-stats-grid {
+    grid-template-columns: 1fr;
+  }
 }

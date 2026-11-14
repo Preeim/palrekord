@@ -42,6 +42,11 @@ class ProfilesController < ApplicationController
   def load_profile_data
     @user = current_user
     @records = current_user.records.includes(:category, :attachments, :reviewed_by).newest_first
+    @overall_leaderboard = LeaderboardCalculator.overall_leaderboard
+    @overall_entry = @overall_leaderboard.entry_for(@user)
+    @current_season = Season.current
+    @seasonal_leaderboard = @current_season ? LeaderboardCalculator.seasonal_leaderboard(@current_season) : nil
+    @seasonal_entry = @seasonal_leaderboard ? @seasonal_leaderboard.entry_for(@user) : nil
   end
 
   def profile_params

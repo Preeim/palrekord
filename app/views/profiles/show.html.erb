@@ -8,7 +8,7 @@
       Szerepkör: <strong><%= @user.role %></strong>
     </p>
   </div>
-  <%= link_to "Új rekord beküldése", new_record_path, class: "btn btn-primary" %>
+  <%= link_to "+ Új rekord beküldése", new_record_path, class: "btn btn-primary" %>
 </div>
 
 <% if @user.errors.any? %>
@@ -22,7 +22,124 @@
   </div>
 <% end %>
 
-<div class="form-row">
+<div class="profile-stats-grid">
+  <div class="stat-card">
+    <div class="stat-label">ÖRÖKÖS ÉLŐ PONTSZÁM</div>
+    <div class="stat-value-row">
+      <span class="stat-value"><%= @overall_entry.total_points %> pont</span>
+      <span class="stat-rank">
+        <% if @overall_entry.rank.present? %>
+          (<%= @overall_entry.rank %>. hely az összetettben)
+        <% else %>
+          (még nincs helyezés)
+        <% end %>
+      </span>
+    </div>
+    <div class="stat-hint">
+      <%= @overall_entry.categories_count %> aktív kategóriában szerzett helyezések alapján
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">
+      <% if @current_season.present? %>
+        <%= @current_season.name.upcase %> (AKTÍV)
+      <% else %>
+        SZEZONÁLIS VERSENY
+      <% end %>
+    </div>
+    <% if @current_season.present? %>
+      <div class="stat-value-row">
+        <span class="stat-value"><%= @seasonal_entry.total_points %> pont</span>
+        <span class="stat-rank">
+          <% if @seasonal_entry.rank.present? %>
+            (<%= @seasonal_entry.rank %>. hely a szezonban)
+          <% else %>
+            (még nincs szezonbeli pont)
+          <% end %>
+        </span>
+      </div>
+      <div class="stat-hint">
+        Csak a <%= @current_season.period_label %> között indított kategóriák
+      </div>
+    <% else %>
+      <div class="stat-value-row">
+        <span class="stat-value">–</span>
+      </div>
+      <div class="stat-hint">Jelenleg nincs aktív szezonális verseny</div>
+    <% end %>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">HAVI KATEGÓRIA KVÓTA</div>
+    <% if @user.admin? %>
+      <div class="stat-value-row">
+        <span class="stat-value">Korlátlan</span>
+      </div>
+      <div class="stat-hint">Adminisztrátorként nem vonatkozik rád a havi limit</div>
+    <% else %>
+      <% remaining = @user.remaining_category_quota %>
+      <% limit = Setting.monthly_category_limit %>
+      <div class="stat-value-row">
+        <span class="stat-value"><%= remaining %> / <%= limit %> szabad</span>
+      </div>
+      <div class="stat-hint">
+        <% if !Setting.members_can_create_categories? %>
+          A tagok általi kategórialétrehozás jelenleg ki van kapcsolva
+        <% elsif remaining.positive? %>
+          Ebben a hónapban még <%= remaining %> új versenyszámot hozhatsz létre
+        <% else %>
+          Elérted a havi keretet · Következő nyitás: <%= @user.next_category_quota_reset_date.strftime("%Y-%m-%d") %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<h2 class="section-title">Pontjaim tételes lebontása</h2>
+
+<% if @overall_entry.breakdown.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>Kategória</th>
+          <th>Saját legjobb</th>
+          <th>Helyezés / Létszám</th>
+          <th>Kapott pont</th>
+          <th>Szezonális?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @overall_entry.breakdown.each do |item| %>
+          <% in_current_season = @current_season.present? && item.category_created_at >= @current_season.starts_at && item.category_created_at <= @current_season.ends_at %>
+          <tr>
+            <td><%= link_to item.category_name, category_path(item.category_id), class: "category-link" %></td>
+            <td class="record-value"><%= item.display_value %></td>
+            <td class="meta-text"><%= item.rank %>. hely / <%= item.participants_count %> fő</td>
+            <td><%= points_badge(item.points, rank: item.rank) %></td>
+            <td>
+              <% if in_current_season %>
+                <span class="badge badge-season">Igen (<%= @current_season.name %>)</span>
+              <% else %>
+                <span class="meta-text">Nem (csak Örökös)</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <p class="form-hint" style="margin-top: 8px;">
+    Összesen: <strong><%= @overall_entry.total_points %> pt</strong> Örökös<% if @current_season.present? %> · ebből <strong><%= @seasonal_entry.total_points %> pt</strong> Szezonális (<%= @current_season.name %>)<% end %>.
+  </p>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Még nincs pontszerző elfogadott rekordod aktív kategóriában.</p>
+  </div>
+<% end %>
+
+<div class="form-row" style="margin-top: 24px;">
   <div class="card" style="flex: 1 1 320px;">
     <h2 class="section-title" style="margin-top: 0;">Profiladatok</h2>
     <%= form_with model: @user, url: profile_path, method: :patch, local: true do |f| %>

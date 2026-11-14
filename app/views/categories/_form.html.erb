@@ -52,7 +52,10 @@
   <% end %>
 
   <div class="actions-inline">
-    <%= f.submit(category.persisted? ? "Változtatások mentése" : "Versenyszám létrehozása", class: "btn btn-primary") %>
+    <% quota_blocked = !category.persisted? && logged_in? && !admin? && !current_user.category_quota_available? %>
+    <%= f.submit(category.persisted? ? "Változtatások mentése" : "Versenyszám létrehozása",
+      class: "btn btn-primary",
+      disabled: quota_blocked) %>
     <%= link_to "Mégse", (category.persisted? ? category_path(category) : root_path), class: "btn btn-outline" %>
   </div>
 <% end %>

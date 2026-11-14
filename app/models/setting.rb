@@ -19,6 +19,10 @@ class Setting < ApplicationRecord
     "require_record_approval" => {
       value: "true",
       description: "Beküldött rekordok előzetes admin jóváhagyásra várjanak-e (PENDING)."
+    },
+    "monthly_category_limit" => {
+      value: "2",
+      description: "Tagok által egy naptári hónapban létrehozható új kategóriák maximális száma."
     }
   }.freeze
 
@@ -71,6 +75,15 @@ class Setting < ApplicationRecord
 
   def self.require_record_approval?
     get_bool("require_record_approval")
+  end
+
+  def self.monthly_category_limit
+    parsed = Integer(get("monthly_category_limit"), exception: false)
+    parsed && parsed >= 0 ? parsed : 2
+  end
+
+  def integer_setting?
+    key == "monthly_category_limit"
   end
 
   def boolean_value?

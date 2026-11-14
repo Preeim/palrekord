@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :enforce_password_change
 
-  helper_method :current_user, :logged_in?, :admin?, :can_create_category?
+  helper_method :current_user, :logged_in?, :admin?, :can_create_category?, :current_user_total_points
 
   private
 
@@ -41,6 +41,12 @@ class ApplicationController < ActionController::Base
 
   def can_create_category?
     logged_in? && (admin? || Setting.members_can_create_categories?)
+  end
+
+  def current_user_total_points
+    return 0 unless logged_in?
+
+    @current_user_total_points ||= LeaderboardCalculator.overall_leaderboard.points_for_user(current_user)
   end
 
   def require_authentication

@@ -1,52 +1,172 @@
 <% content_for :title, "Kategóriák" %>
 
-<div class="page-header">
-  <div>
-    <h1 class="page-title">Kategóriák</h1>
-    <p class="page-subtitle">Válassz egy versenyszámot a teljes ranglista megtekintéséhez.</p>
+<div class="home-layout">
+  <div class="home-main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Kategóriák</h1>
+        <p class="page-subtitle">Válassz egy versenyszámot a ranglistához. Saját kategória létrehozásával új pontokat nyithatsz meg.</p>
+      </div>
+
+      <% if can_create_category? %>
+        <div class="quota-action-wrap">
+          <% if admin? %>
+            <%= link_to "+ Új versenyszám", new_category_path, class: "btn btn-primary" %>
+          <% else %>
+            <% remaining = current_user.remaining_category_quota %>
+            <% limit = Setting.monthly_category_limit %>
+            <% if current_user.category_quota_available? %>
+              <%= link_to "+ Új versenyszám (Kvóta: #{remaining}/#{limit})", new_category_path, class: "btn btn-primary" %>
+            <% else %>
+              <%= link_to "+ Új versenyszám (Kvóta: 0/#{limit})", new_category_path, class: "btn btn-outline quota-exhausted-btn" %>
+              <div class="quota-hint-text">
+                0 / <%= limit %> elérhető ebben a hónapban · Nyitás: <%= current_user.next_category_quota_reset_date.strftime("%Y-%m-%d") %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @categories.any? %>
+      <div class="table-wrap card-table">
+        <table class="minimal-table">
+          <thead>
+            <tr>
+              <th>Kategória neve</th>
+              <th>Rendezés</th>
+              <th>Résztvevők / 1. hely</th>
+              <th>Top 1 eredmény</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @categories.each do |category| %>
+              <% standing = @category_standings[category] %>
+              <% top_entry = standing&.top_entry %>
+              <% category_season = category.matching_season(@seasons) %>
+              <tr>
+                <td>
+                  <%= link_to category.name, category_path(category), class: "category-link" %>
+                  <% if category.is_archived? %>
+                    <span class="badge badge-muted">Archivált</span>
+                  <% end %>
+                  <% if category_season.present? %>
+                    <div class="category-badges">
+                      <span class="badge badge-season"><%= category_season.name %></span>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="meta-text"><%= category.sort_by_label %></td>
+                <td>
+                  <% count = standing ? standing.participants_count : 0 %>
+                  <% max_pts = standing ? standing.max_points : 0 %>
+                  <% if category.is_archived? %>
+                    <span class="meta-text"><%= count %> fő (archivált · 0 pt)</span>
+                  <% else %>
+                    <span class="meta-text"><%= count %> fő (max <strong><%= max_pts %> pt</strong>)</span>
+                  <% end %>
+                </td>
+                <td>
+                  <% if top_entry.present? %>
+                    <div class="record-value"><%= category.display_record_value(top_entry.record) %></div>
+                    <div class="record-user">
+                      <%= top_entry.user.display_name %>
+                      <% unless category.is_archived? %>
+                        (+<%= top_entry.points %> pt)
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <span class="empty-state">Még nincs elfogadott rekord</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="card">
+        <p class="empty-state">Még nincs felvett versenyszám.</p>
+      </div>
+    <% end %>
   </div>
 
-  <% if can_create_category? %>
-    <%= link_to "Új versenyszám", new_category_path, class: "btn btn-primary" %>
-  <% end %>
-</div>
+  <aside class="home-sidebar">
+    <div class="leaderboard-card">
+      <div class="leaderboard-card-header">
+        <h2 class="leaderboard-title">Leaderboard (Ranglista)</h2>
+      </div>
 
-<% if @categories.any? %>
-  <div class="table-wrap">
-    <table class="minimal-table">
-      <thead>
-        <tr>
-          <th>Kategória neve</th>
-          <th>Rendezés (sort_by)</th>
-          <th>Top 1 eredmény</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @categories.each do |category| %>
-          <% top = category.top_record %>
-          <tr>
-            <td>
-              <%= link_to category.name, category_path(category), class: "category-link" %>
-              <% if category.is_archived? %>
-                <span class="badge badge-muted">Archivált</span>
-              <% end %>
-            </td>
-            <td class="meta-text"><%= category.sort_by_label %></td>
-            <td>
-              <% if top.present? %>
-                <div class="record-value"><%= category.display_record_value(top) %></div>
-                <div class="record-user"><%= top.user.display_name %></div>
-              <% else %>
-                <span class="empty-state">Még nincs elfogadott rekord</span>
-              <% end %>
-            </td>
-          </tr>
+      <div class="leaderboard-card-body">
+        <div class="leaderboard-tabs">
+          <%= link_to "Örökös Élő",
+            root_path(tab: "overall", season_id: @selected_season&.id),
+            class: "leaderboard-tab #{@active_tab == 'overall' ? 'active' : ''}" %>
+          <%= link_to(@selected_season ? @selected_season.name : "Szezonális",
+            root_path(tab: "season", season_id: @selected_season&.id),
+            class: "leaderboard-tab #{@active_tab == 'season' ? 'active' : ''}") %>
+        </div>
+
+        <% if @active_tab == "season" && @selected_season.present? %>
+          <div class="season-meta-bar">
+            <span class="meta-text"><%= @selected_season.period_label %></span>
+            <span class="badge <%= @selected_season.active? ? 'badge-approved' : 'badge-muted' %>">
+              <%= @selected_season.status_label %>
+            </span>
+          </div>
+
+          <% if @seasons.size > 1 %>
+            <%= form_with url: root_path, method: :get, local: true, class: "season-selector-form" do %>
+              <%= hidden_field_tag :tab, "season" %>
+              <%= select_tag :season_id,
+                options_for_select(@seasons.map { |s| [ "#{s.name} (#{s.status_label})", s.id ] }, @selected_season.id),
+                class: "form-control form-control-sm",
+                onchange: "this.form.submit()" %>
+            <% end %>
+          <% end %>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-<% else %>
-  <div class="card">
-    <p class="empty-state">Még nincs felvett versenyszám.</p>
-  </div>
-<% end %>
+
+        <% active_leaderboard = @active_tab == "season" ? @seasonal_leaderboard : @overall_leaderboard %>
+
+        <% if @active_tab == "season" && @selected_season.nil? %>
+          <p class="empty-state" style="margin: 16px 0;">Még nincs létrehozott szezonális verseny.</p>
+        <% elsif active_leaderboard.nil? || active_leaderboard.entries.empty? %>
+          <p class="empty-state" style="margin: 16px 0;">Még nincs pontszerző eredmény ezen a ranglistán.</p>
+        <% else %>
+          <table class="minimal-table leaderboard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Tag</th>
+                <th class="num-col">1. hely</th>
+                <th class="num-col">Pont</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% active_leaderboard.entries.each do |entry| %>
+                <% is_current = logged_in? && entry.user_id == current_user.id %>
+                <tr class="<%= 'leaderboard-row-current' if is_current %>">
+                  <td><strong><%= entry.rank %>.</strong></td>
+                  <td>
+                    <%= entry.display_name %><%= " (Te)" if is_current %>
+                  </td>
+                  <td class="num-col meta-text"><%= entry.first_places_count %>x</td>
+                  <td class="num-col"><strong><%= entry.total_points %> pt</strong></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+
+        <div class="leaderboard-info-box">
+          <strong>Hogyan számolódnak a pontok?</strong>
+          <ul>
+            <li>Minden aktív kategóriában csak a legjobb saját elfogadott eredményed számít.</li>
+            <li>Logaritmikus pontozás (N fő → 1. hely = N pt).</li>
+            <li>Szezon fül: csak a szezonban indított kategóriák.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

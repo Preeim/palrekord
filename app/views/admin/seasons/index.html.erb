@@ -1,0 +1,63 @@
+<% content_for :title, "Admin – Szezonok" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Adminisztráció – Szezonális versenyek</h1>
+    <p class="page-subtitle">Időszakos szezonok létrehozása. A szezonba az időszakban létrehozott aktív kategóriák számítanak bele.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<div class="card">
+  <h2 class="section-title" style="margin-top: 0;">Új szezon indítása</h2>
+  <%= render "form", season: @season %>
+</div>
+
+<% if @seasons.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>Szezon neve</th>
+          <th>Időszak</th>
+          <th>Aktív kategóriák</th>
+          <th>Állapot</th>
+          <th>Létrehozta</th>
+          <th>Műveletek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @seasons.each do |season| %>
+          <tr>
+            <td><strong><%= season.name %></strong></td>
+            <td class="meta-text">
+              <div><%= season.starts_at.strftime("%Y-%m-%d %H:%M") %></div>
+              <div>– <%= season.ends_at.strftime("%Y-%m-%d %H:%M") %></div>
+            </td>
+            <td class="meta-text"><%= season.active_categories.count %> db</td>
+            <td>
+              <% badge_class = season.active? ? "badge-approved" : (season.upcoming? ? "badge-pending" : "badge-muted") %>
+              <span class="badge <%= badge_class %>"><%= season.status_label %></span>
+            </td>
+            <td class="meta-text"><%= season.created_by&.display_name || "–" %></td>
+            <td>
+              <div class="actions-inline">
+                <%= link_to "Szerkesztés", edit_admin_season_path(season), class: "btn btn-outline btn-sm" %>
+                <%= button_to "Törlés",
+                  admin_season_path(season),
+                  method: :delete,
+                  data: { turbo_confirm: "Biztosan törlöd a(z) #{season.name} szezont? A benne létrehozott kategóriák megmaradnak." },
+                  class: "btn btn-danger btn-sm" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Még nincs létrehozott szezonális verseny.</p>
+  </div>
+<% end %>

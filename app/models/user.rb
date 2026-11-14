@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include LeaderboardCacheInvalidatable
+
   ROLES = %w[TAG ADMIN].freeze
 
   has_secure_password
@@ -8,6 +10,7 @@ class User < ApplicationRecord
   has_many :reviewed_records, class_name: "Record", foreign_key: :reviewed_by_id, dependent: :nullify
   has_many :created_invite_codes, class_name: "InviteCode", foreign_key: :created_by_id, dependent: :nullify
   has_many :created_categories, class_name: "Category", foreign_key: :created_by_id, dependent: :nullify
+  has_many :created_seasons, class_name: "Season", foreign_key: :created_by_id, dependent: :nullify
 
   normalizes :username, with: ->(value) { value.to_s.strip.downcase }
   normalizes :email, with: ->(value) { value.to_s.strip.downcase.presence }
@@ -65,5 +68,27 @@ class User < ApplicationRecord
 
   def last_active_admin?
     admin? && is_active? && User.active.admins.where.not(id: id).none?
+  end
+
+  def categories_created_this_month_count(reference_time = Time.current)
+    created_categories.where(created_at: reference_time.all_month).count
+  end
+
+  def monthly_category_limit
+    admin? ? nil : Setting.monthly_category_limit
+  end
+
+  def remaining_category_quota(reference_time = Time.current)
+    return nil if admin?
+
+    [ Setting.monthly_category_limit - categories_created_this_month_count(reference_time), 0 ].max
+  end
+
+  def category_quota_available?(reference_time = Time.current)
+    admin? || remaining_category_quota(reference_time).positive?
+  end
+
+  def next_category_quota_reset_date(reference_time = Time.current)
+    reference_time.to_date.next_month.beginning_of_month
   end
 end

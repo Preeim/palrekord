@@ -5,11 +5,24 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [ :show, :edit, :update ]
 
   def index
-    @categories = Category.ordered
+    @categories = Category.ordered.to_a
+    @seasons = Season.ordered.to_a
+    @current_season = Season.current
+    @active_tab = params[:tab] == "season" ? "season" : "overall"
+    @selected_season = if params[:season_id].present?
+      @seasons.find { |s| s.id == params[:season_id].to_i } || @current_season || @seasons.first
+    else
+      @current_season || @seasons.first
+    end
+    @overall_leaderboard = LeaderboardCalculator.overall_leaderboard
+    @seasonal_leaderboard = @selected_season ? LeaderboardCalculator.seasonal_leaderboard(@selected_season) : nil
+    @category_standings = LeaderboardCalculator.standings_by_category(@categories)
   end
 
   def show
-    @records = @category.approved_records_ordered
+    @standings = LeaderboardCalculator.category_standings(@category)
+    @records = @standings.entries.map(&:record)
+    @category_season = @category.matching_season
   end
 
   def new

@@ -7,10 +7,14 @@
       <% if @category.is_archived? %>
         <span class="badge badge-muted">Archivált</span>
       <% end %>
+      <% if @category_season.present? %>
+        <span class="badge badge-season"><%= @category_season.name %></span>
+      <% end %>
     </h1>
     <p class="page-subtitle">
       Mértékegység: <strong><%= @category.unit %></strong> ·
-      Rendezés: <strong><%= @category.sort_by_label %></strong>
+      Rendezés: <strong><%= @category.sort_by_label %></strong> ·
+      Résztvevők: <strong><%= @standings.participants_count %> fő</strong><% unless @category.is_archived? %> (1. hely = <strong><%= @standings.max_points %> pt</strong>)<% end %>
     </p>
   </div>
 
@@ -34,7 +38,7 @@
 
 <h2 class="section-title">Ranglista (Elfogadott rekordok)</h2>
 
-<% if @records.any? %>
+<% if @standings.entries.any? %>
   <div class="table-wrap">
     <table class="minimal-table">
       <thead>
@@ -42,18 +46,50 @@
           <th>#</th>
           <th>Versenyző</th>
           <th>Eredmény</th>
-          <th>Teljesítés</th>
+          <th>Teljesítés / Beküldés</th>
+          <th>Helyezési pont</th>
           <th>Verifikáció</th>
           <th>Megjegyzés</th>
         </tr>
       </thead>
       <tbody>
-        <% @records.each_with_index do |record, index| %>
-          <tr>
-            <td><strong><%= index + 1 %>.</strong></td>
-            <td><%= record.user.display_name %></td>
-            <td class="record-value"><%= @category.display_record_value(record) %></td>
-            <td class="meta-text"><%= record.achieved_at.strftime("%Y-%m-%d") %></td>
+        <% @standings.entries.each do |entry| %>
+          <% record = entry.record %>
+          <% is_current = logged_in? && entry.user_id == current_user.id %>
+          <% row_class = if !entry.personal_best?
+                           "row-secondary-attempt"
+                         elsif is_current
+                           "leaderboard-row-current"
+                         end %>
+          <tr class="<%= row_class %>">
+            <td>
+              <% if entry.personal_best? %>
+                <strong><%= entry.rank %>.</strong>
+              <% else %>
+                <span class="meta-text">–</span>
+              <% end %>
+            </td>
+            <td>
+              <% if entry.personal_best? %>
+                <%= entry.user.display_name %><%= " (Te)" if is_current %>
+              <% else %>
+                <span class="meta-text"><%= entry.user.display_name %> (korábbi kísérlet)</span>
+              <% end %>
+            </td>
+            <td class="<%= entry.personal_best? ? 'record-value' : 'meta-text' %>">
+              <%= @category.display_record_value(record) %>
+            </td>
+            <td class="meta-text">
+              <div><%= record.achieved_at.strftime("%Y-%m-%d") %></div>
+              <div class="form-hint">Beküldve: <%= record.created_at.strftime("%Y-%m-%d %H:%M") %></div>
+            </td>
+            <td>
+              <% if entry.personal_best? %>
+                <%= points_badge(entry.points, rank: entry.rank, archived: @category.is_archived?) %>
+              <% else %>
+                <span class="meta-text">0 pt</span>
+              <% end %>
+            </td>
             <td>
               <% if record.attachments.any? %>
                 <ul class="attachment-list">
@@ -74,7 +110,16 @@
                 <span class="empty-state">Nincs</span>
               <% end %>
             </td>
-            <td class="meta-text"><%= record.note.presence || "–" %></td>
+            <td class="meta-text">
+              <%= record.note.presence || "–" %>
+              <% if entry.tied_sort_value %>
+                <div class="form-hint">
+                  <%= entry.tied_earlier ? "Holtverseny: korábban feltöltve → előrébb áll" : "Holtverseny: későbbi feltöltés → #{entry.rank}. hely" %>
+                </div>
+              <% elsif !entry.personal_best? %>
+                <div class="form-hint">Saját gyengébb kísérlet – nem foglal helyet és nem ad pontot</div>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

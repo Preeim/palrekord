@@ -4,6 +4,22 @@
   <h1 class="page-title">Új versenyszám létrehozása</h1>
 </div>
 
+<% if logged_in? && !admin? %>
+  <% remaining = current_user.remaining_category_quota %>
+  <% limit = Setting.monthly_category_limit %>
+  <% reset_date = current_user.next_category_quota_reset_date.strftime("%Y-%m-%d") %>
+  <% if current_user.category_quota_available? %>
+    <div class="flash flash-notice">
+      Havi kategória-létrehozási kvóta: <strong><%= remaining %> / <%= limit %> elérhető ebben a hónapban</strong>.
+    </div>
+  <% else %>
+    <div class="error-box">
+      <strong>Elérted a havi kategória-létrehozási kvótádat:</strong>
+      0 / <%= limit %> elérhető ebben a hónapban. Következő nyitás: <strong><%= reset_date %></strong>.
+    </div>
+  <% end %>
+<% end %>
+
 <div class="card">
   <%= render "form", category: @category %>
 </div>

@@ -45,7 +45,7 @@ class RecordTest < ActiveSupport::TestCase
     assert archived_rec.errors[:category].present?
   end
 
-  test "orders approved records by sort_direction and breaks ties by earlier achieved_at" do
+  test "orders approved records by sort_direction, breaks ties by earlier created_at, and excludes inactive users" do
     cat = Category.create!(name: "Sprint", unit: "mp", value_type: "TIME_DURATION", sort_direction: "ASC")
     second_user = User.create!(
       username: "tester2",
@@ -54,13 +54,36 @@ class RecordTest < ActiveSupport::TestCase
       password_confirmation: "password123",
       confirmed_at: Time.current
     )
+    inactive_user = User.create!(
+      username: "inactive1",
+      display_name: "Inaktív Imre",
+      password: "password123",
+      password_confirmation: "password123",
+      is_active: false,
+      confirmed_at: Time.current
+    )
 
-    later_tie = Record.create!(user: @user, category: cat, value: "18.42", achieved_at: Date.new(2026, 5, 20), status: "APPROVED")
-    earlier_tie = Record.create!(user: second_user, category: cat, value: "18.42", achieved_at: Date.new(2026, 5, 10), status: "APPROVED")
+    earlier_upload = Record.create!(
+      user: @user,
+      category: cat,
+      value: "18.42",
+      achieved_at: Date.new(2026, 5, 20),
+      status: "APPROVED",
+      created_at: 2.days.ago
+    )
+    later_upload = Record.create!(
+      user: second_user,
+      category: cat,
+      value: "18.42",
+      achieved_at: Date.new(2026, 5, 10),
+      status: "APPROVED",
+      created_at: 1.day.ago
+    )
     Record.create!(user: @user, category: cat, value: "15.00", achieved_at: Date.new(2026, 5, 1), status: "PENDING")
+    Record.create!(user: inactive_user, category: cat, value: "12.00", achieved_at: Date.new(2026, 5, 1), status: "APPROVED")
 
     ordered = cat.approved_records_ordered.to_a
-    assert_equal [ earlier_tie.id, later_tie.id ], ordered.map(&:id)
-    assert_equal earlier_tie.id, cat.top_record.id
+    assert_equal [ earlier_upload.id, later_upload.id ], ordered.map(&:id)
+    assert_equal earlier_upload.id, cat.top_record.id
   end
 end

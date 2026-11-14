@@ -1,6 +1,8 @@
 require "bigdecimal"
 
 class Record < ApplicationRecord
+  include LeaderboardCacheInvalidatable
+
   STATUSES = %w[PENDING APPROVED REJECTED].freeze
 
   belongs_to :user

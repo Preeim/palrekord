@@ -18,6 +18,16 @@ module ApplicationHelper
     content_tag(:span, label, class: css_class)
   end
 
+  def points_badge(points, rank: nil, archived: false)
+    if archived
+      content_tag(:span, "0 pt", class: "badge badge-muted")
+    elsif rank == 1
+      content_tag(:span, "+#{points} pt", class: "badge badge-points-first")
+    else
+      content_tag(:span, "+#{points} pt", class: "badge badge-points")
+    end
+  end
+
   def value_type_hint(value_type)
     VALUE_TYPE_HINTS[value_type] || ""
   end

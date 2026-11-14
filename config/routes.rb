@@ -36,6 +36,7 @@ Rails.application.routes.draw do
       post :reset_password, on: :member
     end
     resources :invite_codes, only: [ :index, :create, :update, :destroy ]
+    resources :seasons, only: [ :index, :create, :edit, :update, :destroy ]
     resources :settings, only: [ :index, :update ]
     resources :records, only: [ :index, :update, :destroy ]
   end

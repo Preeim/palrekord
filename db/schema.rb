@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_13_194505) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_14_140001) do
   create_table "attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "record_id", null: false
     t.string "file_type", limit: 20, null: false
@@ -70,6 +70,20 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_13_194505) do
     t.index ["user_id"], name: "index_records_on_user_id"
   end
 
+  create_table "seasons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", limit: 120, null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at", null: false
+    t.bigint "created_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_seasons_on_created_by_id"
+    t.index ["ends_at"], name: "index_seasons_on_ends_at"
+    t.index ["name"], name: "index_seasons_on_name", unique: true
+    t.index ["starts_at", "ends_at"], name: "index_seasons_on_starts_at_and_ends_at"
+    t.index ["starts_at"], name: "index_seasons_on_starts_at"
+  end
+
   create_table "settings", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "key", limit: 100, null: false
     t.string "value", limit: 255, null: false
@@ -103,5 +117,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_13_194505) do
   add_foreign_key "records", "categories", on_delete: :cascade
   add_foreign_key "records", "users", column: "reviewed_by_id", on_delete: :nullify
   add_foreign_key "records", "users", on_delete: :cascade
+  add_foreign_key "seasons", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "users", "invite_codes", on_delete: :nullify
 end

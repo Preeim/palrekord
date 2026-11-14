@@ -103,83 +103,92 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `test/integration/authentication_flow_test.rb` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)
 
-## 2026-11-13 20:09 – CD SSH hitelesítési hiba elemzése
+## 2026-11-13 21:14 – Fontosabb létrehozott fájlok működésének bemutatása
 
-- **Prompt:** 2026/11/13 18:15:42 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey], no supported methods / a CD nél ez a hiba volt. pedig az elöbbi CD lefutott és nem változott majdnem semmi, csak egy dokumentum hozzáadása
-- **Értelmezés:** A GitHub Actions CD (`deploy` job) SSH hitelesítési hibájának okainak feltárása és hibakeresési javaslatok adása, figyelembe véve, hogy a kódbázisban nem történt pipeline-változás.
+- **Prompt:** Magyarázd el fontosabb létrehozott fájlok működését.
+- **Értelmezés:** A PálRecord alkalmazás legfontosabb újonnan létrehozott és módosított fájljainak (modellek, controllerek, útvonalak, adatbázis-séma, nézetek) működésének és felelősségi köreinek közérthető elmagyarázása.
 - **Elvégzett műveletek:**
-  - Áttekintettem a `.github/workflows/ci_cd.yml` konfigurációt (`appleboy/ssh-action@v1.0.3` és a használt GitHub Secrets beállítások).
-  - Összegyűjtöttem a lehetséges szerver- és GCP-oldali okokat (változó külső IP, GCP metadata / `authorized_keys` szinkronizáció, könyvtárjogosultságok, `ssh-rsa` elavulás) és a javasolt ellenőrzési lépéseket.
+  - Összefoglaltam a kulcsfontosságú fájlok felépítését és együttműködését (adatmodell, fiókkezelés, rekordok/verifikációk és adminisztráció).
   - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
 - **Módosított fájlok:**
   - `docs/AI-Usage.md` (módosítva)
 
-## 2026-11-13 20:14 – Szerver oldali SSH log és jogosultságok kiértékelése
+## 2026-11-14 13:44 – Pontrendszer specifikáció és vizuális illusztrációk készítése
 
-- **Prompt:** A szerveren futtatott `ls -ld ~ ~/.ssh ~/.ssh/authorized_keys` és `sudo tail -n 30 /var/log/auth.log` kimenetének megosztása.
-- **Értelmezés:** A beküldött szerverkimenet alapján a jogosultságok ellenőrzése és pontosított szűrési/diagnosztikai parancsok megadása a `18:15:42`-es CD futás megtalálásához.
+- **Prompt:** Tervezzünk egy pontrendszert a weboldalhoz (`/plan`, `/grill-me`), logaritmikus pontszámítással, majd készítsük el a pontrendszer specifikációt egy új `"Új Funkciók/Pontrendszer"` mappába vizuális illusztrációkkal (kezdőlapon oldalsó leaderboard, pontok kijelzése).
+- **Értelmezés:** Interaktív tervezés után a véglegesített logaritmikus, résztvevő-arányos, örökös élő és szezonális versenyeket, valamint havi kategória-létrehozási kvótát magában foglaló pontrendszer dokumentálása a `docs/Új Funkciók/Pontrendszer/` mappában, minimalista SVG látványtervekkel kiegészítve.
 - **Elvégzett műveletek:**
-  - Ellenőriztem a megosztott jogosultságokat (`700` és `600`, amelyek megfelelnek az OpenSSH követelményeinek) és a log időbélyegeit (UTC időzóna, a `tail -n 30` nem érte el a `18:15`-ös eseményt).
-  - Javasoltam célzott `grep` szűrést az `auth.log`-ra és az `authorized_keys` tartalmának ellenőrzését.
+  - Interaktív kérdés-válasz során rögzítettem a pontrendszer szabályait: csak helyezési pontok, résztvevő-arányos logaritmikus képlet (`N=12` esetén `12, 8, 6, 5, ...`), `N=1` esetén 1 pont, holtversenyben a korábbi feltöltés nyer, havi kategória-létrehozási kvóta (`monthly_category_limit`), örökös élő ranglista + admin által indított szezonális versenyek.
+  - Létrehoztam a `docs/Új Funkciók/Pontrendszer/kezdolap_leaderboard.svg` vizuális tervet (fejléc pontkijelzés, kétoszlopos kezdőlap kategóriákkal és oldalsó Örökös/Szezonális Leaderboarddal).
+  - Létrehoztam a `docs/Új Funkciók/Pontrendszer/kategoria_es_profil_pontok.svg` vizuális tervet (kategória ranglista pontokkal, holtverseny- és saját kísérlet kezeléssel, valamint a profiloldal pont-összesítőivel).
+  - Elkészítettem a `docs/Új Funkciók/Pontrendszer/pontrendszer.md` specifikációt a matematikai képlettel, adatbázis-tervvel (`seasons` tábla, `settings` bővítés) és számítási architektúrával (`LeaderboardCalculator`).
   - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
 - **Módosított fájlok:**
+  - `docs/Új Funkciók/Pontrendszer/pontrendszer.md` (létrehozva)
+  - `docs/Új Funkciók/Pontrendszer/kezdolap_leaderboard.svg` (létrehozva)
+  - `docs/Új Funkciók/Pontrendszer/kategoria_es_profil_pontok.svg` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)
 
-## 2026-11-13 20:20 – Hiányzó `authorized_keys` azonosítása és végleges GCP SSH-kulcs megoldás
+## 2026-11-14 13:44 – Pontrendszer specifikáció és vizuális illusztrációk készítése
 
-- **Prompt:** A `cat ~/.ssh/authorized_keys` (`No such file or directory`) és a szűrt `auth.log` kimenet megosztása.
-- **Értelmezés:** A hiba gyökérokának végleges azonosítása (`authorized_keys` eltűnése a GCP `google-guest-agent` miatt) és az állandó, lejárat nélküli SSH-kulcs beállításának ismertetése.
+- **Prompt:** Tervezzünk egy pontrendszert a weboldalhoz (`/plan`, `/grill-me`), logaritmikus pontszámítással, majd készítsük el a pontrendszer specifikációt egy új `"Új Funkciók/Pontrendszer"` mappába vizuális illusztrációkkal (kezdőlapon oldalsó leaderboard, pontok kijelzése).
+- **Értelmezés:** Interaktív tervezés után a véglegesített logaritmikus, résztvevő-arányos, örökös élő és szezonális versenyeket, valamint havi kategória-létrehozási kvótát magában foglaló pontrendszer dokumentálása a `docs/Új Funkciók/Pontrendszer/` mappában, minimalista SVG látványtervekkel kiegészítve.
 - **Elvégzett műveletek:**
-  - Azonosítottam, hogy a `18:15:42`-es CD próbálkozás (`20.168.157.149`) elérte a szervert, de a `/home/h_gaborbank/.ssh/authorized_keys` fájl hiányzott, mivel a GCP `google-guest-agent` az ideiglenes kulcsok lejártával felülírja/törli azt.
-  - Megadtam a végleges megoldás lépéseit (dedikált `ed25519` kulcspár generálása, publikus kulcs felvétele a GCP VM `SSH Keys` metadatába `h_gaborbank` felhasználóval, privát kulcs frissítése a GitHub `SERVER_SSH_KEY` secretben).
+  - Interaktív kérdés-válasz során rögzítettem a pontrendszer szabályait: csak helyezési pontok, résztvevő-arányos logaritmikus képlet (`N=12` esetén `12, 8, 6, 5, ...`), `N=1` esetén 1 pont, holtversenyben a korábbi feltöltés nyer, havi kategória-létrehozási kvóta (`monthly_category_limit`), örökös élő ranglista + admin által indított szezonális versenyek.
+  - Létrehoztam a `docs/Új Funkciók/Pontrendszer/kezdolap_leaderboard.svg` vizuális tervet (fejléc pontkijelzés, kétoszlopos kezdőlap kategóriákkal és oldalsó Örökös/Szezonális Leaderboarddal).
+  - Létrehoztam a `docs/Új Funkciók/Pontrendszer/kategoria_es_profil_pontok.svg` vizuális tervet (kategória ranglista pontokkal, holtverseny- és saját kísérlet kezeléssel, valamint a profiloldal pont-összesítőivel).
+  - Elkészítettem a `docs/Új Funkciók/Pontrendszer/pontrendszer.md` specifikációt a matematikai képlettel, adatbázis-tervvel (`seasons` tábla, `settings` bővítés) és számítási architektúrával (`LeaderboardCalculator`).
   - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
 - **Módosított fájlok:**
+  - `docs/Új Funkciók/Pontrendszer/pontrendszer.md` (létrehozva)
+  - `docs/Új Funkciók/Pontrendszer/kezdolap_leaderboard.svg` (létrehozva)
+  - `docs/Új Funkciók/Pontrendszer/kategoria_es_profil_pontok.svg` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)
 
-## 2026-11-13 20:26 – Újabb CD SSH hiba (`19:25:56`) diagnosztizálása
 
-- **Prompt:** 2026/11/13 19:25:56 ssh: handshake failed: ssh: unable to authenticate, attempted methods [none publickey], no supported methods
-- **Értelmezés:** A kulcscsere utáni újbóli CD SSH hitelesítési hiba okának gyors behatárolása (GCP `authorized_keys` szinkronizáció, OS Login vagy `SERVER_SSH_KEY` formátum ellenőrzése).
+## 2026-11-14 14:02 – Pontrendszer, szezonális versenyek és havi kategória-kvóta megvalósítása
+
+- **Prompt:** `/goal Hajtsd végre a Pontrendszer mappában lévő specifikációk alapján az új funkciót.`
+- **Értelmezés:** A `docs/Új Funkciók/Pontrendszer/pontrendszer.md` specifikáció, valamint a `kezdolap_leaderboard.svg` és `kategoria_es_profil_pontok.svg` látványtervek alapján a teljes közösségi pontrendszer (logaritmikus pontszámítás, Örökös Élő és Szezonális ranglista, havi kategória-létrehozási kvóta, Admin szezonkezelés, `Rails.cache` alapú gyorsítótárazás és UI nézetek) implementálása.
 - **Elvégzett műveletek:**
-  - Megadtam a `19:25`-ös `auth.log` bejegyzés és a `~/.ssh/authorized_keys` ellenőrzésére szolgáló parancsokat, valamint a lehetséges okokat (OS Login, felhasználónév-eltérés a GCP SSH Keys mezőben, vagy hibásan bemásolt privát kulcs).
-  - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
+  - Létrehoztam a `seasons` adatbázistábla migrációját (`20261114140001_create_seasons.rb`) és frissítettem a `db/schema.rb` fájlt.
+  - Elkészítettem a `LeaderboardCalculator` service-t (`app/services/leaderboard_calculator.rb`) a logaritmikus pontképlettel, egyéni legjobb szűréssel, `created_at` alapú holtverseny-kezeléssel, inaktív tagok és archivált kategóriák kizárásával, Örökös Élő és Szezonális összesítéssel, valamint verziókulcsos `Rails.cache` gyorsítótárazással.
+  - Létrehoztam a `Season` modellt (`app/models/season.rb`) és a `LeaderboardCacheInvalidatable` concern-t (`app/models/concerns/leaderboard_cache_invalidatable.rb`), továbbá frissítettem a `Setting` (`monthly_category_limit`), `User` (kvótaszámítás), `Category` (kvótavalidáció, `created_at` alapú rangsorolás, szezon-illesztés) és `Record` modelleket.
+  - Bővítettem az útvonalakat (`config/routes.rb`), létrehoztam az `Admin::SeasonsController`-t, valamint frissítettem az `ApplicationController`, `CategoriesController`, `ProfilesController` és `Admin::SettingsController` osztályokat.
+  - Elkészítettem és frissítettem a nézeteket és a CSS-t (`application.css`): fejléc pontkijelzés, kétoszlopos kezdőlap Örökös/Szezonális Leaderboard sávval és kvótajelzéssel, kategória ranglista helyezési pontokkal és másodlagos kísérletekkel, profiloldali 3 összefoglaló kártya és tételes pontlebontás, valamint az Admin Szezonok és Beállítások felület.
+  - Frissítettem a `db/seeds.rb` minta szezonnal, valamint frissítettem és létrehoztam a modell-, service- és integrációs teszteket (`record_test.rb`, `season_test.rb`, `leaderboard_calculator_test.rb`, `points_and_seasons_flow_test.rb`). (Megjegyzés: lokális Ruby/MySQL CLI továbbra sem érhető el ezen a Windows munkaállomáson, így a migrációk és tesztek futtatása a célkörnyezetben / CI-ban történik.)
 - **Módosított fájlok:**
-  - `docs/AI-Usage.md` (módosítva)
-
-## 2026-11-13 20:28 – GCP `google-guest-agent` szinkronizáció ellenőrzése
-
-- **Prompt:** A `cat ~/.ssh/authorized_keys` (`No such file or directory`) és a `19:25:56`-os `auth.log` kimenet megosztása.
-- **Értelmezés:** Annak kiderítése, miért nem jött létre a `/home/h_gaborbank/.ssh/authorized_keys` fájl a GCP kulcsfelvétel után (más felhasználóhoz került-e, vagy `google-guest-agent` / `sshd_config` beállítás blokkolja).
-- **Elvégzett műveletek:**
-  - Ellenőrző parancsokat javasoltam a többi `/home/*/.ssh/authorized_keys` fájl, a `google-guest-agent` napló és az `sshd_config` `AuthorizedKeys*` beállításainak lekérdezésére.
-  - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
-- **Módosított fájlok:**
-  - `docs/AI-Usage.md` (módosítva)
-
-## 2026-11-13 20:30 – `google-guest-agent` napló kiértékelése és végleges javítási opciók
-
-- **Prompt:** A `google-guest-agent` és az `sshd_config` lekérdezések kimenetének megosztása.
-- **Értelmezés:** A napló alapján annak megállapítása, hogy a GCP metadata nem frissült `19:15:49` óta, és két biztos megoldási út (GCP VM Edit + Save, illetve `google-guest-agent`-től független `AuthorizedKeysFile` konfiguráció) megadása.
-- **Elvégzett műveletek:**
-  - Kiértékeltem a `google-guest-agent` naplót (a lejáró böngészős kulcsok törlése után nem történt új kulcsszinkronizáció).
-  - Megadtam a GCP Console mentési lépéseit, valamint egy `sshd_config.d/99-cd-keys.conf` alapú, a guest agent által nem felülírható alternatívát.
-  - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
-- **Módosított fájlok:**
-  - `docs/AI-Usage.md` (módosítva)
-
-## 2026-11-13 20:50 – CI Minitest 6.1.0 / Rails 7.1.6 hiba javítása
-
-- **Prompt:** CI hiba volt. (`railties-7.1.6/lib/rails/test_unit/line_filtering.rb:7:in 'run': wrong number of arguments (given 3, expected 1..2) (ArgumentError)` ... `minitest-6.1.0`) Keresd meg a hibát.
-- **Értelmezés:** A GitHub Actions CI-ban a `bin/rails test` futtatásakor fellépő `ArgumentError` okának megkeresése és javítása.
-- **Elvégzett műveletek:**
-  - Azonosítottam, hogy a `Gemfile.lock` a `minitest` `6.1.0` verzióját tartalmazza, amelynek 3 argumentumos `run` hívása inkompatibilis a `railties` `7.1.6` `Rails::LineFiltering#run` metódusával (1..2 argumentum).
-  - A `Gemfile`-ban és a `Gemfile.lock`-ban rögzítettem a Rails 7.1.6-tal kompatibilis `minitest (~> 5.25)` (`5.25.4`) verziót.
-  - A `db/seeds.rb`-ben kizártam a tesztkörnyezetet (`return if Rails.env.test?`), hogy a CI `bin/rails db:prepare` lépése ne töltsön be minta kategóriákat a tesztek elé.
-  - A `test/test_helper.rb`-ben `parallelize(workers: 1)` beállításra váltottam a CI `DATABASE_URL` alapú tesztadatbázisának stabil futtatásához.
-  - Dokumentáltam a műveletet a `docs/AI-Usage.md` fájlban.
-- **Módosított fájlok:**
-  - `Gemfile` (módosítva)
-  - `Gemfile.lock` (módosítva)
+  - `db/migrate/20261114140001_create_seasons.rb` (létrehozva)
+  - `db/schema.rb` (módosítva)
   - `db/seeds.rb` (módosítva)
-  - `test/test_helper.rb` (módosítva)
+  - `app/services/leaderboard_calculator.rb` (létrehozva)
+  - `app/models/concerns/leaderboard_cache_invalidatable.rb` (létrehozva)
+  - `app/models/season.rb` (létrehozva)
+  - `app/models/setting.rb` (módosítva)
+  - `app/models/user.rb` (módosítva)
+  - `app/models/category.rb` (módosítva)
+  - `app/models/record.rb` (módosítva)
+  - `config/routes.rb` (módosítva)
+  - `app/controllers/application_controller.rb` (módosítva)
+  - `app/controllers/categories_controller.rb` (módosítva)
+  - `app/controllers/profiles_controller.rb` (módosítva)
+  - `app/controllers/admin/seasons_controller.rb` (létrehozva)
+  - `app/controllers/admin/settings_controller.rb` (módosítva)
+  - `app/helpers/application_helper.rb` (módosítva)
+  - `app/views/layouts/application.html.erb` (módosítva)
+  - `app/views/categories/index.html.erb` (módosítva)
+  - `app/views/categories/new.html.erb` (módosítva)
+  - `app/views/categories/_form.html.erb` (módosítva)
+  - `app/views/categories/show.html.erb` (módosítva)
+  - `app/views/profiles/show.html.erb` (módosítva)
+  - `app/views/admin/_nav.html.erb` (módosítva)
+  - `app/views/admin/seasons/_form.html.erb` (létrehozva)
+  - `app/views/admin/seasons/index.html.erb` (létrehozva)
+  - `app/views/admin/seasons/edit.html.erb` (létrehozva)
+  - `app/views/admin/settings/index.html.erb` (módosítva)
+  - `app/assets/stylesheets/application.css` (módosítva)
+  - `test/models/record_test.rb` (módosítva)
+  - `test/models/season_test.rb` (létrehozva)
+  - `test/services/leaderboard_calculator_test.rb` (létrehozva)
+  - `test/integration/points_and_seasons_flow_test.rb` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)

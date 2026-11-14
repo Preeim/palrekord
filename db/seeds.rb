@@ -21,6 +21,13 @@ InviteCode.find_or_create_by!(code: "PAL-8F3K9A") do |invite|
   invite.created_by = admin
 end
 
+# Minta szezonális verseny
+Season.find_or_create_by!(name: "2026 Őszi Szezon") do |season|
+  season.starts_at = Time.zone.local(2026, 9, 1, 0, 0, 0)
+  season.ends_at = Time.zone.local(2026, 11, 30, 23, 59, 59)
+  season.created_by = admin
+end
+
 # Minta versenyszámok a látványterv alapján
 sample_categories = [
   {

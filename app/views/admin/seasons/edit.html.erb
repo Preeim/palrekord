@@ -1,0 +1,14 @@
+<% content_for :title, "Admin – Szezon szerkesztése" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Szezon szerkesztése – <%= @season.name %></h1>
+    <p class="page-subtitle">A szezon időtartamának vagy nevének módosítása.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<div class="card">
+  <%= render "form", season: @season %>
+</div>

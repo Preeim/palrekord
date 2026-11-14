@@ -17,8 +17,10 @@
 
         <nav class="header-nav">
           <% if logged_in? %>
-            <%= link_to "Új rekord", new_record_path, class: "btn btn-primary" %>
-            <%= link_to "Profil (#{current_user.display_name})", profile_path, class: "btn btn-outline" %>
+            <%= link_to "+ Új rekord", new_record_path, class: "btn btn-primary" %>
+            <%= link_to profile_path, class: "btn btn-outline" do %>
+              Profil (<%= current_user.display_name %> · <strong><%= current_user_total_points %> pt</strong>)
+            <% end %>
             <% if admin? %>
               <%= link_to "Admin", admin_root_path, class: "btn btn-outline" %>
             <% end %>
