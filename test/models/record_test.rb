@@ -86,4 +86,30 @@ class RecordTest < ActiveSupport::TestCase
     assert_equal [ earlier_upload.id, later_upload.id ], ordered.map(&:id)
     assert_equal earlier_upload.id, cat.top_record.id
   end
+
+  test "rejects decimals for INT and impossible calendar dates for DATE, and orders DESC categories highest-first" do
+    int_cat = Category.create!(name: "Fekvőtámasz", unit: "db", value_type: "INT", sort_direction: "DESC")
+    bad_int = Record.new(user: @user, category: int_cat, value: "12.5", achieved_at: Date.current)
+    assert_not bad_int.valid?
+    assert bad_int.errors[:value].present?
+
+    date_cat = Category.create!(name: "Mérföldkő", unit: "-", value_type: "DATE", sort_direction: "DESC")
+    bad_date = Record.new(user: @user, category: date_cat, value: "2026-02-30", achieved_at: Date.current)
+    assert_not bad_date.valid?
+    assert bad_date.errors[:value].present?
+
+    second_user = User.create!(
+      username: "desc_tester",
+      display_name: "Csökkenő Csaba",
+      password: "password123",
+      password_confirmation: "password123",
+      confirmed_at: Time.current
+    )
+
+    low = Record.create!(user: @user, category: int_cat, value: "30", achieved_at: Date.current, status: "APPROVED")
+    high = Record.create!(user: second_user, category: int_cat, value: "55", achieved_at: Date.current, status: "APPROVED")
+
+    assert_equal [ high.id, low.id ], int_cat.approved_records_ordered.pluck(:id)
+    assert_equal high.id, int_cat.top_record.id
+  end
 end

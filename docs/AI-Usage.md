@@ -203,3 +203,31 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
 - **Módosított fájlok:**
   - `test/services/leaderboard_calculator_test.rb` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+## 2026-11-14 21:52 – Projektet lefedő tesztek és tesztelési dokumentáció készítése
+
+- **Prompt:** Tervezzünk sokféle tesztet az egész projektet lefedve, szedjük össze az eddig megvalósított teszteket típusra rendezve, majd készítsünk dokumentációt és teszteket erről.
+- **Értelmezés:** A meglévő 19 teszteset típus szerinti rendszerezése, a hiányzó modellek (`Setting`, `InviteCode`, `Category`, `Attachment`, valamint `User`/`Record` kiegészítések), a `UserMailer`, az `ApplicationHelper`, a jogosultsági/biztonsági és e-mail/melléklet integrációs tesztek, valamint a Capybara (`:rack_test`) UI rendszerteszt megírása és dokumentálása a `docs/Tesztelés/tesztelesi_terv.md` fájlban.
+- **Elvégzett műveletek:**
+  - Áttekintettem a teljes kódbázist és a meglévő 6 tesztfájl (19 teszteset) tartalmát.
+  - Létrehoztam az új modell teszteket (`setting_test.rb`, `invite_code_test.rb`, `category_test.rb`, `attachment_test.rb`), és bővítettem a `user_test.rb` és `record_test.rb` fájlokat.
+  - Létrehoztam a mailer (`user_mailer_test.rb`) és helper (`application_helper_test.rb`) teszteket.
+  - Létrehoztam a jogosultsági/biztonsági (`security_and_authorization_test.rb`) és az e-mail/fájlfeltöltési (`email_system_and_attachments_flow_test.rb`) integrációs teszteket.
+  - Átállítottam a `test/application_system_test_case.rb` meghajtót `:rack_test`-re, és elkészítettem a `user_journey_system_test.rb` UI folyamattesztet.
+  - Elkészítettem a típus szerint rendszerezett teljes tesztelési specifikációt a `docs/Tesztelés/tesztelesi_terv.md` fájlban.
+  - Naplóztam a lépést a `docs/AI-Usage.md` fájlban. (Megjegyzés: ezen a Windows munkaállomáson nincs telepített Ruby/MySQL CLI, így a tesztek tényleges futtatása a célkörnyezetben szükséges.)
+- **Módosított fájlok:**
+  - `test/models/setting_test.rb` (létrehozva)
+  - `test/models/invite_code_test.rb` (létrehozva)
+  - `test/models/category_test.rb` (létrehozva)
+  - `test/models/attachment_test.rb` (létrehozva)
+  - `test/models/user_test.rb` (módosítva)
+  - `test/models/record_test.rb` (módosítva)
+  - `test/mailers/user_mailer_test.rb` (létrehozva)
+  - `test/helpers/application_helper_test.rb` (létrehozva)
+  - `test/integration/security_and_authorization_test.rb` (létrehozva)
+  - `test/integration/email_system_and_attachments_flow_test.rb` (létrehozva)
+  - `test/application_system_test_case.rb` (módosítva)
+  - `test/system/user_journey_system_test.rb` (létrehozva)
+  - `docs/Tesztelés/tesztelesi_terv.md` (létrehozva)
+  - `docs/AI-Usage.md` (módosítva)
