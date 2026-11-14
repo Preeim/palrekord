@@ -328,3 +328,14 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `docs/Új Funkciók/Verifikáció/verifikacios_menu_urlap.svg` (módosítva)
   - `docs/Új Funkciók/Verifikáció/kezdo_kategoriak_bizonyitekok.svg` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-14 23:32] – `AttachmentTest` típusfelismerési teszt javítása
+
+- **Prompt:** CI tesztkimenet továbbítása (`AttachmentTest#test_infers_file_type_automatically_when_blank_and_cleans_inactive_fields` 1 hiba, 53 tesztből 52 sikeres).
+- **Értelmezés:** A tesztben üres `file_type: ""` mellett egyúttal `file_path_or_url` is átadásra került a `text_content` mellett, így az `infer_file_type_from_payload` helyesen `"LINK"` típust állított be (`file_path_or_url` prioritása miatt). A `"TEXT"` típusfelismerést és az inaktív URL törlését két külön esetre kellett bontani.
+- **Elvégzett műveletek:**
+  - Módosította a `test/models/attachment_test.rb` 89–95. sorát: üres `file_type: ""` esetén `file_path_or_url` nélkül ellenőrzi a `"TEXT"` felismerést, majd explicit `file_type: "TEXT"` mellett ellenőrzi a `file_path_or_url` törlését.
+- **Módosított fájlok:**
+  - `test/models/attachment_test.rb` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)

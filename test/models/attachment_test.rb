@@ -86,9 +86,13 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_equal "https://example.com/run", inferred_link.file_path_or_url
     assert_nil inferred_link.text_content
 
-    inferred_text = Attachment.create!(record: @record, file_type: "", text_content: "Tanúk: Peti, Anna", file_path_or_url: "https://ignored.example")
+    inferred_text = Attachment.create!(record: @record, file_type: "", text_content: "Tanúk: Peti, Anna")
     assert_equal "TEXT", inferred_text.file_type
     assert_nil inferred_text.file_path_or_url
+
+    cleaned_text = Attachment.create!(record: @record, file_type: "TEXT", text_content: "Tanúk: Peti, Anna", file_path_or_url: "https://ignored.example")
+    assert_equal "TEXT", cleaned_text.file_type
+    assert_nil cleaned_text.file_path_or_url
   end
 
   private
