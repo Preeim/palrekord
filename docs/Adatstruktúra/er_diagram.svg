@@ -16,7 +16,7 @@
 
   <!-- Title Bar -->
   <text x="40" y="38" font-size="22" font-weight="700" fill="#0f172a">PálRecord – Entitás-kapcsolati Diagram (MySQL)</text>
-  <text x="40" y="58" font-size="13" fill="#475569">Rails 7.1 + MySQL adatbázis séma · Kék kerettel és [ÚJ] jelvénnyel jelölve a Pontrendszer, Szezonok és Havi kvóta változásai</text>
+  <text x="40" y="58" font-size="13" fill="#475569">Rails 7.1 + MySQL adatbázis séma · Kék kerettel és [ÚJ] jelvénnyel jelölve a Pontrendszer, Szezonok és Verifikáció változásai</text>
 
   <!-- ==================== CONNECTORS ==================== -->
   <!-- USERS -> INVITE_CODES (created_by_id) -->
@@ -55,7 +55,7 @@
   <text x="855" y="350" font-size="10" font-weight="700" text-anchor="middle" fill="#1d4ed8">[ÚJ] létrehoz</text>
 
   <!-- [NEW] SEASONS <-> CATEGORIES (időszakos besorolás created_at alapján) -->
-  <path d="M 1240 410 L 1280 410 L 1280 855 L 210 855 L 210 775" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-new)"/>
+  <path d="M 1240 410 L 1280 410 L 1280 855 L 210 855 L 210 820" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow-new)"/>
   <rect x="495" y="844" width="500" height="20" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
   <text x="745" y="858" font-size="11" font-weight="600" text-anchor="middle" fill="#1d4ed8">[ÚJ] Időszakos besorolás: categories.created_at BETWEEN seasons.starts_at AND ends_at</text>
 
@@ -235,7 +235,7 @@
 
   <!-- ==================== TABLE: CATEGORIES ==================== -->
   <g transform="translate(40, 480)" filter="url(#shadow)">
-    <rect width="340" height="295" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+    <rect width="340" height="340" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
     <path d="M 0 8 Q 0 0 8 0 L 332 0 Q 340 0 340 8 L 340 36 L 0 36 Z" fill="#1e293b"/>
     <text x="14" y="23" font-size="13" font-weight="700" fill="#ffffff">CATEGORIES (Versenyszámok)</text>
     <rect x="292" y="9" width="36" height="18" rx="4" fill="#dbeafe"/>
@@ -270,17 +270,25 @@
     <text x="155" y="192" font-size="11" fill="#475569">BOOLEAN</text>
     <text x="326" y="192" font-size="10" text-anchor="end" fill="#64748b">NN, def: false</text>
 
-    <text x="14" y="214" font-size="12" font-weight="600" fill="#1d4ed8">created_by_id</text>
-    <text x="155" y="214" font-size="11" fill="#475569">BIGINT</text>
-    <text x="326" y="214" font-size="10" font-weight="700" text-anchor="end" fill="#0369a1">FK, IDX</text>
+    <text x="14" y="214" font-size="11.5" font-weight="600" fill="#1d4ed8">recommended_file_type</text>
+    <text x="175" y="214" font-size="10.5" fill="#475569">VARCHAR(20)</text>
+    <text x="326" y="214" font-size="10" font-weight="700" text-anchor="end" fill="#1d4ed8">NULL [ÚJ]</text>
 
-    <text x="14" y="236" font-size="11" font-weight="600" fill="#1d4ed8">created_at, updated_at</text>
-    <text x="200" y="236" font-size="11" fill="#475569">DATETIME(6)</text>
-    <text x="326" y="236" font-size="10" text-anchor="end" fill="#64748b">NN</text>
+    <text x="14" y="236" font-size="11.5" font-weight="600" fill="#1d4ed8">verification_hint</text>
+    <text x="175" y="236" font-size="10.5" fill="#475569">VARCHAR(255)</text>
+    <text x="326" y="236" font-size="10" font-weight="700" text-anchor="end" fill="#1d4ed8">NULL [ÚJ]</text>
 
-    <rect x="12" y="246" width="316" height="38" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
-    <text x="20" y="262" font-size="10" font-weight="700" fill="#1d4ed8">[ÚJ] created_at → szezon besorolás (starts_at..ends_at)</text>
-    <text x="20" y="276" font-size="10" fill="#1e40af">[ÚJ] (created_by_id, created_at) → havi kvóta számítás</text>
+    <text x="14" y="258" font-size="12" font-weight="600" fill="#1d4ed8">created_by_id</text>
+    <text x="155" y="258" font-size="11" fill="#475569">BIGINT</text>
+    <text x="326" y="258" font-size="10" font-weight="700" text-anchor="end" fill="#0369a1">FK, IDX</text>
+
+    <text x="14" y="280" font-size="11" font-weight="600" fill="#1d4ed8">created_at, updated_at</text>
+    <text x="200" y="280" font-size="11" fill="#475569">DATETIME(6)</text>
+    <text x="326" y="280" font-size="10" text-anchor="end" fill="#64748b">NN</text>
+
+    <rect x="12" y="292" width="316" height="38" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+    <text x="20" y="308" font-size="10" font-weight="700" fill="#1d4ed8">[ÚJ] created_at → szezon besorolás (starts_at..ends_at)</text>
+    <text x="20" y="322" font-size="10" fill="#1e40af">[ÚJ] (created_by_id, created_at) → havi kvóta számítás</text>
   </g>
 
   <!-- ==================== TABLE: RECORDS ==================== -->
@@ -393,7 +401,7 @@
 
     <rect x="615" y="16" width="50" height="20" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
     <text x="640" y="30" font-size="10" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ]</text>
-    <text x="673" y="30" font-size="11" font-weight="600" fill="#1d4ed8">= Pontrendszer / Szezonok / Havi kvóta miatt hozzáadott</text>
+    <text x="673" y="30" font-size="11" font-weight="600" fill="#1d4ed8">= Pontrendszer / Szezonok / Verifikáció miatt hozzáadott</text>
 
     <line x1="1015" y1="26" x2="1055" y2="26" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,3"/>
     <text x="1063" y="30" font-size="11" fill="#1d4ed8">Időintervallum kapcsolat</text>

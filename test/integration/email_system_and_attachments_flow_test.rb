@@ -170,6 +170,53 @@ class EmailSystemAndAttachmentsFlowTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "record submission menu displays category verification hint and auto-infers proof type" do
+    Setting.set("require_record_approval", "false")
+    @category.update!(
+      recommended_file_type: "IMAGE",
+      verification_hint: "1 célfotó a stopperről"
+    )
+
+    user = User.create!(
+      username: "menuuser",
+      display_name: "Menü Misi",
+      password: "password123",
+      password_confirmation: "password123",
+      confirmed_at: Time.current
+    )
+    post login_path, params: { login: "menuuser", password: "password123" }
+
+    get new_record_path(category_id: @category.id)
+    assert_response :success
+    assert_includes response.body, "verification-menu"
+    assert_includes response.body, "1 célfotó a stopperről"
+
+    assert_difference([ "Record.count", "Attachment.count" ], 1) do
+      post records_path, params: {
+        record: {
+          category_id: @category.id,
+          value: "02:30:00",
+          achieved_at: Date.current.to_s,
+          note: "Tanú: Mail Admin",
+          attachments_attributes: {
+            "0" => {
+              file_type: "",
+              text_content: "Jelenlévő tanú(k): Mail Admin\nHelyszín: Pálya"
+            }
+          }
+        }
+      }
+    end
+
+    created_att = Record.last.attachments.first
+    assert_equal "TEXT", created_att.file_type
+
+    get category_path(@category)
+    assert_response :success
+    assert_includes response.body, "1 célfotó a stopperről"
+    assert_includes response.body, "🤝 Jegyzőkönyv"
+  end
+
   private
 
   def extract_token_from_mail(mail)

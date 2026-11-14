@@ -9,13 +9,27 @@
   </div>
 <% end %>
 
-<%= form_with model: record, multipart: true, local: true do |f| %>
+<% selected_category = record.category || @categories.find { |c| c.id == record.category_id } %>
+
+<%= form_with model: record, multipart: true, local: true, html: { id: "record-submission-form" } do |f| %>
   <div class="form-group">
     <%= f.label :category_id, "Versenyszám *", class: "form-label" %>
     <%= f.select :category_id,
-      @categories.map { |c| [ "#{c.name} (#{c.unit} · #{value_type_hint(c.value_type)})", c.id ] },
+      options_for_select(
+        @categories.map do |c|
+          [
+            "#{c.name} (#{c.unit} · #{value_type_hint(c.value_type)})",
+            c.id,
+            {
+              "data-recommended-type" => c.recommended_file_type.to_s,
+              "data-verification-hint" => c.verification_hint.to_s
+            }
+          ]
+        end,
+        record.category_id
+      ),
       { prompt: "-- Válassz versenyszámot --" },
-      class: "form-control", required: true %>
+      class: "form-control", id: "record_category_id", required: true %>
   </div>
 
   <div class="form-row">
@@ -31,57 +45,116 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <%= f.label :note, "Megjegyzés / tanúk", class: "form-label" %>
-    <%= f.text_area :note, class: "form-control", placeholder: "Körülmények, helyszín, jelenlévő tanúk..." %>
+  <% has_category_proof_info = selected_category.present? && (selected_category.verification_hint.present? || selected_category.recommended_file_type.present?) %>
+  <div id="category-verification-hint-box" class="verification-hint-box" style="<%= has_category_proof_info ? '' : 'display: none;' %>">
+    <strong>Ajánlott bizonyítás ehhez a kategóriához:</strong>
+    <span id="category-verification-hint-text">
+      <% if selected_category&.verification_hint.present? %>
+        <%= selected_category.verification_hint %>
+      <% elsif selected_category&.recommended_file_type.present? %>
+        <%= selected_category.recommended_file_type_label %>
+      <% end %>
+    </span>
   </div>
 
-  <div class="card" style="background: #fafafa;">
-    <h3 style="margin: 0 0 12px 0; font-size: 15px;">Verifikációs melléklet (opcionális)</h3>
+  <div class="form-group">
+    <%= f.label :note, "Megjegyzés / jelenlévő tanúk", class: "form-label" %>
+    <%= f.text_area :note, class: "form-control", placeholder: "Körülmények, helyszín, jelenlévő tanúk neve..." %>
+  </div>
+
+  <div class="card" id="record-verification-card" style="background: #fafafa;">
+    <h3 style="margin: 0 0 6px 0; font-size: 15px;">Verifikációs bizonyíték (opcionális)</h3>
+    <p class="form-hint" style="margin: 0 0 12px 0;">
+      Válassz egy egyszerű bizonyítéktípust a menüből – egyszerre csak az adott típushoz tartozó mező jelenik meg.
+    </p>
 
     <%= f.fields_for :attachments do |af| %>
       <% if af.object.persisted? %>
         <div class="form-group">
-          <strong>Meglévő melléklet (<%= af.object.file_type %>):</strong>
+          <strong>Meglévő melléklet (<%= af.object.type_label %>):</strong>
           <% if af.object.file_attachment? %>
-            <%= link_to(af.object.original_filename.presence || af.object.file_type, attachment_path(af.object), target: "_blank") %>
+            <%= link_to(af.object.original_filename.presence || af.object.file_type, attachment_path(af.object), target: "_blank", rel: "noopener") %>
           <% elsif af.object.link? %>
             <%= link_to af.object.file_path_or_url, af.object.file_path_or_url, target: "_blank", rel: "noopener noreferrer" %>
           <% elsif af.object.text? %>
-            <span><%= af.object.text_content %></span>
+            <div style="margin-top: 4px;"><%= simple_format(h(af.object.text_content)) %></div>
           <% end %>
           <div style="margin-top: 6px;">
             <label><%= af.check_box :_destroy %> Melléklet törlése</label>
           </div>
         </div>
       <% else %>
-        <div class="form-group">
-          <%= af.label :file_type, "Melléklet típusa", class: "form-label" %>
-          <%= af.select :file_type,
-            [
-              ["-- Nincs melléklet --", ""],
-              ["Kép feltöltése (IMAGE)", "IMAGE"],
-              ["PDF dokumentum (PDF)", "PDF"],
-              ["Szöveges igazolás (TEXT)", "TEXT"],
-              ["Külső link / videó URL (LINK)", "LINK"]
-            ],
-            {},
-            class: "form-control" %>
-        </div>
+        <div class="verification-wrapper" data-attachment-widget>
+          <div class="form-group verification-select-fallback">
+            <%= af.label :file_type, "Melléklet típusa", class: "form-label" %>
+            <%= af.select :file_type,
+              [
+                [ "🚫 Nincs melléklet", "" ],
+                [ Attachment::FILE_TYPE_LABELS["IMAGE"], "IMAGE" ],
+                [ Attachment::FILE_TYPE_LABELS["LINK"], "LINK" ],
+                [ Attachment::FILE_TYPE_LABELS["TEXT"], "TEXT" ],
+                [ Attachment::FILE_TYPE_LABELS["PDF"], "PDF" ]
+              ],
+              { selected: af.object.file_type.to_s },
+              class: "form-control verification-type-select" %>
+          </div>
 
-        <div class="form-group">
-          <%= af.label :uploaded_file, "Fájl kiválasztása (IMAGE vagy PDF esetén)", class: "form-label" %>
-          <%= af.file_field :uploaded_file, class: "form-control", accept: "image/png,image/jpeg,image/gif,image/webp,application/pdf" %>
-        </div>
+          <div class="verification-menu" role="tablist" aria-label="Verifikációs bizonyíték típusa" style="display: none;">
+            <button type="button" class="verification-tab" data-proof-type="">
+              🚫 Nincs melléklet
+            </button>
+            <button type="button" class="verification-tab" data-proof-type="IMAGE">
+              <%= Attachment::FILE_TYPE_LABELS["IMAGE"] %>
+              <span class="verification-tab-tag" style="display: none;">Ajánlott</span>
+            </button>
+            <button type="button" class="verification-tab" data-proof-type="LINK">
+              <%= Attachment::FILE_TYPE_LABELS["LINK"] %>
+              <span class="verification-tab-tag" style="display: none;">Ajánlott</span>
+            </button>
+            <button type="button" class="verification-tab" data-proof-type="TEXT">
+              <%= Attachment::FILE_TYPE_LABELS["TEXT"] %>
+              <span class="verification-tab-tag" style="display: none;">Ajánlott</span>
+            </button>
+            <button type="button" class="verification-tab" data-proof-type="PDF">
+              <%= Attachment::FILE_TYPE_LABELS["PDF"] %>
+              <span class="verification-tab-tag" style="display: none;">Ajánlott</span>
+            </button>
+          </div>
 
-        <div class="form-group">
-          <%= af.label :file_path_or_url, "Külső URL (LINK esetén)", class: "form-label" %>
-          <%= af.url_field :file_path_or_url, class: "form-control", placeholder: "https://..." %>
-        </div>
+          <div class="verification-panel" data-proof-panel="FILE">
+            <div class="form-group" style="margin-bottom: 0;">
+              <%= af.label :uploaded_file, "Fájl kiválasztása", class: "form-label verification-file-label" %>
+              <%= af.file_field :uploaded_file, class: "form-control verification-file-input",
+                accept: "image/png,image/jpeg,image/gif,image/webp,application/pdf" %>
+              <div class="form-hint verification-file-hint">
+                Engedélyezett: PNG, JPG, JPEG, GIF, WEBP vagy PDF (legfeljebb 10 MB).
+              </div>
+            </div>
+          </div>
 
-        <div class="form-group" style="margin-bottom: 0;">
-          <%= af.label :text_content, "Szöveges igazolás (TEXT esetén)", class: "form-label" %>
-          <%= af.text_area :text_content, class: "form-control", placeholder: "Írd ide a szöveges igazolást..." %>
+          <div class="verification-panel" data-proof-panel="LINK" style="margin-top: 10px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <%= af.label :file_path_or_url, "Videó vagy megosztott hivatkozás", class: "form-label" %>
+              <%= af.url_field :file_path_or_url, class: "form-control verification-url-input", placeholder: "https://..." %>
+              <div class="form-hint">
+                Használhatsz nem listázott YouTube Shorts, Google Fotók, Google Drive vagy Strava linket (http:// vagy https://).
+              </div>
+            </div>
+          </div>
+
+          <div class="verification-panel" data-proof-panel="TEXT" style="margin-top: 10px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <div class="verification-panel-header">
+                <%= af.label :text_content, "Tanú-jegyzőkönyv / szöveges igazolás", class: "form-label", style: "margin-bottom: 0;" %>
+                <button type="button" class="btn btn-outline btn-sm verification-template-btn">+ Sablon beszúrása</button>
+              </div>
+              <%= af.text_area :text_content, class: "form-control verification-text-input",
+                placeholder: "Add meg a jelenlévő tanúk nevét, a helyszínt és a mérés módját..." %>
+              <div class="form-hint">
+                Tipp: kattints a „+ Sablon beszúrása” gombra a védhető jegyzőkönyv-formátumhoz.
+              </div>
+            </div>
+          </div>
         </div>
       <% end %>
     <% end %>
@@ -92,3 +165,159 @@
     <%= link_to "Mégse", (record.persisted? ? profile_path : root_path), class: "btn btn-outline" %>
   </div>
 <% end %>
+
+<script>
+  (function() {
+    var form = document.getElementById("record-submission-form");
+    if (!form || form.dataset.verificationInitialized === "true") return;
+    form.dataset.verificationInitialized = "true";
+
+    var TEMPLATE = <%= raw Attachment::DEFAULT_TEXT_TEMPLATE.to_json %>;
+    var categorySelect = document.getElementById("record_category_id");
+    var hintBox = document.getElementById("category-verification-hint-box");
+    var hintText = document.getElementById("category-verification-hint-text");
+    var widget = form.querySelector("[data-attachment-widget]");
+    if (!widget) return;
+
+    var fallbackWrap = widget.querySelector(".verification-select-fallback");
+    var typeSelect = widget.querySelector(".verification-type-select");
+    var menu = widget.querySelector(".verification-menu");
+    var tabs = Array.prototype.slice.call(widget.querySelectorAll(".verification-tab"));
+
+    var filePanel = widget.querySelector('[data-proof-panel="FILE"]');
+    var linkPanel = widget.querySelector('[data-proof-panel="LINK"]');
+    var textPanel = widget.querySelector('[data-proof-panel="TEXT"]');
+
+    var fileLabel = widget.querySelector(".verification-file-label");
+    var fileHint = widget.querySelector(".verification-file-hint");
+    var fileInput = widget.querySelector(".verification-file-input");
+    var urlInput = widget.querySelector(".verification-url-input");
+    var textInput = widget.querySelector(".verification-text-input");
+    var templateBtn = widget.querySelector(".verification-template-btn");
+
+    // Progresszív fejlesztés: JS alatt a menüt használjuk a sima select helyett
+    if (fallbackWrap) fallbackWrap.style.display = "none";
+    if (menu) menu.style.display = "flex";
+
+    function hasAnyPayload() {
+      var hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+      var hasUrl = urlInput && urlInput.value.trim() !== "";
+      var hasText = textInput && textInput.value.trim() !== "";
+      return Boolean(hasFile || hasUrl || hasText);
+    }
+
+    function applyTab(proofType, clearIncompatibleFile) {
+      var previousType = typeSelect.value;
+      typeSelect.value = proofType || "";
+
+      if (clearIncompatibleFile && fileInput) {
+        var wasFile = previousType === "IMAGE" || previousType === "PDF";
+        var nowFile = proofType === "IMAGE" || proofType === "PDF";
+        if (proofType === "" || (wasFile && nowFile && previousType !== proofType)) {
+          fileInput.value = "";
+        }
+      }
+
+      if (proofType === "") {
+        if (urlInput) urlInput.value = "";
+        if (textInput) textInput.value = "";
+        if (fileInput) fileInput.value = "";
+      }
+
+      tabs.forEach(function(tab) {
+        tab.classList.toggle("active", tab.getAttribute("data-proof-type") === typeSelect.value);
+      });
+
+      filePanel.style.display = "none";
+      linkPanel.style.display = "none";
+      textPanel.style.display = "none";
+
+      if (typeSelect.value === "IMAGE") {
+        filePanel.style.display = "block";
+        fileLabel.textContent = "Fotó vagy képernyőkép feltöltése *";
+        fileInput.setAttribute("accept", "image/png,image/jpeg,image/gif,image/webp");
+        fileHint.textContent = "Engedélyezett: PNG, JPG, JPEG, GIF, WEBP (legfeljebb 10 MB). Mobilon közvetlenül fotózhatsz is.";
+      } else if (typeSelect.value === "PDF") {
+        filePanel.style.display = "block";
+        fileLabel.textContent = "PDF dokumentum kiválasztása *";
+        fileInput.setAttribute("accept", "application/pdf");
+        fileHint.textContent = "Engedélyezett: PDF fájl (legfeljebb 10 MB).";
+      } else if (typeSelect.value === "LINK") {
+        linkPanel.style.display = "block";
+      } else if (typeSelect.value === "TEXT") {
+        textPanel.style.display = "block";
+      }
+    }
+
+    function syncCategorySuggestion(autoSwitchTab) {
+      if (!categorySelect) return;
+      var selectedOption = categorySelect.options[categorySelect.selectedIndex];
+      var recommendedType = selectedOption ? (selectedOption.getAttribute("data-recommended-type") || "") : "";
+      var hint = selectedOption ? (selectedOption.getAttribute("data-verification-hint") || "") : "";
+
+      tabs.forEach(function(tab) {
+        var tabType = tab.getAttribute("data-proof-type");
+        var tag = tab.querySelector(".verification-tab-tag");
+        var isRec = recommendedType !== "" && tabType === recommendedType;
+        tab.classList.toggle("recommended", isRec);
+        if (tag) tag.style.display = isRec ? "inline-block" : "none";
+      });
+
+      if (hintBox && hintText) {
+        if (hint !== "" || recommendedType !== "") {
+          hintText.textContent = hint !== "" ? hint : (recommendedType + " formátum ajánlott ehhez a kategóriához.");
+          hintBox.style.display = "block";
+        } else {
+          hintBox.style.display = "none";
+        }
+      }
+
+      if (autoSwitchTab && !hasAnyPayload()) {
+        applyTab(recommendedType, true);
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        applyTab(tab.getAttribute("data-proof-type"), true);
+      });
+    });
+
+    if (templateBtn && textInput) {
+      templateBtn.addEventListener("click", function() {
+        if (textInput.value.trim() === "") {
+          textInput.value = TEMPLATE;
+        } else if (textInput.value.indexOf("Jelenlévő tanú(k):") === -1) {
+          textInput.value = textInput.value.replace(/\s+$/, "") + "\n\n" + TEMPLATE;
+        }
+        textInput.focus();
+      });
+    }
+
+    if (categorySelect) {
+      categorySelect.addEventListener("change", function() {
+        syncCategorySuggestion(true);
+      });
+    }
+
+    // Ha egy opcionális fül aktív (pl. kategória ajánlás miatt), de üres maradt, beküldéskor ne hibázzon
+    form.addEventListener("submit", function() {
+      var activeType = typeSelect.value;
+      var emptyActive =
+        (activeType === "IMAGE" || activeType === "PDF") && (!fileInput || !fileInput.files || fileInput.files.length === 0) ||
+        activeType === "LINK" && (!urlInput || urlInput.value.trim() === "") ||
+        activeType === "TEXT" && (!textInput || textInput.value.trim() === "");
+
+      if (emptyActive) {
+        typeSelect.value = "";
+      }
+    });
+
+    // Kezdő állapot beállítása
+    var initialType = typeSelect.value;
+    syncCategorySuggestion(initialType === "");
+    if (initialType !== "") {
+      applyTab(initialType, false);
+    }
+  })();
+</script>

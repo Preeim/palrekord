@@ -65,10 +65,10 @@ class CategoriesController < ApplicationController
   end
 
   def category_params
-    params.require(:category).permit(:name, :description, :unit, :value_type, :sort_direction)
+    params.require(:category).permit(:name, :description, :unit, :value_type, :sort_direction, :recommended_file_type, :verification_hint)
   end
 
   def admin_category_params
-    params.require(:category).permit(:name, :description, :unit, :value_type, :sort_direction, :is_archived)
+    params.require(:category).permit(:name, :description, :unit, :value_type, :sort_direction, :recommended_file_type, :verification_hint, :is_archived)
   end
 end

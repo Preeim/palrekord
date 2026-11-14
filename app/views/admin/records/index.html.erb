@@ -47,12 +47,13 @@
                 <ul class="attachment-list">
                   <% record.attachments.each do |att| %>
                     <li>
+                      <%= attachment_type_badge(att) %>
                       <% if att.file_attachment? %>
                         <%= link_to(att.original_filename.presence || att.file_type, attachment_path(att), target: "_blank", rel: "noopener") %>
                       <% elsif att.link? %>
                         <%= link_to "Link", att.file_path_or_url, target: "_blank", rel: "noopener noreferrer" %>
                       <% elsif att.text? %>
-                        <%= att.text_content %>
+                        <span><%= simple_format(h(att.text_content), {}, wrapper_tag: "span") %></span>
                       <% end %>
                     </li>
                   <% end %>

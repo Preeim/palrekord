@@ -31,4 +31,17 @@ module ApplicationHelper
   def value_type_hint(value_type)
     VALUE_TYPE_HINTS[value_type] || ""
   end
+
+  def attachment_type_badge(attachment)
+    return nil if attachment.blank? || attachment.file_type.blank?
+
+    content_tag(:span, attachment.short_type_label, class: "badge badge-proof")
+  end
+
+  def recommended_proof_badge(file_type)
+    label = Attachment::FILE_TYPE_LABELS[file_type]
+    return nil if label.blank?
+
+    content_tag(:span, label, class: "badge badge-proof")
+  end
 end

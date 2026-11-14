@@ -29,10 +29,23 @@
   </div>
 </div>
 
-<% if @category.description.present? %>
+<% if @category.description.present? || @category.recommended_file_type.present? || @category.verification_hint.present? %>
   <div class="card">
-    <strong>Szabályzat / leírás:</strong>
-    <div><%= simple_format(h(@category.description)) %></div>
+    <% if @category.description.present? %>
+      <div>
+        <strong>Szabályzat / leírás:</strong>
+        <div><%= simple_format(h(@category.description)) %></div>
+      </div>
+    <% end %>
+    <% if @category.recommended_file_type.present? || @category.verification_hint.present? %>
+      <div style="<%= 'margin-top: 10px; padding-top: 10px; border-top: 1px solid #eeeeee;' if @category.description.present? %>">
+        <strong>Ajánlott verifikáció:</strong>
+        <%= recommended_proof_badge(@category.recommended_file_type) %>
+        <% if @category.verification_hint.present? %>
+          <span class="meta-text" style="margin-left: 6px;"><%= @category.verification_hint %></span>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
@@ -95,13 +108,13 @@
                 <ul class="attachment-list">
                   <% record.attachments.each do |attachment| %>
                     <li>
+                      <%= attachment_type_badge(attachment) %>
                       <% if attachment.file_attachment? %>
                         <%= link_to(attachment.original_filename.presence || attachment.file_type, attachment_path(attachment), target: "_blank", rel: "noopener") %>
-                        (<%= attachment.file_type %>)
                       <% elsif attachment.link? %>
                         <%= link_to "Külső hivatkozás", attachment.file_path_or_url, target: "_blank", rel: "noopener noreferrer" %>
                       <% elsif attachment.text? %>
-                        <span><%= truncate(attachment.text_content, length: 80) %></span>
+                        <span><%= truncate(attachment.text_content, length: 90) %></span>
                       <% end %>
                     </li>
                   <% end %>

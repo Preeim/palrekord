@@ -9,11 +9,15 @@ class Category < ApplicationRecord
 
   normalizes :name, with: ->(value) { value.to_s.strip }
   normalizes :unit, with: ->(value) { value.to_s.strip }
+  normalizes :recommended_file_type, with: ->(value) { value.to_s.strip.upcase.presence }
+  normalizes :verification_hint, with: ->(value) { value.to_s.strip.presence }
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: 150 }
   validates :unit, presence: true, length: { maximum: 30 }
   validates :value_type, presence: true, inclusion: { in: VALUE_TYPES }
   validates :sort_direction, presence: true, inclusion: { in: SORT_DIRECTIONS }
+  validates :recommended_file_type, inclusion: { in: Attachment::FILE_TYPES }, allow_blank: true
+  validates :verification_hint, length: { maximum: 255 }, allow_blank: true
   validate :creator_must_have_monthly_quota, on: :create
 
   scope :active, -> { where(is_archived: false) }
@@ -21,6 +25,10 @@ class Category < ApplicationRecord
 
   def sort_by_label
     "#{value_type} · #{sort_direction}"
+  end
+
+  def recommended_file_type_label
+    Attachment::FILE_TYPE_LABELS[recommended_file_type]
   end
 
   def approved_records_ordered

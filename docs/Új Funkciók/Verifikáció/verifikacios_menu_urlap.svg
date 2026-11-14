@@ -11,8 +11,8 @@
 
   <!-- PAGE TITLE + BADGE -->
   <text x="40" y="100" font-size="22" font-weight="700" fill="#111111">Új rekord beküldése – Menüs verifikációs feltöltő</text>
-  <rect x="595" y="81" width="110" height="22" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
-  <text x="650" y="96" font-size="11" font-weight="700" text-anchor="middle" fill="#1e40af">[TERVEZETT UI]</text>
+  <rect x="595" y="81" width="90" height="22" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="640" y="96" font-size="11" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ UI]</text>
 
   <!-- TOP RECORD FORM FIELDS (Category, Value, Date) -->
   <rect x="40" y="118" width="1120" height="122" rx="5" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
@@ -126,5 +126,5 @@
   <!-- FOOTER -->
   <rect x="0" y="764" width="1200" height="56" fill="#fafafa"/>
   <line x1="0" y1="764" x2="1200" y2="764" stroke="#dddddd" stroke-width="1"/>
-  <text x="600" y="796" font-size="12" text-anchor="middle" fill="#666666">PálRecord · Verifikációs mellékletek menüs feltöltése (Tervezett specifikáció)</text>
+  <text x="600" y="796" font-size="12" text-anchor="middle" fill="#666666">PálRecord · Verifikációs mellékletek menüs feltöltése</text>
 </svg>

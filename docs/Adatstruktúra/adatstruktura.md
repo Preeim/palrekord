@@ -3,11 +3,11 @@
 Ez a dokumentum a **PálRecord** alkalmazás véglegesített adatbázis-struktúráját és entitás-kapcsolati modelljét írja le **Rails 7.1 + MySQL (`mysql2`)** környezetre.
 
 > [!IMPORTANT]
-> **🆕 Új funkciók miatti adatbázis-változások (Pontrendszer, Szezonok és Havi Kategóriakvóta):**
-> A dokumentumban `🆕 [ÚJ – Pontrendszer]` jelöléssel láthatók az alábbi módosítások:
+> **🆕 Új funkciók miatti adatbázis-változások (Pontrendszer, Szezonok, Havi Kategóriakvóta és Verifikáció):**
+> A dokumentumban `🆕 [ÚJ – Pontrendszer]` és `🆕 [ÚJ – Verifikáció]` jelöléssel láthatók az alábbi módosítások:
 > 1. **Új `seasons` tábla (`2.7.`):** Időszakos szezonok tárolása (`name` UNIQUE, `starts_at`, `ends_at`, `(starts_at, ends_at)` összetett index, `created_by_id` FK).
 > 2. **`settings` bővítése (`2.3.`):** Új alapértelmezett kulcs (`monthly_category_limit = '2'`) a tagok havi kategórialétrehozási kvótájához.
-> 3. **`categories` bővített lekérdezési szerep (`2.4.`):** A `created_at` mező határozza meg a szezonális besorolást (`starts_at <= created_at <= ends_at`), valamint `(created_by_id, created_at)` együtt adja a havi kvótaellenőrzést.
+> 3. **`categories` bővítése (`2.4.`):** Új verifikációs oszlopok (`recommended_file_type`, `verification_hint`), valamint a `created_at` / `(created_by_id, created_at)` szezonális és kvóta-lekérdezési szerepe.
 > 4. **Dinamikus pontszámítás (`2.8.`):** A ranglistapontok nem denormalizált adatbázis-oszlopban tárolódnak, hanem a `LeaderboardCalculator` számítja őket `Rails.cache` gyorsítótárazással.
 
 ---
@@ -77,6 +77,8 @@ erDiagram
         string value_type "NOT NULL ('INT' | 'DOUBLE' | 'TIME_DURATION' | 'DATE')"
         string sort_direction "NOT NULL ('ASC' | 'DESC')"
         boolean is_archived "NOT NULL, default: false"
+        string recommended_file_type "NULLABLE ([ÚJ] ajánlott bizonyítás: IMAGE|LINK|TEXT|PDF)"
+        string verification_hint "NULLABLE ([ÚJ] bizonyítási útmutató max 255 kar.)"
         bigint created_by_id FK "NULLABLE (user_id)"
         datetime created_at
         datetime updated_at
@@ -195,13 +197,10 @@ Adatbázisban tárolt, az Admin felületről futásidőben kapcsolható rendszer
 | `value_type` | `VARCHAR(20)` | Igen | `'DOUBLE'` | Érték típusa és validációja: `'INT'`, `'DOUBLE'`, `'TIME_DURATION'`, `'DATE'`. |
 | `sort_direction` | `VARCHAR(10)` | Igen | `'DESC'` | Rendezési irány: `'ASC'` (kisebb/korábbi jobb) vagy `'DESC'` (nagyobb/frissebb jobb). |
 | `is_archived` | `BOOLEAN` | Igen | `false` | Archivált kategóriába új rekord nem küldhető be. *(Archivált kategóriák pontjai kikerülnek a ranglistából.)* |
+| 🆕 `recommended_file_type` | `VARCHAR(20)` | Nem | `NULL` | 🆕 **`[ÚJ – Verifikáció]`:** Ajánlott bizonyítási mód (`'IMAGE'`, `'LINK'`, `'TEXT'`, `'PDF'`); a menüs beküldő űrlap automatikusan erre nyílik. |
+| 🆕 `verification_hint` | `VARCHAR(255)` | Nem | `NULL` | 🆕 **`[ÚJ – Verifikáció]`:** Rövid, védhető bizonyítási elvárás / tipp a kategóriaoldalon és a rekordbeküldőn. |
 | `created_by_id` | `BIGINT` (FK → `users`) | Nem | `NULL` | **Index:** `index_categories_on_created_by_id`. 🆕 **`[ÚJ – Pontrendszer]`:** Havi kategórialimit (`monthly_category_limit`) ellenőrzéséhez használt mező (`ON DELETE SET NULL`). |
 | `created_at`, `updated_at` | `DATETIME(6)` | Igen | - | Rails időbélyegek. 🆕 **`[ÚJ – Pontrendszer]`:** A `created_at` határozza meg a szezonális besorolást (`seasons.starts_at..ends_at`) és a havi kvóta időablakát (`Time.current.all_month`). |
-
-> [!NOTE]
-> **🆕 `[TERVEZETT – Verifikáció]`:** A menüs bizonyíték-feltöltő specifikáció ([verifikacio.md](../Új%20Funkciók/Verifikáció/verifikacio.md)) megvalósításakor a `categories` tábla két opcionális oszloppal bővül (`db/schema.rb`-be a migráció futtatásakor kerül be):
-> - `recommended_file_type` (`VARCHAR(20)`, `NULL`) — Ajánlott bizonyítéktípus (`'IMAGE'`, `'LINK'`, `'TEXT'`, `'PDF'`).
-> - `verification_hint` (`VARCHAR(255)`, `NULL`) — Kategória-specifikus rövid bizonyítási útmutató.
 
 ---
 

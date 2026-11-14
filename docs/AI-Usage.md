@@ -291,3 +291,40 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `docs/Látványtervek/latvanyterv.md` (módosítva)
   - `docs/Adatstruktúra/adatstruktura.md` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-14 23:27] – Menüs verifikációs feltöltő, kezdő kategória bizonyítékok és seed mintaadatok megvalósítása
+
+- **Prompt:** "Igen ,csináld." (a `docs/Új Funkciók/Verifikáció/verifikacio.md` specifikáció és a jóváhagyott terv kódba ültetése)
+- **Értelmezés:** A `categories` séma bővítése ajánlott bizonyítási mezőkkel, okos típusfelismerés az `Attachment` modellben, egykattintásos 5-elemű menüs feltöltő UI a `records/_form` nézetben, védhető kezdő kategória-bizonyítékok és valós generált PNG/LINK/TEXT mintaadatok a `db/seeds.rb`-ben, tesztek bővítése, valamint a dokumentációk szinkronizálása.
+- **Elvégzett műveletek:**
+  - Létrehozta a `db/migrate/20261114180001_add_verification_fields_to_categories.rb` migrációt (`recommended_file_type`, `verification_hint`) és frissítette a `db/schema.rb` fájlt.
+  - Bővítette az `app/models/attachment.rb` modellt magyar címkékkel (`FILE_TYPE_LABELS`, `FILE_TYPE_SHORT_LABELS`), `DEFAULT_TEXT_TEMPLATE` jegyzőkönyv-sablonnal, `infer_file_type_from_payload` automatikus típusfelismeréssel és `sanitize_inactive_payload_fields` tisztítással.
+  - Bővítette az `app/models/category.rb` és `app/controllers/categories_controller.rb` osztályokat az új mezők normalizálásával, validációjával és engedélyezett paramétereivel, valamint az `app/helpers/application_helper.rb` modult a `attachment_type_badge` és `recommended_proof_badge` segédmetódusokkal.
+  - Átalakította az `app/views/records/_form.html.erb` nézetet kategória-specifikus ajánló sávval, progresszív 5-elemű `.verification-menu` gombsorral, állapotonként egyetlen aktív beviteli mezővel és `+ Sablon beszúrása` gombbal; bővítette a `categories/_form.html.erb`, `categories/show.html.erb`, `admin/records/index.html.erb` nézeteket és a `application.css` stíluslapot.
+  - Frissítette a `db/seeds.rb` fájlt az 5 kezdő kategória bizonyítási ajánlásaival, 4 minta taggal és `Zlib` segítségével generált szabványos PNG/LINK/TEXT minta bizonyítékokkal.
+  - Bővítette a `test/models/attachment_test.rb`, `test/models/category_test.rb` és `test/integration/email_system_and_attachments_flow_test.rb` teszteket.
+  - Szinkronizálta a `docs/Adatstruktúra/adatstruktura.md`, `docs/Adatstruktúra/er_diagram.svg`, `docs/Látványtervek/latvanyterv.md` és `docs/Új Funkciók/Verifikáció/` fájlokat a `.agents/rules/docs-sync.md` szerint.
+- **Módosított fájlok:**
+  - `db/migrate/20261114180001_add_verification_fields_to_categories.rb` (létrehozva)
+  - `db/schema.rb` (módosítva)
+  - `app/models/attachment.rb` (módosítva)
+  - `app/models/category.rb` (módosítva)
+  - `app/controllers/categories_controller.rb` (módosítva)
+  - `app/helpers/application_helper.rb` (módosítva)
+  - `app/views/records/_form.html.erb` (módosítva)
+  - `app/views/categories/_form.html.erb` (módosítva)
+  - `app/views/categories/show.html.erb` (módosítva)
+  - `app/views/admin/records/index.html.erb` (módosítva)
+  - `app/assets/stylesheets/application.css` (módosítva)
+  - `db/seeds.rb` (módosítva)
+  - `test/models/attachment_test.rb` (módosítva)
+  - `test/models/category_test.rb` (módosítva)
+  - `test/integration/email_system_and_attachments_flow_test.rb` (módosítva)
+  - `docs/Adatstruktúra/adatstruktura.md` (módosítva)
+  - `docs/Adatstruktúra/er_diagram.svg` (módosítva)
+  - `docs/Látványtervek/latvanyterv.md` (módosítva)
+  - `docs/Új Funkciók/Verifikáció/verifikacio.md` (módosítva)
+  - `docs/Új Funkciók/Verifikáció/verifikacios_menu_urlap.svg` (módosítva)
+  - `docs/Új Funkciók/Verifikáció/kezdo_kategoriak_bizonyitekok.svg` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)

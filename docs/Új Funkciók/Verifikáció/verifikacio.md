@@ -107,12 +107,9 @@ flowchart TD
 
 ---
 
-## 6. Adatbázis- és Architektúra-kiegészítések (Tervezett)
+## 6. Adatbázis- és Architektúra-kiegészítések
 
-> [!NOTE]
-> Az alábbi séma-kiegészítések **tervezett** bővítések, amelyek a specifikáció jóváhagyása és implementálása során kerülnek be a `db/migrate/` mappába és a `db/schema.rb` fájlba.
-
-### 6.1. `categories` tábla tervezett bővítése
+### 6.1. `categories` tábla bővítése (`db/migrate/20261114180001_add_verification_fields_to_categories.rb`)
 
 ```mermaid
 erDiagram
@@ -124,8 +121,8 @@ erDiagram
         string value_type
         string sort_direction
         boolean is_archived
-        string recommended_file_type "NULLABLE ([TERVEZETT] IMAGE|LINK|TEXT|PDF)"
-        string verification_hint "NULLABLE ([TERVEZETT] rövid bizonyítási súgó)"
+        string recommended_file_type "NULLABLE ([ÚJ] IMAGE|LINK|TEXT|PDF)"
+        string verification_hint "NULLABLE ([ÚJ] rövid bizonyítási súgó)"
         bigint created_by_id FK
         datetime created_at
         datetime updated_at

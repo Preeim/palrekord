@@ -63,4 +63,28 @@ class CategoryTest < ActiveSupport::TestCase
       cat.destroy!
     end
   end
+
+  test "normalizes and validates verification fields on category" do
+    cat = Category.create!(
+      name: "Kocka teszt",
+      unit: "mp",
+      value_type: "DOUBLE",
+      sort_direction: "ASC",
+      recommended_file_type: "  image  ",
+      verification_hint: "  Közös fotó a kockáról és timerről  "
+    )
+    assert_equal "IMAGE", cat.recommended_file_type
+    assert_equal "Közös fotó a kockáról és timerről", cat.verification_hint
+    assert_equal "📷 Fotó / Képernyőkép", cat.recommended_file_type_label
+
+    invalid = Category.new(
+      name: "Rossz típus",
+      unit: "db",
+      value_type: "INT",
+      sort_direction: "DESC",
+      recommended_file_type: "VIDEO"
+    )
+    assert_not invalid.valid?
+    assert invalid.errors[:recommended_file_type].present?
+  end
 end

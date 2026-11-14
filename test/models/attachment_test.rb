@@ -68,6 +68,29 @@ class AttachmentTest < ActiveSupport::TestCase
     assert pdf_att.stored_file_pathname.exist?
   end
 
+  test "infers file_type automatically when blank and cleans inactive fields" do
+    png_file = build_uploaded_file("auto.png", "\x89PNG\r\n\x1a\n")
+    inferred_img = Attachment.create!(record: @record, file_type: "", uploaded_file: png_file, text_content: "ignored")
+    assert_equal "IMAGE", inferred_img.file_type
+    assert_nil inferred_img.text_content
+    assert_equal "📷 Fotó / Képernyőkép", inferred_img.type_label
+    assert_equal "📷 Fotó", inferred_img.short_type_label
+
+    pdf_file = build_uploaded_file("auto.pdf", "%PDF-1.4")
+    inferred_pdf = Attachment.create!(record: @record, file_type: nil, uploaded_file: pdf_file)
+    assert_equal "PDF", inferred_pdf.file_type
+    assert inferred_pdf.pdf?
+
+    inferred_link = Attachment.create!(record: @record, file_type: "", file_path_or_url: "  https://example.com/run  ", text_content: "ignored")
+    assert_equal "LINK", inferred_link.file_type
+    assert_equal "https://example.com/run", inferred_link.file_path_or_url
+    assert_nil inferred_link.text_content
+
+    inferred_text = Attachment.create!(record: @record, file_type: "", text_content: "Tanúk: Peti, Anna", file_path_or_url: "https://ignored.example")
+    assert_equal "TEXT", inferred_text.file_type
+    assert_nil inferred_text.file_path_or_url
+  end
+
   private
 
   def build_uploaded_file(filename, content)

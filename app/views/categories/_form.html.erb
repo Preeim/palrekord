@@ -43,6 +43,24 @@
     </div>
   </div>
 
+  <div class="form-row">
+    <div class="form-group">
+      <%= f.label :recommended_file_type, "Ajánlott bizonyítási mód", class: "form-label" %>
+      <%= f.select :recommended_file_type,
+        Attachment::FILE_TYPE_LABELS.map { |code, label| [ label, code ] },
+        { include_blank: "-- Nincs kiemelt ajánlás --" },
+        class: "form-control" %>
+      <div class="form-hint">Rekord beküldésekor ez a fül nyílik meg automatikusan a verifikációs menüben.</div>
+    </div>
+
+    <div class="form-group" style="flex: 2 1 320px;">
+      <%= f.label :verification_hint, "Bizonyítási elvárás / tipp", class: "form-label" %>
+      <%= f.text_field :verification_hint, class: "form-control", maxlength: 255,
+        placeholder: "pl. 1 fotó a súlytárcsákról vagy vágatlan telefonos videó link..." %>
+      <div class="form-hint">Rövid, egyszerűen teljesíthető és védhető útmutató a versenyzőknek (max. 255 karakter).</div>
+    </div>
+  </div>
+
   <% if admin? && category.persisted? %>
     <div class="form-group">
       <label class="form-label">

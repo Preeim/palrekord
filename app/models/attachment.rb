@@ -2,6 +2,19 @@ require "fileutils"
 
 class Attachment < ApplicationRecord
   FILE_TYPES = %w[IMAGE PDF TEXT LINK].freeze
+  FILE_TYPE_LABELS = {
+    "IMAGE" => "📷 Fotó / Képernyőkép",
+    "LINK" => "🎬 Videó / Külső Link",
+    "TEXT" => "🤝 Tanú / Jegyzőkönyv",
+    "PDF" => "📄 PDF Dokumentum"
+  }.freeze
+  FILE_TYPE_SHORT_LABELS = {
+    "IMAGE" => "📷 Fotó",
+    "LINK" => "🎬 Videó / Link",
+    "TEXT" => "🤝 Jegyzőkönyv",
+    "PDF" => "📄 PDF"
+  }.freeze
+  DEFAULT_TEXT_TEMPLATE = "Jelenlévő tanú(k): \nHelyszín és időpont: \nMérés módja / eszköz: ".freeze
   MAX_FILE_SIZE = 10.megabytes
   ALLOWED_IMAGE_EXTS = %w[.png .jpg .jpeg .gif .webp].freeze
   ALLOWED_PDF_EXTS = %w[.pdf].freeze
@@ -10,6 +23,8 @@ class Attachment < ApplicationRecord
 
   attr_accessor :uploaded_file
 
+  before_validation :infer_file_type_from_payload
+  before_validation :sanitize_inactive_payload_fields
   before_validation :set_uploaded_at
   before_validation :prepare_uploaded_file
   before_save :persist_uploaded_file
@@ -35,6 +50,14 @@ class Attachment < ApplicationRecord
     candidate.exist? ? candidate : nil
   end
 
+  def image?
+    file_type == "IMAGE"
+  end
+
+  def pdf?
+    file_type == "PDF"
+  end
+
   def text?
     file_type == "TEXT"
   end
@@ -47,7 +70,49 @@ class Attachment < ApplicationRecord
     %w[IMAGE PDF].include?(file_type)
   end
 
+  def type_label
+    FILE_TYPE_LABELS.fetch(file_type, file_type.to_s)
+  end
+
+  def short_type_label
+    FILE_TYPE_SHORT_LABELS.fetch(file_type, file_type.to_s)
+  end
+
   private
+
+  def infer_file_type_from_payload
+    self.file_type = file_type.to_s.strip.upcase.presence
+    return if file_type.present?
+
+    if uploaded_file.present? && uploaded_file.respond_to?(:original_filename)
+      ext = File.extname(uploaded_file.original_filename.to_s).downcase
+      self.file_type = ext == ".pdf" ? "PDF" : "IMAGE"
+    elsif file_path_or_url.present?
+      self.file_type = "LINK"
+    elsif text_content.present?
+      self.file_type = "TEXT"
+    end
+  end
+
+  def sanitize_inactive_payload_fields
+    case file_type
+    when "IMAGE", "PDF"
+      self.text_content = nil
+      if new_record? || uploaded_file.present? || !file_path_or_url.to_s.start_with?("uploads/")
+        self.file_path_or_url = nil
+      end
+    when "LINK"
+      self.file_path_or_url = file_path_or_url.to_s.strip.presence
+      self.text_content = nil
+      self.uploaded_file = nil
+      self.original_filename = nil
+    when "TEXT"
+      self.text_content = text_content.to_s.strip.presence
+      self.file_path_or_url = nil
+      self.uploaded_file = nil
+      self.original_filename = nil
+    end
+  end
 
   def set_uploaded_at
     self.uploaded_at ||= Time.current

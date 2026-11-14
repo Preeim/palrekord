@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_14_140001) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_14_180001) do
   create_table "attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "record_id", null: false
     t.string "file_type", limit: 20, null: false
@@ -30,6 +30,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_14_140001) do
     t.string "value_type", limit: 20, default: "DOUBLE", null: false
     t.string "sort_direction", limit: 10, default: "DESC", null: false
     t.boolean "is_archived", default: false, null: false
+    t.string "recommended_file_type", limit: 20
+    t.string "verification_hint", limit: 255
     t.bigint "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
