@@ -63,8 +63,9 @@ class LeaderboardCalculatorTest < ActiveSupport::TestCase
     Record.create!(user: u2, category: season_cat, value: "20", achieved_at: Date.current, status: "APPROVED")
 
     # Archived category (must not award points in overall or seasonal)
-    archived_cat = Category.create!(name: "Archivált szám", unit: "db", value_type: "INT", sort_direction: "DESC", is_archived: true, created_at: 2.days.ago)
+    archived_cat = Category.create!(name: "Archivált szám", unit: "db", value_type: "INT", sort_direction: "DESC", created_at: 2.days.ago)
     Record.create!(user: u3, category: archived_cat, value: "99", achieved_at: Date.current, status: "APPROVED")
+    archived_cat.update!(is_archived: true)
 
     archived_standings = LeaderboardCalculator.category_standings(archived_cat)
     assert_equal 0, archived_standings.max_points

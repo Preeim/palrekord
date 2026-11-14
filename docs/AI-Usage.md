@@ -192,3 +192,14 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `test/services/leaderboard_calculator_test.rb` (létrehozva)
   - `test/integration/points_and_seasons_flow_test.rb` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)
+
+## 2026-11-14 14:06 – CI teszthiba javítása (archivált kategória rekord létrehozása a tesztben)
+
+- **Prompt:** CI hiba (`LeaderboardCalculatorTest#test_computes_overall_and_seasonal_leaderboards,_tie-breakers,_and_excludes_archived_categories` -> `ActiveRecord::RecordInvalid: Validation failed: Category archivált, új rekord nem küldhető be ebbe a versenyszámba`)
+- **Értelmezés:** A `Record` modell helyesen tiltja új rekord létrehozását már archivált kategóriába, ezért a `LeaderboardCalculatorTest` tesztesetében a kategóriát aktívként kell létrehozni, felvinni a rekordot, majd utána archiválni a kategóriát.
+- **Elvégzett műveletek:**
+  - Módosítottam a `test/services/leaderboard_calculator_test.rb` fájlt úgy, hogy az `archived_cat` először aktívként jöjjön létre, a `Record.create!` után kapja meg az `is_archived: true` állapotot.
+  - Dokumentáltam a javítást a `docs/AI-Usage.md` fájlban.
+- **Módosított fájlok:**
+  - `test/services/leaderboard_calculator_test.rb` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)
