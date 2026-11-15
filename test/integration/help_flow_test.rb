@@ -39,7 +39,7 @@ class HelpFlowTest < ActionDispatch::IntegrationTest
     get help_path
     assert_response :success
     assert_select "header nav a[href=?]", help_path, text: "Súgó"
-    assert_match(/havi 4 db/, response.body)
+    assert_match(/havi kvóta: 4 db/, response.body)
   end
 
   test "user with must_change_password can still access help page" do

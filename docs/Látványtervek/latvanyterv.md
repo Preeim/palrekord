@@ -111,7 +111,7 @@ A rekordbeküldő (`records/_form.html.erb`), a kategória-adatlap (`categories/
 A weboldal használatát bemutató, bejelentkezés nélkül is elérhető `/help` oldal felépítése:
 
 - **Gyors tartalomjegyzék (`.help-toc`):** Ugrólinkek az oldal 5 fő szekciójához (`1. Gyors áttekintés`, `2. Kezdőlap és Ranglisták`, `3. Belépés és Regisztráció`, `4. Rekord beküldése és Bizonyítás`, `5. Pontszámítás és Profil`).
-- **4 lépéses áttekintő + Élő rendszerbeállítások sáv:** Áttekinti a folyamatot és megjeleníti a jelenlegi közösségi beállításokat (`require_invite_code`, `email_system`, `require_record_approval`, `members_can_create_categories`, `monthly_category_limit`).
+- **4 lépéses áttekintő kártyasor (`.help-steps-grid`):** Áttekinti a folyamatot és a kártyák szövegében dinamikusan megjeleníti az aktuális közösségi szabályokat (`require_invite_code`, `require_record_approval`, `members_can_create_categories`, `monthly_category_limit`).
 - **4 annotált látványterv SVG ábra (nyilakkal és számozott szövegdobozokkal):**
   1. `help_home.svg` – A kezdőlap, a havi kvóta, a kategóriák és a Leaderboard oldalsáv használata.
   2. `help_auth.svg` – Bejelentkezés, elfelejtett jelszó, becenév és meghívókód.

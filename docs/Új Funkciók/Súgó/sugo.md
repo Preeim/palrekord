@@ -14,8 +14,8 @@ Kapcsolódó dokumentumok:
 
 1. **Nyilvános hozzáférhetőség (`/help`):** A Súgó oldal bejelentkezés nélkül (vendégként), bejelentkezett tagként/adminként, sőt kötelező jelszócsere (`must_change_password`) állapotban is azonnal megnyitható a fejlécben és a láblécben található **„Súgó”** gombra/linkre kattintva.
 2. **Látványtervek közvetlen felhasználása:** A dokumentációban korábban elkészült képernyőtervek (`kezdolap.svg`, `login.svg`, `register.svg`, `verifikacios_menu_urlap.svg`, `kategoria_es_profil_pontok.svg`) képezik az alapját a súgó 4 annotált SVG ábrájának. A fejlesztői jelölések (`[ÚJ 1]`, `[ÚJ UI]`) helyett felhasználóbarát **mutató nyilak (`<marker>` nyílhegyek) és számozott szövegdobozok** magyarázzák el az egyes felületi elemek szerepét.
-3. **Élő rendszerbeállítások tükrözése:** A Súgó szöveges áttekintője kiolvassa az aktuális `Setting` rekordokat (`monthly_category_limit`, `require_invite_code`, `require_record_approval`, `email_system`, `members_can_create_categories`), így a felhasználók mindig a ténylegesen aktív szabályokat látják.
-4. **Minimalista, reszponzív kialakítás:** Külső CSS/JS keretrendszer nélkül, az alkalmazás meglévő stílusrendszerét (`application.css`) követve jelenik meg; az SVG ábrák alatt minden pont szöveges magyarázatként is olvasható mobilnézetben.
+3. **Élő rendszerbeállítások tükrözése:** A Súgó 4 lépéses áttekintő kártyái kiolvassák az aktuális `Setting` rekordokat (`monthly_category_limit`, `require_invite_code`, `require_record_approval`, `members_can_create_categories`), így a felhasználók mindig a ténylegesen aktív szabályokat látják.
+4. **Minimalista, reszponzív kialakítás:** Külső CSS/JS keretrendszer nélkül, az alkalmazás meglévő stílusrendszerét (`application.css`) követve jelenik meg; az egyes szekciók felesleges ismétlő szövegek nélkül, közvetlenül a nyilakkal és szövegdobozokkal annotált SVG ábrákon keresztül magyarázzák el a felületet.
 
 ---
 
@@ -31,13 +31,11 @@ A `/help` oldal tetején gyors ugrólinkeket tartalmazó **tartalomjegyzék sáv
 
 ### 2.1. Gyors áttekintés (`#attekintes`)
 
-4 lépéses kártyasor mutatja be a teljes használati folyamatot:
-1. **Regisztráció és belépés:** Fiók létrehozása (meghívókóddal, ha az admin bekapcsolta) és belépés felhasználónévvel vagy e-mail-címmel.
-2. **Versenyszám választása vagy nyitása:** Meglévő kategória kiválasztása, vagy saját versenyszám létrehozása az aktív havi kvóta terhére.
-3. **Rekord beküldése bizonyítékkal:** Elért eredmény és dátum megadása, majd a 5-elemű menüből megfelelő igazolás (fotó, videó link, tanú-jegyzőkönyv vagy PDF) csatolása.
-4. **Jóváhagyás és pontszerzés:** Adminisztrátori elbírálás után (ha a jóváhagyás aktív) a rekord megjelenik a ranglistán, és logaritmikus helyezési pontot ér.
-
-Az áttekintő alatt egy **Aktuális rendszerbeállítások** tájékoztató sáv foglalja össze az élő szabályokat (`Setting` értékekből).
+4 lépéses kártyasor mutatja be a teljes használati folyamatot az élő `Setting` értékekkel kiegészítve:
+1. **Regisztráció és belépés:** Fiók létrehozása a becenévvel (`require_invite_code` alapján meghívókóddal vagy anélkül) és belépés felhasználónévvel / e-mail címmel.
+2. **Versenyszám választása:** Böngészés a kategóriák között, vagy saját versenyszám indítása (`members_can_create_categories` és `monthly_category_limit` alapján).
+3. **Rekord beküldése:** Eredmény beírása és a kategóriához illő bizonyíték (fotó, videó link, tanú vagy PDF) csatolása.
+4. **Jóváhagyás és pontok:** Adminisztrátori jóváhagyás után vagy azonnal (`require_record_approval` szerint) a rekord felkerül a ranglistára és pontot ér.
 
 ---
 
@@ -100,5 +98,5 @@ Alapja a `docs/Új Funkciók/Pontrendszer/kategoria_es_profil_pontok.svg` látv�
 - **Controller (`app/controllers/help_controller.rb`):** Autentikáció nélkül elérhető `HelpController#show` akció, amely betölti az élő `Setting` értékeket a szöveges tájékoztatóhoz.
 - **Globális jelszócsere-kivétel (`app/controllers/application_controller.rb`):** Az `enforce_password_change` szűrőben a `help` controller engedélyezett, így ideiglenes jelszóval belépett felhasználó is elolvashatja a súgót.
 - **Navigáció (`app/views/layouts/application.html.erb`):** A fejléc (`.header-nav`) minden állapotban tartalmazza a `Súgó` gombot (`btn btn-outline`), a lábléc pedig tartalmazza a `Használati útmutató (Súgó)` linket.
-- **Nézet és stílus (`app/views/help/show.html.erb`, `app/assets/stylesheets/application.css`):** Minimalista, reszponzív HTML + CSS struktúra tartalomjegyzékkel, 4 lépéses áttekintővel, az SVG ábrák beágyazásával (`app/assets/images/help/*.svg`) és számozott jelmagyarázatokkal.
+- **Nézet és stílus (`app/views/help/show.html.erb`, `app/assets/stylesheets/application.css`):** Letisztult, reszponzív HTML + CSS struktúra tartalomjegyzékkel, az élő beállításokat tükröző 4 lépéses áttekintővel és a 4 annotált SVG ábra beágyazásával (`app/assets/images/help/*.svg`).
 - **Tesztek (`test/integration/help_flow_test.rb`):** Ellenőrzi a `/help` oldal elérhetőségét vendégként (zárt `public_leaderboards: false` mellett is), bejelentkezett felhasználóként és ideiglenes jelszóval, valamint a navigációs linkek és a 4 SVG diagram renderelését.
