@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1020" width="1200" height="1020" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <defs>
+    <marker id="help-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#1d4ed8"/>
+    </marker>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1200" height="1020" fill="#f8fafc"/>
+
+  <!-- ==================== SECTION 1: CATEGORY LEADERBOARD (y=110..445) ==================== -->
+  <rect x="20" y="110" width="1160" height="335" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="44" y="142" font-size="17" font-weight="700" fill="#111111">Kategória Ranglista – 100m sörfutás (N = 12 résztvevő)</text>
+  <text x="44" y="160" font-size="12" fill="#666666">Minden versenyzőnek csak a legjobb elfogadott kísérlete számít a helyezésbe és kap pontot.</text>
+
+  <!-- Category Leaderboard Table (x=44, y=174, w=1112, h=256) -->
+  <rect x="44" y="174" width="1112" height="256" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <rect x="44" y="174" width="1112" height="34" rx="4" fill="#fafafa"/>
+  <line x1="44" y1="208" x2="1156" y2="208" stroke="#cccccc" stroke-width="1.2"/>
+
+  <text x="64" y="196" font-size="11" font-weight="700" fill="#555555">#</text>
+  <text x="114" y="196" font-size="11" font-weight="700" fill="#555555">VERSENYZŐ</text>
+  <text x="364" y="196" font-size="11" font-weight="700" fill="#555555">EREDMÉNY</text>
+  <text x="504" y="196" font-size="11" font-weight="700" fill="#555555">BEKÜLDÉS IDEJE</text>
+  <text x="690" y="196" font-size="11" font-weight="700" fill="#1d4ed8">HELYEZÉSI PONT</text>
+  <text x="844" y="196" font-size="11" font-weight="700" fill="#555555">MEGJEGYZÉS / LOGIKA</text>
+
+  <!-- Row 1 -->
+  <text x="64" y="234" font-size="14" font-weight="700" fill="#111111">1.</text>
+  <text x="114" y="234" font-size="14" font-weight="600" fill="#111111">Kovács Peti</text>
+  <text x="364" y="234" font-size="14" font-weight="700" fill="#111111">18.42 mp</text>
+  <text x="504" y="234" font-size="12" fill="#555555">2026-10-12 16:00</text>
+  <rect x="690" y="217" width="64" height="24" rx="3" fill="#222222"/>
+  <text x="722" y="233" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">+12 pt</text>
+  <text x="844" y="234" font-size="12" fill="#555555">1. hely = N pont (N = 12)</text>
+  <line x1="44" y1="250" x2="1156" y2="250" stroke="#eeeeee" stroke-width="1"/>
+
+  <!-- Row 2 -->
+  <text x="64" y="276" font-size="14" font-weight="700" fill="#111111">2.</text>
+  <text x="114" y="276" font-size="14" font-weight="600" fill="#111111">Nagy Bence</text>
+  <text x="364" y="276" font-size="14" font-weight="700" fill="#111111">19.05 mp</text>
+  <text x="504" y="276" font-size="12" fill="#555555">2026-10-14 11:30</text>
+  <rect x="690" y="259" width="64" height="24" rx="3" fill="#eff6ff" stroke="#2563eb" stroke-width="1"/>
+  <text x="722" y="275" font-size="12" font-weight="700" text-anchor="middle" fill="#1d4ed8">+8 pt</text>
+  <text x="844" y="276" font-size="12" fill="#555555">Legnagyobb pontugrás az 1. és 2. hely között (-4 pt)</text>
+  <line x1="44" y1="292" x2="1156" y2="292" stroke="#eeeeee" stroke-width="1"/>
+
+  <!-- Row 3 (Tie earlier) -->
+  <text x="64" y="318" font-size="14" font-weight="700" fill="#111111">3.</text>
+  <text x="114" y="318" font-size="14" fill="#111111">Tóth Ádám</text>
+  <text x="364" y="318" font-size="14" font-weight="700" fill="#111111">19.50 mp</text>
+  <text x="504" y="318" font-size="12" fill="#555555">2026-10-15 14:20</text>
+  <rect x="690" y="301" width="64" height="24" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="722" y="317" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">+6 pt</text>
+  <text x="844" y="318" font-size="12" fill="#555555">Holtverseny: korábban feltöltve → előrébb áll</text>
+  <line x1="44" y1="334" x2="1156" y2="334" stroke="#eeeeee" stroke-width="1"/>
+
+  <!-- Row 4 (Tie later) -->
+  <text x="64" y="360" font-size="14" font-weight="700" fill="#111111">4.</text>
+  <text x="114" y="360" font-size="14" fill="#111111">Szabó Anna</text>
+  <text x="364" y="360" font-size="14" font-weight="700" fill="#111111">19.50 mp</text>
+  <text x="504" y="360" font-size="12" fill="#555555">2026-10-15 18:05</text>
+  <rect x="690" y="343" width="64" height="24" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="722" y="359" font-size="12" font-weight="700" text-anchor="middle" fill="#111111">+5 pt</text>
+  <text x="844" y="360" font-size="12" fill="#555555">Holtverseny: későbbi feltöltés → 4. hely</text>
+  <line x1="44" y1="376" x2="1156" y2="376" stroke="#eeeeee" stroke-width="1"/>
+
+  <!-- Row: Previous personal attempt (0 pt) -->
+  <rect x="45" y="377" width="1110" height="44" fill="#fafafa"/>
+  <text x="64" y="404" font-size="14" fill="#999999">–</text>
+  <text x="114" y="404" font-size="13" fill="#777777">Nagy Bence (korábbi kísérlet)</text>
+  <text x="364" y="404" font-size="13" fill="#777777">20.10 mp</text>
+  <text x="504" y="404" font-size="12" fill="#888888">2026-10-01 09:10</text>
+  <text x="722" y="404" font-size="12" font-weight="700" text-anchor="middle" fill="#1d4ed8">0 pt</text>
+  <text x="844" y="404" font-size="12" font-style="italic" fill="#777777">Saját 2. legjobb kísérlet – nem foglal helyet és nem ad pontot</text>
+
+  <!-- ==================== TOP CALLOUTS [1], [2], [3] (y=12..90) ==================== -->
+  <!-- Callout [2]: Logaritmikus pontlépcső -->
+  <rect x="20" y="12" width="372" height="80" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="42" cy="34" r="11" fill="#1d4ed8"/>
+  <text x="42" y="38" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">2</text>
+  <text x="62" y="38" font-size="13" font-weight="700" fill="#1e3a8a">Logaritmikus pontlépcső</text>
+  <text x="34" y="58" font-size="11.5" fill="#1e40af">Az 1. és 2. hely között a legnagyobb a pontugrás,</text>
+  <text x="34" y="75" font-size="11.5" fill="#1e40af">lefelé mérséklődik. Az utolsó hely is min. 1 pt-ot kap.</text>
+  <path d="M 38 92 L 38 271 L 685 271" fill="none" stroke="#1d4ed8" stroke-width="1.8" stroke-dasharray="4,3" marker-end="url(#help-arrow)"/>
+
+  <!-- Callout [1]: 1. hely = N pont -->
+  <rect x="414" y="12" width="372" height="80" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="436" cy="34" r="11" fill="#1d4ed8"/>
+  <text x="436" y="38" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">1</text>
+  <text x="456" y="38" font-size="13" font-weight="700" fill="#1e3a8a">1. hely = Résztvevők száma (N pt)</text>
+  <text x="428" y="58" font-size="11.5" fill="#1e40af">Minél több egyéni versenyző indul egy kategóriában,</text>
+  <text x="428" y="75" font-size="11.5" fill="#1e40af">annál értékesebb az 1. hely (pl. 12 főnél 12 pt).</text>
+  <path d="M 722 92 L 722 213" fill="none" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+
+  <!-- Callout [3]: Holtverseny szabály -->
+  <rect x="808" y="12" width="372" height="80" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="830" cy="34" r="11" fill="#1d4ed8"/>
+  <text x="830" y="38" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">3</text>
+  <text x="850" y="38" font-size="13" font-weight="700" fill="#1e3a8a">Holtverseny: a korábbi beküldés nyer</text>
+  <text x="822" y="58" font-size="11.5" fill="#1e40af">Azonos eredmény esetén az kerül előrébb a ranglistán,</text>
+  <text x="822" y="75" font-size="11.5" fill="#1e40af">aki korábban töltötte fel a rekordot (created_at ASC).</text>
+  <path d="M 1164 92 L 1164 314 L 1138 314" fill="none" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+
+  <!-- ==================== MIDDLE CALLOUT [4] (y=460..534) ==================== -->
+  <rect x="20" y="460" width="1160" height="74" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="42" cy="482" r="11" fill="#1d4ed8"/>
+  <text x="42" y="486" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">4</text>
+  <text x="62" y="486" font-size="13" font-weight="700" fill="#1e3a8a">Csak a legjobb saját eredményed számít a ranglistába</text>
+  <text x="34" y="506" font-size="11.5" fill="#1e40af">Ha többször is megdöntöd vagy megismétled ugyanazt a kategóriát, csak a legjobb eredményed foglal helyezést és kap pontot.</text>
+  <text x="34" y="522" font-size="11.5" fill="#1e40af">A korábbi, gyengébb kísérleteid 0 pt jelzéssel megmaradnak az archívumban, és nem tolják hátrébb a többieket.</text>
+  <line x1="722" y1="460" x2="722" y2="414" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+
+  <!-- ==================== CALLOUT [5] ABOVE PROFILE (y=552..624) ==================== -->
+  <rect x="20" y="552" width="1160" height="72" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="42" cy="574" r="11" fill="#1d4ed8"/>
+  <text x="42" y="578" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">5</text>
+  <text x="62" y="578" font-size="13" font-weight="700" fill="#1e3a8a">Saját Profil (/profile) – Összegző pontkártyák és havi kvóta</text>
+  <text x="34" y="598" font-size="11.5" fill="#1e40af">A profilodon három kártya mutatja az örökös élő pontszámodat, az aktív szezonban elért pontjaidat, valamint hogy hány új versenyszámot</text>
+  <text x="34" y="614" font-size="11.5" fill="#1e40af">hozhatsz még létre ebben a hónapban (itt tudod a jelszavadat és megjelenített nevedet is módosítani).</text>
+  <line x1="220" y1="624" x2="220" y2="682" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+  <line x1="600" y1="624" x2="600" y2="682" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+  <line x1="980" y1="624" x2="980" y2="682" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+
+  <!-- ==================== SECTION 2: PROFILE PAGE (y=646..918) ==================== -->
+  <rect x="20" y="646" width="1160" height="272" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="44" y="674" font-size="16" font-weight="700" fill="#111111">Saját Profil – Nagy Bence</text>
+
+  <!-- 3 Summary Boxes (y=686..766) -->
+  <rect x="44" y="686" width="356" height="80" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="62" y="708" font-size="11" font-weight="700" fill="#555555">ÖRÖKÖS ÉLŐ PONTSZÁM</text>
+  <text x="62" y="738" font-size="22" font-weight="700" fill="#111111">38 pont</text>
+  <text x="158" y="736" font-size="12" fill="#444444">(2. hely az összetettben)</text>
+  <text x="62" y="756" font-size="11" fill="#777777">5 aktív kategóriában szerzett helyezések alapján</text>
+
+  <rect x="422" y="686" width="356" height="80" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="440" y="708" font-size="11" font-weight="700" fill="#555555">2026 ŐSZI SZEZON (AKTÍV)</text>
+  <text x="440" y="738" font-size="22" font-weight="700" fill="#111111">14 pont</text>
+  <text x="536" y="736" font-size="12" fill="#444444">(1. hely a szezonban)</text>
+  <text x="440" y="756" font-size="11" fill="#777777">Csak a szezonban indított kategóriák alapján</text>
+
+  <rect x="800" y="686" width="356" height="80" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="818" y="708" font-size="11" font-weight="700" fill="#555555">HAVI KATEGÓRIA KVÓTA</text>
+  <text x="818" y="738" font-size="22" font-weight="700" fill="#111111">1 / 2 szabad</text>
+  <text x="818" y="756" font-size="11" fill="#777777">Ebben a hónapban még 1 új versenyszámot nyithatsz</text>
+
+  <!-- Points Breakdown Table (y=780..904) -->
+  <rect x="44" y="780" width="1112" height="124" rx="4" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <rect x="44" y="780" width="1112" height="30" rx="4" fill="#fafafa"/>
+  <line x1="44" y1="810" x2="1156" y2="810" stroke="#cccccc" stroke-width="1.2"/>
+  <text x="64" y="799" font-size="10.5" font-weight="700" fill="#555555">KATEGÓRIA</text>
+  <text x="344" y="799" font-size="10.5" font-weight="700" fill="#555555">SAJÁT LEGJOBB</text>
+  <text x="544" y="799" font-size="10.5" font-weight="700" fill="#555555">HELYEZÉS / LÉTSZÁM</text>
+  <text x="764" y="799" font-size="10.5" font-weight="700" fill="#555555">KAPOTT PONT</text>
+  <text x="934" y="799" font-size="10.5" font-weight="700" fill="#555555">SZEZONÁLIS?</text>
+
+  <text x="64" y="834" font-size="12.5" font-weight="600" fill="#111111">100m sörfutás</text>
+  <text x="344" y="834" font-size="12.5" fill="#333333">19.05 mp</text>
+  <text x="544" y="834" font-size="12.5" fill="#333333">2. hely / 12 fő</text>
+  <text x="764" y="834" font-size="12.5" font-weight="700" fill="#111111">+8 pt</text>
+  <text x="934" y="834" font-size="12" fill="#334155">Igen (2026 Őszi Szezon)</text>
+  <line x1="44" y1="846" x2="1156" y2="846" stroke="#eeeeee" stroke-width="1"/>
+
+  <text x="64" y="868" font-size="12.5" font-weight="600" fill="#111111">Fekvenyomás max</text>
+  <text x="344" y="868" font-size="12.5" fill="#333333">125.0 kg</text>
+  <text x="544" y="868" font-size="12.5" fill="#333333">1. hely / 8 fő</text>
+  <text x="764" y="868" font-size="12.5" font-weight="700" fill="#111111">+8 pt</text>
+  <text x="934" y="868" font-size="12" fill="#777777">Nem (csak Örökös)</text>
+  <line x1="44" y1="880" x2="1156" y2="880" stroke="#eeeeee" stroke-width="1"/>
+
+  <text x="64" y="897" font-size="11.5" fill="#666666">... további aktív kategóriák és saját rekordok státusza (Elfogadva / Függőben / Elutasítva)</text>
+
+  <!-- ==================== BOTTOM CALLOUT [6] (y=934..1006) ==================== -->
+  <rect x="20" y="934" width="1160" height="72" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <circle cx="42" cy="956" r="11" fill="#1d4ed8"/>
+  <text x="42" y="960" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">6</text>
+  <text x="62" y="960" font-size="13" font-weight="700" fill="#1e3a8a">Kategóriánkénti pontbontás és saját beküldések követése</text>
+  <text x="34" y="980" font-size="11.5" fill="#1e40af">A profilod alján tételesen látod, melyik kategóriából hány pontod származik, hányadik helyen állsz, és követheted a még jóváhagyásra váró</text>
+  <text x="34" y="996" font-size="11.5" fill="#1e40af">vagy javítandó beküldéseidet is (amiket szükség esetén szerkeszthetsz vagy törölhetsz).</text>
+  <line x1="600" y1="934" x2="600" y2="908" stroke="#1d4ed8" stroke-width="2" marker-end="url(#help-arrow)"/>
+</svg>

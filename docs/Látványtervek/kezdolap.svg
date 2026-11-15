@@ -8,6 +8,13 @@
   <text x="40" y="37" font-size="18" font-weight="700" fill="#111111">PálRecord</text>
 
   <!-- Header Right Nav -->
+  <!-- [ÚJ – Súgó] Header Súgó link highlight -->
+  <rect x="466" y="21" width="88" height="18" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="0.9"/>
+  <text x="510" y="34" font-size="10" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ] Súgó →</text>
+  <rect x="560" y="11" width="74" height="38" rx="4" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <rect x="564" y="15" width="66" height="30" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="597" y="34" font-size="12" text-anchor="middle" fill="#111111">Súgó</text>
+
   <rect x="640" y="15" width="96" height="30" rx="3" fill="#222222"/>
   <text x="688" y="34" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">+ Új rekord</text>
 

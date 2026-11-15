@@ -1,0 +1,249 @@
+<% content_for :title, "Súgó és Használati Útmutató" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Súgó – Hogyan használd a PálRecordot?</h1>
+    <p class="page-subtitle">
+      Képernyőképekkel, nyilakkal és magyarázó szövegdobozokkal mutatjuk be az oldal minden fontos funkcióját.
+    </p>
+  </div>
+  <div>
+    <%= link_to "← Vissza a kezdőlapra", root_path, class: "btn btn-outline" %>
+  </div>
+</div>
+
+<nav class="help-toc" aria-label="Súgó tartalomjegyzék">
+  <a href="#attekintes" class="btn btn-outline">1. Gyors áttekintés (4 lépés)</a>
+  <a href="#kezdolap" class="btn btn-outline">2. Kezdőlap és Ranglisták</a>
+  <a href="#fiok" class="btn btn-outline">3. Belépés és Regisztráció</a>
+  <a href="#rekord-bekuldes" class="btn btn-outline">4. Rekord beküldése és Bizonyítás</a>
+  <a href="#pontozas-profil" class="btn btn-outline">5. Pontszámítás és Profil</a>
+</nav>
+
+<section id="attekintes" class="help-section">
+  <h2 class="section-title">1. Gyors áttekintés – 4 lépés az első pontjaidig</h2>
+
+  <div class="help-steps-grid">
+    <div class="help-step-card">
+      <div class="help-step-num">1. lépés</div>
+      <h3 class="help-step-title">Regisztráció és belépés</h3>
+      <p class="help-step-desc">
+        Hozz létre fiókot a beceneveddel (<%= @require_invite_code ? "meghívókód szükséges" : "meghívókód nélkül" %>), vagy lépj be felhasználónévvel / e-mail címmel.
+      </p>
+    </div>
+
+    <div class="help-step-card">
+      <div class="help-step-num">2. lépés</div>
+      <h3 class="help-step-title">Versenyszám választása</h3>
+      <p class="help-step-desc">
+        Böngéssz a kezdőlapon a kategóriák között, vagy <%= @members_can_create_categories ? "indíts saját versenyszámot (havi kvóta: #{@monthly_category_limit} db)" : "válassz az admin által felvett versenyszámokból" %>.
+      </p>
+    </div>
+
+    <div class="help-step-card">
+      <div class="help-step-num">3. lépés</div>
+      <h3 class="help-step-title">Rekord beküldése</h3>
+      <p class="help-step-desc">
+        Kattints a <strong>+ Új rekord</strong> gombra, írd be az eredményt és csatolj a kategóriához illő bizonyítékot (fotó, videó link, tanú vagy PDF).
+      </p>
+    </div>
+
+    <div class="help-step-card">
+      <div class="help-step-num">4. lépés</div>
+      <h3 class="help-step-title">Jóváhagyás és pontok</h3>
+      <p class="help-step-desc">
+        <%= @require_record_approval ? "Adminisztrátori jóváhagyás után" : "Beküldés után azonnal" %> a rekordod felkerül a ranglistára, és a helyezésedért automatikusan pontot kapsz.
+      </p>
+    </div>
+  </div>
+
+  <div class="help-settings-bar">
+    <strong>Aktuális közösségi szabályok:</strong>
+    <span>Meghívókód: <strong><%= @require_invite_code ? "Kötelező" : "Nem kötelező" %></strong></span> ·
+    <span>E-mail megerősítés / reset: <strong><%= @email_system ? "Aktív" : "Kikapcsolva (admin segít)" %></strong></span> ·
+    <span>Rekord jóváhagyás: <strong><%= @require_record_approval ? "Adminisztrátori jóváhagyáshoz kötött" : "Azonnali" %></strong></span> ·
+    <span>Tagi kategória-nyitás: <strong><%= @members_can_create_categories ? "Engedélyezett (havi #{@monthly_category_limit} db)" : "Csak adminisztrátor" %></strong></span>
+  </div>
+</section>
+
+<section id="kezdolap" class="help-section">
+  <h2 class="section-title">2. A Kezdőlap, a Kategóriák és a Leaderboard</h2>
+  <p class="page-subtitle">
+    A főoldalon bal oldalon találod az összes aktív versenyszámot, jobb oldalon pedig az összesített és szezonális ranglistát.
+  </p>
+
+  <figure class="help-figure">
+    <%= image_tag "help/help_home.svg", alt: "Kezdőlap és Leaderboard használata nyilakkal és szövegdobozokkal", class: "help-diagram" %>
+  </figure>
+
+  <div class="help-callouts-grid">
+    <div class="help-callout-item">
+      <span class="help-badge-num">1</span>
+      <div>
+        <strong>Fejléc gyorsgombok és élő pontszám:</strong> Bárhonnan elindíthatod az <code>+ Új rekord</code> beküldését, a <code>Profil</code> gombon pedig azonnal látod az összpontszámodat.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">2</span>
+      <div>
+        <strong>Új versenyszám és havi kvóta:</strong> Ha a tagok nyithatnak kategóriát, a gombon látszik a havi kereted (pl. <code>Kvóta: 1/2</code>).
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">3</span>
+      <div>
+        <strong>Kategóriák és szezonális jelvény:</strong> Kattints egy versenyszám nevére a teljes ranglistához. A kék jelvény mutatja, ha a szám egy szezonhoz tartozik.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">4</span>
+      <div>
+        <strong>Rendezés és 1. hely max pont:</strong> Az <code>ASC</code> (pl. idő) esetén a kisebb, a <code>DESC</code> (pl. kg, db) esetén a nagyobb érték a jobb. Minél többen indulnak (<code>N</code> fő), annál több pontot ér az 1. hely.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">5</span>
+      <div>
+        <strong>Aktuális csúcstartó (Top 1):</strong> Az adott kategória pillanatnyi legjobb elfogadott eredménye, tulajdonosa és a helyezési pontszám.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">6</span>
+      <div>
+        <strong>Örökös &amp; Szezonális Leaderboard:</strong> Egy kattintással válthatsz az <code>Örökös Élő</code> és az aktív szezonok ranglistája között.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fiok" class="help-section">
+  <h2 class="section-title">3. Bejelentkezés és Regisztráció</h2>
+  <p class="page-subtitle">
+    Rekordok beküldéséhez saját fiók szükséges. A ranglistákat vendégként is megtekintheted, ha a nyilvános megtekintés engedélyezve van.
+  </p>
+
+  <figure class="help-figure">
+    <%= image_tag "help/help_auth.svg", alt: "Bejelentkezés és Regisztráció oldal magyarázó nyilakkal", class: "help-diagram" %>
+  </figure>
+
+  <div class="help-callouts-grid">
+    <div class="help-callout-item">
+      <span class="help-badge-num">1</span>
+      <div>
+        <strong>Bejelentkezés:</strong> Felhasználónévvel (pl. <code>bence99</code>) és e-mail címmel is be tudsz lépni a jelszavad megadásával.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">2</span>
+      <div>
+        <strong>Elfelejtett vagy ideiglenes jelszó:</strong> Aktív e-mail rendszernél e-mailes visszaállítás érhető el; kikapcsolt e-mail esetén az adminisztrátortól kérhetsz egyszeri ideiglenes jelszót.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">3</span>
+      <div>
+        <strong>Felhasználónév vs. Becenév:</strong> A felhasználónév a belépéshez kell, a <strong>Megjelenített név (becenév)</strong> pedig minden nyilvános ranglistán látszik.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">4</span>
+      <div>
+        <strong>Meghívókód:</strong> Ha be van kapcsolva a zárt regisztráció, csak az admintól kapott érvényes meghívókóddal hozható létre új fiók.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rekord-bekuldes" class="help-section">
+  <h2 class="section-title">4. Új rekord beküldése és Bizonyítás (Verifikáció)</h2>
+  <p class="page-subtitle">
+    A 5-elemű menüs feltöltő segít gyorsan, felesleges mezők nélkül csatolni a kategóriához illő bizonyítékot.
+  </p>
+
+  <figure class="help-figure">
+    <%= image_tag "help/help_record_verification.svg", alt: "Rekord beküldő űrlap és verifikációs menü nyilakkal", class: "help-diagram" %>
+  </figure>
+
+  <div class="help-callouts-grid">
+    <div class="help-callout-item">
+      <span class="help-badge-num">1</span>
+      <div>
+        <strong>Alapadatok megadása:</strong> Válaszd ki a versenyszámot, add meg az elért értéket a kategória mértékegységében és állítsd be a teljesítés dátumát.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">2</span>
+      <div>
+        <strong>Kategória-specifikus ajánló sáv:</strong> Versenyszám váltásakor automatikusan megjelenik az ajánlott bizonyítás módja, és a menü átvált a javasolt fülre.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">3</span>
+      <div>
+        <strong>5-elemű verifikációs menü:</strong> Választhatsz a <code>Nincs melléklet</code>, <code>Fotó / Képernyőkép</code>, <code>Videó / Külső Link</code>, <code>Tanú / Jegyzőkönyv</code> és <code>PDF Dokumentum</code> lehetőségek közül.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">4</span>
+      <div>
+        <strong>Fájlfeltöltés vagy külső link:</strong> Képet és PDF-et közvetlenül feltölthetsz (max. 10 MB), míg videót Google Fotók, Drive, YouTube Shorts vagy Strava linkkel oszthatsz meg.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">5</span>
+      <div>
+        <strong>Tanú-jegyzőkönyv gyors sablon:</strong> Ha nincs képed vagy videód, a <code>+ Sablon beszúrása</code> gombbal egy kattintással kitöltheted a tanúk, a helyszín és a mérés módjának mezőit.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pontozas-profil" class="help-section">
+  <h2 class="section-title">5. Kategória Ranglista, Pontszámítás és Saját Profil</h2>
+  <p class="page-subtitle">
+    A pontrendszer úgy jutalmazza a részvételt és a rekorddöntéseket, hogy minden versenyszámban csak a legjobb elfogadott kísérleted számít.
+  </p>
+
+  <figure class="help-figure">
+    <%= image_tag "help/help_points_profile.svg", alt: "Kategória ranglista, logaritmikus pontozás és profil oldal magyarázata", class: "help-diagram" %>
+  </figure>
+
+  <div class="help-callouts-grid">
+    <div class="help-callout-item">
+      <span class="help-badge-num">1</span>
+      <div>
+        <strong>1. hely = Résztvevők száma (N pt):</strong> Ha 12 különböző versenyzőnek van elfogadott eredménye egy kategóriában, az 1. hely 12 pontot ér.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">2</span>
+      <div>
+        <strong>Logaritmikus pontlépcső:</strong> Az 1. és a 2. hely között a legnagyobb a pontugrás, lefelé fokozatosan csökken, de az utolsó helyezett is kap legalább 1 pontot.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">3</span>
+      <div>
+        <strong>Holtverseny feloldása:</strong> Azonos elért eredmény esetén az áll előrébb, aki korábban töltötte fel a rekordját.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">4</span>
+      <div>
+        <strong>Csak a legjobb saját kísérlet számít:</strong> Többszöri próbálkozásnál csak a legjobb eredményed foglal helyezést; a többi kísérlet <code>0 pt</code> jelöléssel marad látható.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">5</span>
+      <div>
+        <strong>Profil összegző kártyák:</strong> A <code>Profil</code> oldalon egy pillantással látod az örökös pontodat, az aktív szezonpontodat és a havi kategóriakvótádat.
+      </div>
+    </div>
+    <div class="help-callout-item">
+      <span class="help-badge-num">6</span>
+      <div>
+        <strong>Kategóriánkénti bontás és státuszok:</strong> Tételesen nyomon követheted a helyezéseidet, valamint szerkesztheted vagy törölheted a még függőben lévő rekordjaidat.
+      </div>
+    </div>
+  </div>
+</section>

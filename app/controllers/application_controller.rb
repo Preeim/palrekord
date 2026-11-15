@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   def enforce_password_change
     return unless Current.user&.must_change_password?
+    return if controller_name == "help"
     return if controller_name == "profiles" && action_name.in?(%w[show update_password])
     return if controller_name == "sessions" && action_name == "destroy"
 

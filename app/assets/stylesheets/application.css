@@ -815,3 +815,131 @@ textarea.form-control {
     grid-template-columns: 1fr;
   }
 }
+
+/* Súgó (/help) oldal */
+.help-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+}
+
+.help-section {
+  margin-bottom: 36px;
+  padding-top: 8px;
+}
+
+.help-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 14px;
+}
+
+.help-step-card {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  padding: 14px;
+  background-color: #ffffff;
+}
+
+.help-step-num {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e40af;
+  background-color: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-radius: 3px;
+  padding: 2px 8px;
+  margin-bottom: 8px;
+}
+
+.help-step-title {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.help-step-desc {
+  margin: 0;
+  font-size: 12.5px;
+  color: #444444;
+}
+
+.help-settings-bar {
+  background-color: #eff6ff;
+  border: 1px solid #93c5fd;
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: #1e3a8a;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.help-figure {
+  margin: 14px 0;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+
+.help-diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.help-callouts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.help-callout-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background-color: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #222222;
+}
+
+.help-badge-num {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  border-radius: 50%;
+  background-color: #1d4ed8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 920px) {
+  .help-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .help-steps-grid,
+  .help-callouts-grid {
+    grid-template-columns: 1fr;
+  }
+}

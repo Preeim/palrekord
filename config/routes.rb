@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 
   root "categories#index"
 
+  # Súgó
+  get "/help", to: "help#show", as: :help
+
   # Autentikáció
   get "/login", to: "sessions#new"
   post "/login", to: "sessions#create"

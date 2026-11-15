@@ -16,6 +16,7 @@
         <%= link_to "PálRecord", root_path, class: "brand-link" %>
 
         <nav class="header-nav">
+          <%= link_to "Súgó", help_path, class: "btn btn-outline" %>
           <% if logged_in? %>
             <%= link_to "+ Új rekord", new_record_path, class: "btn btn-primary" %>
             <%= link_to profile_path, class: "btn btn-outline" do %>
@@ -47,7 +48,7 @@
     </main>
 
     <footer class="site-footer">
-      PálRecord · Baráti rekordgyűjtő
+      PálRecord · Baráti rekordgyűjtő · <%= link_to "Használati útmutató (Súgó)", help_path %>
     </footer>
   </body>
 </html>

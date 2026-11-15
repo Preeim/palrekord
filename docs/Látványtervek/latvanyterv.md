@@ -10,6 +10,7 @@ Ez a dokumentum a **Kezdőlap**, a **Login**, a **Register** és a pontrendszerr
 > - **`[ÚJ 3]` Kategóriatábla bővítése:** Szezonális jelvény, `Résztvevők / 1. hely` max pont oszlop és Top 1 rekorder pontszáma (`+X pt`).
 > - **`[ÚJ 4]` Leaderboard oldalsáv:** Kétoszlopos elrendezés jobb oldalon `Örökös Élő` és szezonális ranglistákkal.
 > - **Részletes kategória- és profilnézet (`4.` fejezet):** Helyezési pont oszlop, szezonok és holtversenyek vizuális terve.
+> - 🆕 **`[ÚJ – Súgó]` Fejléc/Lábléc Súgó link és `/help` oldal (`6.` fejezet):** Nyilvános használati útmutató a látványtervek alapján készített, nyilakkal és szövegdobozokkal annotált SVG ábrákkal.
 
 ---
 
@@ -20,10 +21,11 @@ Minden oldalon egy egyszerű, klasszikus fejléc–tartalom–lábléc (`flex-di
 - **Fejléc (`<header>`):**
   - Bal oldalon: **PálRecord** logó / főoldal link.
   - Jobb sarokban:
-    - Kijelentkezett állapotban: `Bejelentkezés` és `Regisztráció` gomb.
-    - Bejelentkezett állapotban: `+ Új rekord`, 🆕 **`[ÚJ 1 – Pontrendszer]`** `Profil (Név · XX pt)` (saját élő összpontszám kijelzésével), admin jogosultság esetén `Admin`, valamint `Kijelentkezés` gomb.
+    - 🆕 **`[ÚJ – Súgó]`** `Súgó` gomb (`/help`) minden állapotban látható (vendégként, tagként, adminként és kötelező jelszócsere közben is).
+    - Kijelentkezett állapotban: `Súgó`, `Bejelentkezés` és `Regisztráció` gomb.
+    - Bejelentkezett állapotban: `Súgó`, `+ Új rekord`, 🆕 **`[ÚJ 1 – Pontrendszer]`** `Profil (Név · XX pt)` (saját élő összpontszám kijelzésével), admin jogosultság esetén `Admin`, valamint `Kijelentkezés` gomb.
 - **Lábléc (`<footer>`):**
-  - Egyszerű alsó sáv (`PálRecord · Baráti rekordgyűjtő`).
+  - Egyszerű alsó sáv (`PálRecord · Baráti rekordgyűjtő · Használati útmutató (Súgó)`).
 - **Stílus:** Rendszer-betűtípus (`system-ui, sans-serif`), fehér háttér (`#ffffff`), vékony szürke keretek (`1px solid #cccccc` / `#dddddd`), sötétszürke gombok (`#222222`), felesleges árnyékok, animációk és CSS keretrendszerek nélkül.
 
 ---
@@ -101,3 +103,27 @@ A rekordbeküldő (`records/_form.html.erb`), a kategória-adatlap (`categories/
 ![Kezdő kategóriák és bizonyítékok áttekintő](../Új%20Funkciók/Verifikáció/kezdo_kategoriak_bizonyitekok.svg)
 
 > További részletek és a teljes bizonyítási séma: [Verifikációs specifikáció](../Új%20Funkciók/Verifikáció/verifikacio.md)
+
+---
+
+## 6. Interaktív Vizuális Súgó oldal (`help#show`) — 🆕 [ÚJ FUNKCIÓ – Súgó]
+
+A weboldal használatát bemutató, bejelentkezés nélkül is elérhető `/help` oldal felépítése:
+
+- **Gyors tartalomjegyzék (`.help-toc`):** Ugrólinkek az oldal 5 fő szekciójához (`1. Gyors áttekintés`, `2. Kezdőlap és Ranglisták`, `3. Belépés és Regisztráció`, `4. Rekord beküldése és Bizonyítás`, `5. Pontszámítás és Profil`).
+- **4 lépéses áttekintő + Élő rendszerbeállítások sáv:** Áttekinti a folyamatot és megjeleníti a jelenlegi közösségi beállításokat (`require_invite_code`, `email_system`, `require_record_approval`, `members_can_create_categories`, `monthly_category_limit`).
+- **4 annotált látványterv SVG ábra (nyilakkal és számozott szövegdobozokkal):**
+  1. `help_home.svg` – A kezdőlap, a havi kvóta, a kategóriák és a Leaderboard oldalsáv használata.
+  2. `help_auth.svg` – Bejelentkezés, elfelejtett jelszó, becenév és meghívókód.
+  3. `help_record_verification.svg` – Új rekord beküldése, kategória-ajánló sáv, 5-elemű verifikációs menü és tanú-jegyzőkönyv sablon.
+  4. `help_points_profile.svg` – Helyezési pontok (`1. hely = N pt`, logaritmikus lépcső, holtverseny), saját legjobb kísérlet szabály és profil összegzés.
+
+![Kezdőlap Súgó ábra nyilakkal és szövegdobozokkal](../Új%20Funkciók/Súgó/help_home.svg)
+
+![Bejelentkezés és Regisztráció Súgó ábra](../Új%20Funkciók/Súgó/help_auth.svg)
+
+![Rekord beküldése és Verifikáció Súgó ábra](../Új%20Funkciók/Súgó/help_record_verification.svg)
+
+![Pontszámítás és Profil Súgó ábra](../Új%20Funkciók/Súgó/help_points_profile.svg)
+
+> Részletes specifikáció: [Súgó specifikáció](../Új%20Funkciók/Súgó/sugo.md)

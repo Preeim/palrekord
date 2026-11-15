@@ -339,3 +339,36 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
 - **Módosított fájlok:**
   - `test/models/attachment_test.rb` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-15 20:25] – Interaktív vizuális Súgó (/help) funkció tervezése, specifikációja és megvalósítása
+
+- **Prompt:** `/plan Tervezzünk egy új funkciót ami egy súgó lesz. Mutassa be a weboldal használatának módját, használjuk fel a látványtervekben elkészitett terveket, úgy hogy nyilakkal és szövegfobozokkal mutatva miről van szó.` → `Mentsd el ezt a specifikációt az új funkciók mappába. Utána kezd el végrehajtani a tervet.`
+- **Értelmezés:** Egy nyilvánosan elérhető, vizuális Súgó (`/help`) oldal specifikálása és megvalósítása, amely a korábbi látványtervekből (`kezdolap.svg`, `login.svg`, `register.svg`, `verifikacios_menu_urlap.svg`, `kategoria_es_profil_pontok.svg`) kiindulva, nyilakkal és számozott szövegdobozokkal mutatja be a PálRecord weboldal használatát.
+- **Elvégzett műveletek:**
+  - Elmentette a funkcióspecifikációt `docs/Új Funkciók/Súgó/sugo.md` néven a `docs/Új Funkciók/` mappakonvenció szerint.
+  - Elkészítette a 4 annotált, nyilakkal (`<marker id="help-arrow">`) és számozott szövegdobozokkal ellátott SVG ábrát (`help_home.svg`, `help_auth.svg`, `help_record_verification.svg`, `help_points_profile.svg`) mind az `app/assets/images/help/`, mind a `docs/Új Funkciók/Súgó/` könyvtárakban.
+  - Felvette a `GET /help` (`help#show`) útvonalat a `config/routes.rb` fájlba, létrehozta a `HelpController`-t élő `Setting` értékek betöltésével, és az `ApplicationController#enforce_password_change` szűrőben engedélyezte a `help` controllert.
+  - Kiegészítette az `app/views/layouts/application.html.erb` fejlécét és láblécét a `Súgó` linkkel, létrehozta az `app/views/help/show.html.erb` nézetet (tartalomjegyzék, 4 lépéses folyamat, élő szabály-összesítő, 4 annotált ábra és számozott jelmagyarázat), valamint hozzáadta a minimalista `.help-*` stílusokat az `app/assets/stylesheets/application.css` fájlhoz.
+  - A `.agents/rules/docs-sync.md` szerint frissítette a `docs/Látványtervek/kezdolap.svg` (fejléc `Súgó` gomb `[ÚJ]` kiemeléssel) és a `docs/Látványtervek/latvanyterv.md` (`6.` fejezet) fájlokat.
+  - Létrehozta a `test/integration/help_flow_test.rb` integrációs tesztet és PowerShell XML parserrel ellenőrizte mind a 16 `.svg` fájl érvényességét.
+- **Módosított fájlok:**
+  - `docs/Új Funkciók/Súgó/sugo.md` (létrehozva)
+  - `docs/Új Funkciók/Súgó/help_home.svg` (létrehozva)
+  - `docs/Új Funkciók/Súgó/help_auth.svg` (létrehozva)
+  - `docs/Új Funkciók/Súgó/help_record_verification.svg` (létrehozva)
+  - `docs/Új Funkciók/Súgó/help_points_profile.svg` (létrehozva)
+  - `app/assets/images/help/help_home.svg` (létrehozva)
+  - `app/assets/images/help/help_auth.svg` (létrehozva)
+  - `app/assets/images/help/help_record_verification.svg` (létrehozva)
+  - `app/assets/images/help/help_points_profile.svg` (létrehozva)
+  - `config/routes.rb` (módosítva)
+  - `app/controllers/application_controller.rb` (módosítva)
+  - `app/controllers/help_controller.rb` (létrehozva)
+  - `app/views/layouts/application.html.erb` (módosítva)
+  - `app/views/help/show.html.erb` (létrehozva)
+  - `app/assets/stylesheets/application.css` (módosítva)
+  - `docs/Látványtervek/kezdolap.svg` (módosítva)
+  - `docs/Látványtervek/latvanyterv.md` (módosítva)
+  - `test/integration/help_flow_test.rb` (létrehozva)
+  - `docs/AI-Usage.md` (módosítva)
