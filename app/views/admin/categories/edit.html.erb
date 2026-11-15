@@ -1,0 +1,14 @@
+<% content_for :title, "Admin – Kategória szerkesztése" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Kategória szerkesztése – <%= @category.name %></h1>
+    <p class="page-subtitle">A versenyszám beállításainak, bizonyítási útmutatójának vagy archiválási állapotának módosítása.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<div class="card">
+  <%= render "form", category: @category, return_status: params[:return_status] %>
+</div>

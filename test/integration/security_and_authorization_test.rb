@@ -64,7 +64,7 @@ class SecurityAndAuthorizationTest < ActionDispatch::IntegrationTest
   end
 
   test "guests and TAG users are blocked from all admin endpoints" do
-    [ admin_records_path, admin_users_path, admin_invite_codes_path, admin_seasons_path, admin_settings_path ].each do |path|
+    [ admin_records_path, admin_categories_path, admin_users_path, admin_invite_codes_path, admin_seasons_path, admin_settings_path ].each do |path|
       get path
       assert_redirected_to login_path
     end
@@ -72,8 +72,20 @@ class SecurityAndAuthorizationTest < ActionDispatch::IntegrationTest
     post login_path, params: { login: "tag_one", password: "password123" }
     assert_redirected_to root_path
 
-    [ admin_records_path, admin_users_path, admin_invite_codes_path, admin_seasons_path, admin_settings_path ].each do |path|
+    [ admin_records_path, admin_categories_path, admin_users_path, admin_invite_codes_path, admin_seasons_path, admin_settings_path ].each do |path|
       get path
+      assert_redirected_to root_path
+    end
+
+    post admin_categories_path, params: { category: { name: "Jogosulatlan", unit: "db", value_type: "INT", sort_direction: "DESC" } }
+    assert_redirected_to root_path
+
+    patch admin_category_path(@category), params: { category: { is_archived: true } }
+    assert_redirected_to root_path
+    assert_not @category.reload.is_archived?
+
+    assert_no_difference("Category.count") do
+      delete admin_category_path(@category)
       assert_redirected_to root_path
     end
 

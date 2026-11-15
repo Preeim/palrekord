@@ -1,0 +1,78 @@
+<% if category.errors.any? %>
+  <div class="error-box">
+    <strong>A versenyszám mentése nem sikerült:</strong>
+    <ul>
+      <% category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: [ :admin, category ], local: true do |f| %>
+  <% if local_assigns[:return_status].present? %>
+    <%= hidden_field_tag :return_status, return_status %>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-group" style="flex: 2 1 260px;">
+      <%= f.label :name, "Versenyszám neve *", class: "form-label" %>
+      <%= f.text_field :name, class: "form-control", required: true, placeholder: "pl. 100m sörfutás" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :unit, "Mértékegység *", class: "form-label" %>
+      <%= f.text_field :unit, class: "form-control", required: true, placeholder: "pl. mp, kg, db, perc" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :value_type, "Érték típusa *", class: "form-label" %>
+      <%= f.select :value_type,
+        [["Egész szám (INT)", "INT"], ["Törtszám (DOUBLE)", "DOUBLE"], ["Időtartam (TIME_DURATION)", "TIME_DURATION"], ["Dátum (DATE)", "DATE"]],
+        {},
+        class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :sort_direction, "Rendezési irány *", class: "form-label" %>
+      <%= f.select :sort_direction,
+        [["Nagyobb jobb (DESC)", "DESC"], ["Kisebb / gyorsabb jobb (ASC)", "ASC"]],
+        {},
+        class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <%= f.label :recommended_file_type, "Ajánlott bizonyítási mód", class: "form-label" %>
+      <%= f.select :recommended_file_type,
+        Attachment::FILE_TYPE_LABELS.map { |code, label| [ label, code ] },
+        { include_blank: "-- Nincs kiemelt ajánlás --" },
+        class: "form-control" %>
+    </div>
+
+    <div class="form-group" style="flex: 2 1 320px;">
+      <%= f.label :verification_hint, "Bizonyítási elvárás / tipp", class: "form-label" %>
+      <%= f.text_field :verification_hint, class: "form-control", maxlength: 255,
+        placeholder: "pl. 1 fotó a súlytárcsákról vagy vágatlan telefonos videó link..." %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description, "Szabályzat / leírás", class: "form-label" %>
+    <%= f.text_area :description, class: "form-control", placeholder: "Teljesítési feltételek és szabályok..." %>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">
+      <%= f.check_box :is_archived %> Archivált versenyszám (új rekord nem küldhető be, a pontok nem számítanak a ranglistába)
+    </label>
+  </div>
+
+  <div class="actions-inline">
+    <%= f.submit(category.persisted? ? "Változtatások mentése" : "Versenyszám létrehozása", class: "btn btn-primary") %>
+    <% if category.persisted? %>
+      <%= link_to "Mégse", admin_categories_path(status: local_assigns[:return_status].presence), class: "btn btn-outline" %>
+    <% end %>
+  </div>
+<% end %>

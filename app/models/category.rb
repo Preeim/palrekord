@@ -21,6 +21,7 @@ class Category < ApplicationRecord
   validate :creator_must_have_monthly_quota, on: :create
 
   scope :active, -> { where(is_archived: false) }
+  scope :archived, -> { where(is_archived: true) }
   scope :ordered, -> { order(is_archived: :asc, name: :asc) }
 
   def sort_by_label

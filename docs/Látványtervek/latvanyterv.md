@@ -11,6 +11,7 @@ Ez a dokumentum a **Kezdőlap**, a **Login**, a **Register** és a pontrendszerr
 > - **`[ÚJ 4]` Leaderboard oldalsáv:** Kétoszlopos elrendezés jobb oldalon `Örökös Élő` és szezonális ranglistákkal.
 > - **Részletes kategória- és profilnézet (`4.` fejezet):** Helyezési pont oszlop, szezonok és holtversenyek vizuális terve.
 > - 🆕 **`[ÚJ – Súgó]` Fejléc/Lábléc Súgó link és `/help` oldal (`6.` fejezet):** Nyilvános használati útmutató a látványtervek alapján készített, nyilakkal és szövegdobozokkal annotált SVG ábrákkal.
+> - 🆕 **`[ÚJ – Admin Kategóriák]` Admin kategóriakezelő felület (`7.` fejezet):** Dedikált `/admin/categories` fül beépített létrehozó űrlappal, állapotszűrőkkel, gyors archiválással/visszaállítással és törléssel.
 
 ---
 
@@ -80,6 +81,7 @@ A pontrendszerhez kapcsolódó további képernyőelemek és nézetek (a közpon
   - Összegzett pontkártyák (`Örökös összpontszám`, `Aktív helyezések`, `1. helyezések`, valamint szezononkénti pontbontás).
   - Havi kategórialétrehozási kvóta állapota és elért helyezések kategóriánként.
 - **Admin felület:**
+  - 🆕 **`[ÚJ – Admin Kategóriák]` Kategóriák kezelése (`admin/categories`):** Versenyszámok létrehozása, szerkesztése, állapotszűrése, gyors archiválása/visszaállítása és törlése.
   - **Szezonok kezelése (`admin/seasons`):** Új szezon létrehozása (`name`, `starts_at`, `ends_at`), szerkesztése és törlése.
   - **Rendszerbeállítások (`admin/settings`):** `monthly_category_limit` paraméter állítása (`0` = korlátozva/tiltva, alapérték `'2'`).
 
@@ -127,3 +129,18 @@ A weboldal használatát bemutató, bejelentkezés nélkül is elérhető `/help
 ![Pontszámítás és Profil Súgó ábra](../Új%20Funkciók/Súgó/help_points_profile.svg)
 
 > Részletes specifikáció: [Súgó specifikáció](../Új%20Funkciók/Súgó/sugo.md)
+
+---
+
+## 7. Admin Kategóriakezelő felület (`admin/categories`) — 🆕 [ÚJ FUNKCIÓ – Admin Kategóriák]
+
+Az adminisztrációs menüsor új `Kategóriák` fülén (`/admin/categories`) elérhető központi versenyszám-kezelő képernyő felépítése:
+
+- **Admin navigáció (`admin/_nav.html.erb`):** `Kategóriák` fül közvetlenül a `Rekordok elbírálása` és `Szezonok` között.
+- **Beépített új kategória űrlap (`admin/categories/_form.html.erb`):** Az oldal tetején kártyában jelenik meg (név, mértékegység, értéktípus, rendezési irány, ajánlott bizonyítási mód, bizonyítási tipp, szabályzat/leírás, archivált állapot).
+- **Állapotszűrők:** `Összes (N)`, `Aktív (N)` és `Archivált (N)` szűrőgombok.
+- **Kategóriák táblázata és gyorsműveletek:** Szezonjelvény, ajánlott bizonyítási mód, elfogadott/összes rekordstatisztika, `Aktív`/`Archivált` állapotjelvény, valamint `Szerkesztés`, 1 kattintásos `Archiválás` / `Visszaállítás` és megerősített `Törlés` gombok.
+
+![Admin Kategóriák látványterv](../Új%20Funkciók/Admin%20Kategóriák/admin_kategoriak.svg)
+
+> Részletes specifikáció: [Admin Kategóriák specifikáció](../Új%20Funkciók/Admin%20Kategóriák/admin_kategoriak.md)

@@ -23,9 +23,9 @@ flowchart TB
 | **2. Service tesztek** (`test/services/`) | 1 | 4 | Logaritmikus pontszámítás, holtversenyek, szezonok, cache |
 | **3. Mailer tesztek** (`test/mailers/`) | 1 | 2 | Aktiváló és jelszó-visszaállító e-mailek, tokenek |
 | **4. Helper tesztek** (`test/helpers/`) | 1 | 3 | Státusz- és pont-jelvények, értékformátum-súgók |
-| **5. Integrációs tesztek** (`test/integration/`) | 4 | 16 | Teljes HTTP folyamatok, admin/tag jogosultságok, biztonság |
+| **5. Integrációs tesztek** (`test/integration/`) | 5 | 17 | Teljes HTTP folyamatok, admin/tag jogosultságok, biztonság |
 | **6. System / UI tesztek** (`test/system/`) | 1 | 1 | Valós DOM-űrlapok és gombok végigkattintása (`:rack_test`) |
-| **Összesen** | **15** *(+1 csatorna váz)* | **51** | Teljes stack lefedettsége modelltől a böngésző-nézetekig |
+| **Összesen** | **16** *(+1 csatorna váz)* | **52** | Teljes stack lefedettsége modelltől a böngésző-nézetekig |
 
 ---
 
@@ -115,7 +115,7 @@ flowchart TB
 - *(Meglévő)* `admin can create, edit, and delete seasons`: Admin szezonkezelés teljes CRUD folyamata.
 
 #### C) `test/integration/security_and_authorization_test.rb` (`SecurityAndAuthorizationTest` – 5 új teszt)
-- `guests and TAG users are blocked from all admin endpoints`: Vendég és `TAG` szerepkör blokkolása az összes `/admin/*` végponton és kategória-szerkesztésen.
+- `guests and TAG users are blocked from all admin endpoints`: Vendég és `TAG` szerepkör blokkolása az összes `/admin/*` végponton (`admin/categories` POST/PATCH/DELETE végpontokat is beleértve) és kategória-szerkesztésen.
 - `TAG can edit and destroy own PENDING record only, not APPROVED or others records`: Csak a saját függőben lévő rekord módosítható/törölhető; jóváhagyott vagy más felhasználó rekordja védett.
 - `protects last active admin and allows admin to reset password or suspend other users`: Az utolsó aktív Admin önvédelme (lefokozás, tiltás, törlés tiltva), valamint ideiglenes jelszó-generálás és tag felfüggesztése.
 - `suspended user cannot log in and active session is invalidated upon suspension`: Felfüggesztett felhasználó azonnali kizárása aktív munkamenetből és belépéskor.
@@ -126,6 +126,9 @@ flowchart TB
 - `email_system=true allows self-service password reset and invalidates used token`: Teljes önkiszolgáló jelszó-visszaállítási folyamat és felhasznált token érvénytelenítése.
 - `email_system=false blocks password reset POST requests`: Kikapcsolt e-mail rendszer esetén a jelszó-reset POST kérés elutasítása.
 - `require_record_approval=false immediately approves submitted record with file attachment`: Azonnali rekord-jóváhagyás képmelléklettel és annak letöltése (`/attachments/:id`).
+
+#### E) `test/integration/admin_categories_flow_test.rb` (`AdminCategoriesFlowTest` – 1 új teszt)
+- `admin can view, filter, create, edit, archive, restore, and delete categories`: A teljes `/admin/categories` adminisztrációs életciklus (szűrés `ALL`/`ACTIVE`/`ARCHIVED` alapján, új kategória felvétele és hibakezelés `422`, szerkesztés, egykattintásos archiválás/visszaállítás, valamint törlés a kapcsolódó rekordokkal együtt).
 
 ---
 

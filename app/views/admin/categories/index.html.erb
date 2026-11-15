@@ -1,0 +1,110 @@
+<% content_for :title, "Admin – Kategóriák" %>
+
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Adminisztráció – Kategóriák kezelése</h1>
+    <p class="page-subtitle">Versenyszámok létrehozása, szerkesztése, archiválása és törlése egy helyen.</p>
+  </div>
+</div>
+
+<%= render "admin/nav" %>
+
+<div class="card">
+  <h2 class="section-title" style="margin-top: 0;">Új versenyszám létrehozása</h2>
+  <%= render "form", category: @category %>
+</div>
+
+<div class="actions-inline" style="margin-bottom: 16px;">
+  <%= link_to "Összes (#{@all_count})", admin_categories_path(status: "ALL"), class: "btn btn-sm #{@status_filter == 'ALL' ? 'btn-primary' : 'btn-outline'}" %>
+  <%= link_to "Aktív (#{@active_count})", admin_categories_path(status: "ACTIVE"), class: "btn btn-sm #{@status_filter == 'ACTIVE' ? 'btn-primary' : 'btn-outline'}" %>
+  <%= link_to "Archivált (#{@archived_count})", admin_categories_path(status: "ARCHIVED"), class: "btn btn-sm #{@status_filter == 'ARCHIVED' ? 'btn-primary' : 'btn-outline'}" %>
+</div>
+
+<% if @categories.any? %>
+  <div class="table-wrap">
+    <table class="minimal-table">
+      <thead>
+        <tr>
+          <th>Versenyszám</th>
+          <th>Típus &amp; Mértékegység</th>
+          <th>Ajánlott bizonyítás</th>
+          <th>Rekordok</th>
+          <th>Állapot</th>
+          <th>Műveletek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @categories.each do |category| %>
+          <% category_season = category.matching_season(@seasons) %>
+          <% approved_count = category.records.count { |r| r.status == "APPROVED" } %>
+          <% pending_count = category.records.count { |r| r.status == "PENDING" } %>
+          <% total_count = category.records.size %>
+          <tr>
+            <td>
+              <div>
+                <%= link_to category.name, category_path(category), class: "category-link" %>
+              </div>
+              <% if category_season.present? %>
+                <div class="category-badges">
+                  <span class="badge badge-season"><%= category_season.name %></span>
+                </div>
+              <% end %>
+              <% if category.description.present? %>
+                <div class="form-hint"><%= truncate(category.description, length: 90) %></div>
+              <% end %>
+              <div class="form-hint">
+                Létrehozta: <%= category.created_by&.display_name || "Rendszer" %> · <%= category.created_at.strftime("%Y-%m-%d") %>
+              </div>
+            </td>
+            <td class="meta-text">
+              <div><strong><%= category.unit %></strong></div>
+              <div><%= category.sort_by_label %></div>
+            </td>
+            <td>
+              <% if category.recommended_file_type.present? %>
+                <div><%= recommended_proof_badge(category.recommended_file_type) %></div>
+              <% else %>
+                <span class="meta-text">Nincs kiemelve</span>
+              <% end %>
+              <% if category.verification_hint.present? %>
+                <div class="form-hint"><%= truncate(category.verification_hint, length: 80) %></div>
+              <% end %>
+            </td>
+            <td class="meta-text">
+              <div><strong><%= approved_count %></strong> elfogadott</div>
+              <div class="form-hint">Összes: <%= total_count %> db<%= " (#{pending_count} függőben)" if pending_count.positive? %></div>
+            </td>
+            <td>
+              <% if category.is_archived? %>
+                <span class="badge badge-muted">Archivált</span>
+              <% else %>
+                <span class="badge badge-approved">Aktív</span>
+              <% end %>
+            </td>
+            <td>
+              <div class="actions-inline">
+                <%= link_to "Szerkesztés", edit_admin_category_path(category, return_status: @status_filter), class: "btn btn-outline btn-sm" %>
+
+                <%= button_to(category.is_archived? ? "Visszaállítás" : "Archiválás",
+                  admin_category_path(category, return_status: @status_filter),
+                  method: :patch,
+                  params: { category: { is_archived: !category.is_archived? } },
+                  class: "btn btn-outline btn-sm") %>
+
+                <%= button_to "Törlés",
+                  admin_category_path(category, return_status: @status_filter),
+                  method: :delete,
+                  data: { turbo_confirm: "Biztosan véglegesen törlöd a(z) #{category.name} versenyszámot és az összes (#{total_count} db) rekordját?" },
+                  class: "btn btn-danger btn-sm" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="card">
+    <p class="empty-state">Nincs megjeleníthető kategória ebben a szűrőben.</p>
+  </div>
+<% end %>

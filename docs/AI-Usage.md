@@ -372,3 +372,32 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `docs/Látványtervek/latvanyterv.md` (módosítva)
   - `test/integration/help_flow_test.rb` (létrehozva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-15 21:24] – Admin Kategóriakezelő felület (`/admin/categories`) tervezése és megvalósítása
+
+- **Prompt:** "Tervezz egy új admin felületet ahol a kategóriákat lehet kezelni."
+- **Értelmezés:** A felhasználói jóváhagyás alapján egy teljes értékű, dedikált `/admin/categories` adminisztrációs felület megtervezése, specifikálása SVG látványtervvel, valamint a Rails controller, nézetek és integrációs tesztek elkészítése (beépített új kategória űrlap, állapotszűrők, gyors archiválás/visszaállítás, szerkesztés és megerősített törlés).
+- **Elvégzett műveletek:**
+  - Interaktív kérdések segítségével pontosította a törlési/archiválási viselkedést, az oldal elrendezését és a megvalósítás hatókörét.
+  - Bővítette az `app/models/category.rb` modellt az `archived` scope-pal, valamint a `config/routes.rb` fájlt az `admin/categories` (`index`, `create`, `edit`, `update`, `destroy`) útvonalakkal.
+  - Létrehozta az `app/controllers/admin/categories_controller.rb` kontrollert állapotszűréssel (`ALL` / `ACTIVE` / `ARCHIVED`), kategórialétrehozással, szerkesztéssel, archiválással/visszaállítással és kaszkádolt törléssel.
+  - Frissítette az `app/views/admin/_nav.html.erb` navigációt a `Kategóriák` füllel, létrehozta az `app/views/admin/categories/_form.html.erb`, `index.html.erb` és `edit.html.erb` nézeteket, valamint frissítette az `app/views/categories/show.html.erb` admin szerkesztési hivatkozását.
+  - Bővítette a `test/integration/security_and_authorization_test.rb` jogosultsági tesztet és létrehozta a `test/integration/admin_categories_flow_test.rb` integrációs tesztet.
+  - Elkészítette a `docs/Új Funkciók/Admin Kategóriák/admin_kategoriak.md` specifikációt és az `admin_kategoriak.svg` látványtervet, frissítette a `docs/Látványtervek/latvanyterv.md` (`7.` fejezet), a `docs/Tesztelés/tesztelesi_terv.md` és a `docs/AI-Usage.md` fájlokat, majd ellenőrizte az SVG XML-érvényességét.
+- **Módosított fájlok:**
+  - `app/models/category.rb` (módosítva)
+  - `config/routes.rb` (módosítva)
+  - `app/controllers/admin/categories_controller.rb` (létrehozva)
+  - `app/views/admin/_nav.html.erb` (módosítva)
+  - `app/views/admin/categories/_form.html.erb` (létrehozva)
+  - `app/views/admin/categories/index.html.erb` (létrehozva)
+  - `app/views/admin/categories/edit.html.erb` (létrehozva)
+  - `app/views/categories/show.html.erb` (módosítva)
+  - `test/integration/security_and_authorization_test.rb` (módosítva)
+  - `test/integration/admin_categories_flow_test.rb` (létrehozva)
+  - `docs/Új Funkciók/Admin Kategóriák/admin_kategoriak.svg` (létrehozva)
+  - `docs/Új Funkciók/Admin Kategóriák/admin_kategoriak.md` (létrehozva)
+  - `docs/Látványtervek/latvanyterv.md` (módosítva)
+  - `docs/Tesztelés/tesztelesi_terv.md` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)

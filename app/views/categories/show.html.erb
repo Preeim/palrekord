@@ -24,7 +24,7 @@
       <%= link_to "Rekord beküldése", new_record_path(category_id: @category.id), class: "btn btn-primary" %>
     <% end %>
     <% if admin? %>
-      <%= link_to "Kategória szerkesztése", edit_category_path(@category), class: "btn btn-outline" %>
+      <%= link_to "Kategória szerkesztése", edit_admin_category_path(@category), class: "btn btn-outline" %>
     <% end %>
   </div>
 </div>

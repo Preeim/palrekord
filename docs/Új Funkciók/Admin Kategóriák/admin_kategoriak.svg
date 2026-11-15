@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 840" width="1200" height="840" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <!-- Background -->
+  <rect width="1200" height="840" fill="#ffffff"/>
+
+  <!-- HEADER (site-header) -->
+  <rect x="0" y="0" width="1200" height="60" fill="#fafafa"/>
+  <line x1="0" y1="60" x2="1200" y2="60" stroke="#dddddd" stroke-width="1"/>
+  <text x="40" y="37" font-size="18" font-weight="700" fill="#111111">PálRecord</text>
+
+  <rect x="610" y="15" width="66" height="30" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="643" y="34" font-size="12" text-anchor="middle" fill="#111111">Súgó</text>
+  <rect x="684" y="15" width="96" height="30" rx="3" fill="#222222"/>
+  <text x="732" y="34" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">+ Új rekord</text>
+  <rect x="788" y="15" width="180" height="30" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="878" y="34" font-size="12" text-anchor="middle" fill="#111111">Profil (Admin · 42 pt)</text>
+  <rect x="976" y="15" width="66" height="30" rx="3" fill="#222222"/>
+  <text x="1009" y="34" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">Admin</text>
+  <rect x="1050" y="15" width="110" height="30" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="1105" y="34" font-size="12" text-anchor="middle" fill="#111111">Kijelentkezés</text>
+
+  <!-- Page Header -->
+  <text x="40" y="102" font-size="22" font-weight="700" fill="#111111">Adminisztráció – Kategóriák kezelése</text>
+  <text x="40" y="124" font-size="13" fill="#666666">Versenyszámok létrehozása, szerkesztése, archiválása és törlése egy helyen.</text>
+
+  <!-- Admin Navigation Bar -->
+  <rect x="40" y="142" width="145" height="32" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="112" y="162" font-size="12" text-anchor="middle" fill="#111111">Rekordok elbírálása</text>
+
+  <!-- [ÚJ 1] Active Kategóriák tab -->
+  <rect x="191" y="138" width="106" height="40" rx="4" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="4,3"/>
+  <rect x="195" y="142" width="98" height="32" rx="3" fill="#222222"/>
+  <text x="244" y="162" font-size="12" font-weight="700" text-anchor="middle" fill="#ffffff">Kategóriák</text>
+  <rect x="195" y="121" width="98" height="16" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="0.9"/>
+  <text x="244" y="133" font-size="9.5" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ] Admin fül</text>
+
+  <rect x="303" y="142" width="84" height="32" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="345" y="162" font-size="12" text-anchor="middle" fill="#111111">Szezonok</text>
+
+  <rect x="395" y="142" width="104" height="32" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="447" y="162" font-size="12" text-anchor="middle" fill="#111111">Felhasználók</text>
+
+  <rect x="507" y="142" width="112" height="32" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="563" y="162" font-size="12" text-anchor="middle" fill="#111111">Meghívókódok</text>
+
+  <rect x="627" y="142" width="96" height="32" rx="3" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="675" y="162" font-size="12" text-anchor="middle" fill="#111111">Beállítások</text>
+
+  <line x1="40" y1="186" x2="1160" y2="186" stroke="#dddddd" stroke-width="1"/>
+
+  <!-- Inline Create Form Card -->
+  <rect x="40" y="202" width="1120" height="238" rx="4" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <rect x="40" y="202" width="1120" height="238" rx="4" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="5,4"/>
+  <text x="60" y="228" font-size="16" font-weight="700" fill="#111111">Új versenyszám létrehozása</text>
+  <rect x="278" y="213" width="160" height="19" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="0.9"/>
+  <text x="358" y="226" font-size="10" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ] Beépített létrehozó űrlap</text>
+
+  <!-- Form Row 1 -->
+  <text x="60" y="252" font-size="12" font-weight="600" fill="#333333">Versenyszám neve *</text>
+  <rect x="60" y="259" width="380" height="32" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="72" y="279" font-size="12" fill="#888888">pl. 100m sörfutás</text>
+
+  <text x="456" y="252" font-size="12" font-weight="600" fill="#333333">Mértékegység *</text>
+  <rect x="456" y="259" width="180" height="32" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="468" y="279" font-size="12" fill="#888888">pl. mp, kg, db</text>
+
+  <text x="652" y="252" font-size="12" font-weight="600" fill="#333333">Érték típusa *</text>
+  <rect x="652" y="259" width="230" height="32" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="664" y="279" font-size="12" fill="#111111">Törtszám (DOUBLE) ▾</text>
+
+  <text x="898" y="252" font-size="12" font-weight="600" fill="#333333">Rendezési irány *</text>
+  <rect x="898" y="259" width="242" height="32" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="910" y="279" font-size="12" fill="#111111">Nagyobb jobb (DESC) ▾</text>
+
+  <!-- Form Row 2 -->
+  <text x="60" y="314" font-size="12" font-weight="600" fill="#333333">Ajánlott bizonyítási mód</text>
+  <rect x="60" y="321" width="320" height="32" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="72" y="341" font-size="12" fill="#111111">Fotó / Képernyőkép (IMAGE) ▾</text>
+
+  <text x="396" y="314" font-size="12" font-weight="600" fill="#333333">Bizonyítási elvárás / tipp</text>
+  <rect x="396" y="321" width="744" height="32" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="408" y="341" font-size="12" fill="#888888">pl. 1 fotó a súlytárcsákról vagy vágatlan telefonos videó link...</text>
+
+  <!-- Form Row 3 & Submit -->
+  <text x="60" y="376" font-size="12" font-weight="600" fill="#333333">Szabályzat / leírás</text>
+  <rect x="60" y="383" width="680" height="36" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="72" y="405" font-size="12" fill="#888888">Teljesítési feltételek és szabályok...</text>
+
+  <rect x="756" y="392" width="14" height="14" rx="2" fill="#ffffff" stroke="#666666" stroke-width="1"/>
+  <text x="776" y="404" font-size="12" fill="#333333">Archivált versenyszám</text>
+
+  <rect x="970" y="386" width="170" height="32" rx="3" fill="#222222"/>
+  <text x="1055" y="406" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">Versenyszám létrehozása</text>
+
+  <!-- Status Filters -->
+  <rect x="40" y="458" width="94" height="28" rx="3" fill="#222222"/>
+  <text x="87" y="476" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">Összes (6)</text>
+
+  <rect x="142" y="458" width="84" height="28" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="184" y="476" font-size="12" text-anchor="middle" fill="#111111">Aktív (5)</text>
+
+  <rect x="234" y="458" width="104" height="28" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="286" y="476" font-size="12" text-anchor="middle" fill="#111111">Archivált (1)</text>
+
+  <rect x="350" y="462" width="166" height="20" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="0.9"/>
+  <text x="433" y="476" font-size="10" font-weight="700" text-anchor="middle" fill="#1e40af">[ÚJ] Állapotszűrők darabszámmal</text>
+
+  <!-- Categories Admin Table -->
+  <rect x="40" y="502" width="1120" height="284" rx="4" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <rect x="40" y="502" width="1120" height="38" rx="4" fill="#fafafa"/>
+  <line x1="40" y1="540" x2="1160" y2="540" stroke="#cccccc" stroke-width="1.2"/>
+
+  <text x="56" y="526" font-size="11" font-weight="700" fill="#555555">VERSENYSZÁM</text>
+  <text x="340" y="526" font-size="11" font-weight="700" fill="#555555">TÍPUS &amp; MÉRTÉKEGYSÉG</text>
+  <text x="510" y="526" font-size="11" font-weight="700" fill="#555555">AJÁNLOTT BIZONYÍTÁS</text>
+  <text x="740" y="526" font-size="11" font-weight="700" fill="#555555">REKORDOK</text>
+  <text x="850" y="526" font-size="11" font-weight="700" fill="#555555">ÁLLAPOT</text>
+  <text x="945" y="526" font-size="11" font-weight="700" fill="#1d4ed8">MŰVELETEK [ÚJ]</text>
+
+  <!-- Row 1: Active -->
+  <text x="56" y="566" font-size="14" font-weight="600" fill="#111111" text-decoration="underline">100m sörfutás</text>
+  <rect x="56" y="574" width="112" height="17" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="112" y="586" font-size="10" font-weight="600" text-anchor="middle" fill="#334155">2026 Őszi Szezon</text>
+  <text x="56" y="606" font-size="11" fill="#666666">Létrehozta: Admin · 2026-11-13</text>
+
+  <text x="340" y="566" font-size="13" font-weight="700" fill="#333333">mp</text>
+  <text x="340" y="584" font-size="12" fill="#555555">TIME_DURATION · ASC</text>
+
+  <rect x="510" y="553" width="110" height="18" rx="3" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="565" y="566" font-size="10.5" font-weight="600" text-anchor="middle" fill="#1e40af">Videó / Külső Link</text>
+  <text x="510" y="586" font-size="11" fill="#666666">Vágatlan telefonos videó a rajtról...</text>
+
+  <text x="740" y="566" font-size="12" font-weight="700" fill="#111111">4 elfogadott</text>
+  <text x="740" y="584" font-size="11" fill="#666666">Összes: 5 db (1 függőben)</text>
+
+  <rect x="850" y="554" width="52" height="20" rx="3" fill="#f0fdf4" stroke="#22c55e" stroke-width="1"/>
+  <text x="876" y="568" font-size="11" font-weight="600" text-anchor="middle" fill="#14532d">Aktív</text>
+
+  <rect x="945" y="553" width="76" height="24" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="983" y="569" font-size="11" text-anchor="middle" fill="#111111">Szerkesztés</text>
+  <rect x="1026" y="553" width="66" height="24" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="1059" y="569" font-size="11" text-anchor="middle" fill="#111111">Archiválás</text>
+  <rect x="1097" y="553" width="48" height="24" rx="3" fill="#ffffff" stroke="#dc2626" stroke-width="1"/>
+  <text x="1121" y="569" font-size="11" text-anchor="middle" fill="#991b1b">Törlés</text>
+
+  <line x1="40" y1="622" x2="1160" y2="622" stroke="#eeeeee" stroke-width="1"/>
+
+  <!-- Row 2: Active -->
+  <text x="56" y="648" font-size="14" font-weight="600" fill="#111111" text-decoration="underline">Fekvenyomás max</text>
+  <text x="56" y="670" font-size="11" fill="#666666">Létrehozta: Admin · 2026-11-13</text>
+
+  <text x="340" y="648" font-size="13" font-weight="700" fill="#333333">kg</text>
+  <text x="340" y="666" font-size="12" fill="#555555">DOUBLE · DESC</text>
+
+  <rect x="510" y="635" width="122" height="18" rx="3" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="571" y="648" font-size="10.5" font-weight="600" text-anchor="middle" fill="#1e40af">Fotó / Képernyőkép</text>
+  <text x="510" y="668" font-size="11" fill="#666666">1 fotó a felpakolt rúdról és tárcsákról</text>
+
+  <text x="740" y="648" font-size="12" font-weight="700" fill="#111111">3 elfogadott</text>
+  <text x="740" y="666" font-size="11" fill="#666666">Összes: 3 db</text>
+
+  <rect x="850" y="636" width="52" height="20" rx="3" fill="#f0fdf4" stroke="#22c55e" stroke-width="1"/>
+  <text x="876" y="650" font-size="11" font-weight="600" text-anchor="middle" fill="#14532d">Aktív</text>
+
+  <rect x="945" y="635" width="76" height="24" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="983" y="651" font-size="11" text-anchor="middle" fill="#111111">Szerkesztés</text>
+  <rect x="1026" y="635" width="66" height="24" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="1059" y="651" font-size="11" text-anchor="middle" fill="#111111">Archiválás</text>
+  <rect x="1097" y="635" width="48" height="24" rx="3" fill="#ffffff" stroke="#dc2626" stroke-width="1"/>
+  <text x="1121" y="651" font-size="11" text-anchor="middle" fill="#991b1b">Törlés</text>
+
+  <line x1="40" y1="696" x2="1160" y2="696" stroke="#eeeeee" stroke-width="1"/>
+
+  <!-- Row 3: Archived -->
+  <text x="56" y="724" font-size="14" font-weight="600" fill="#111111" text-decoration="underline">2025 Nyári darts kupa</text>
+  <text x="56" y="746" font-size="11" fill="#666666">Létrehozta: Admin · 2025-07-10</text>
+
+  <text x="340" y="724" font-size="13" font-weight="700" fill="#333333">pont</text>
+  <text x="340" y="742" font-size="12" fill="#555555">INT · DESC</text>
+
+  <text x="510" y="724" font-size="12" fill="#666666">Nincs kiemelve</text>
+
+  <text x="740" y="724" font-size="12" font-weight="700" fill="#111111">6 elfogadott</text>
+  <text x="740" y="742" font-size="11" fill="#666666">Összes: 6 db</text>
+
+  <rect x="850" y="712" width="64" height="20" rx="3" fill="#f5f5f5" stroke="#cccccc" stroke-width="1"/>
+  <text x="882" y="726" font-size="11" font-weight="600" text-anchor="middle" fill="#555555">Archivált</text>
+
+  <rect x="945" y="711" width="76" height="24" rx="3" fill="#ffffff" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="983" y="727" font-size="11" text-anchor="middle" fill="#111111">Szerkesztés</text>
+  <rect x="1026" y="711" width="66" height="24" rx="3" fill="#eff6ff" stroke="#2563eb" stroke-width="1"/>
+  <text x="1059" y="727" font-size="10.5" font-weight="600" text-anchor="middle" fill="#1e40af">Visszaállítás</text>
+  <rect x="1097" y="711" width="48" height="24" rx="3" fill="#ffffff" stroke="#dc2626" stroke-width="1"/>
+  <text x="1121" y="727" font-size="11" text-anchor="middle" fill="#991b1b">Törlés</text>
+
+  <!-- Action highlight callout -->
+  <rect x="941" y="548" width="208" height="193" rx="4" fill="none" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="4,3"/>
+
+  <!-- Footer -->
+  <rect x="0" y="800" width="1200" height="40" fill="#fafafa"/>
+  <line x1="0" y1="800" x2="1200" y2="800" stroke="#dddddd" stroke-width="1"/>
+  <text x="600" y="824" font-size="12" text-anchor="middle" fill="#666666">PálRecord · Baráti rekordgyűjtő · Használati útmutató (Súgó)</text>
+</svg>

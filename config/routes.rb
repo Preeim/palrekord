@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   # Adminisztráció
   namespace :admin do
     root to: "records#index"
+    resources :categories, only: [ :index, :create, :edit, :update, :destroy ]
     resources :users, only: [ :index, :update, :destroy ] do
       post :reset_password, on: :member
     end
