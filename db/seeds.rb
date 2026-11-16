@@ -1,5 +1,6 @@
 return if Rails.env.test?
 
+require "securerandom"
 require "zlib"
 require "tempfile"
 
@@ -51,46 +52,18 @@ end
 Setting.ensure_defaults!
 
 # Kezdeti Admin felhasználó (ha még nem létezik)
+admin_password = ENV["SEED_ADMIN_PASSWORD"].presence ||
+  (Rails.env.production? ? SecureRandom.alphanumeric(16) : "admin12345")
+
 admin = User.find_or_create_by!(username: "admin") do |user|
   user.display_name = "Adminisztrátor"
   user.email = "admin@palrekord.local"
-  user.password = "admin12345"
-  user.password_confirmation = "admin12345"
+  user.password = admin_password
+  user.password_confirmation = admin_password
   user.role = "ADMIN"
   user.is_active = true
+  user.must_change_password = Rails.env.production? && ENV["SEED_ADMIN_PASSWORD"].blank?
   user.confirmed_at = Time.current
-end
-
-# Minta tagok a kezdő ranglistához és bizonyítékokhoz
-sample_members = [
-  { username: "kovacs_peti", display_name: "Kovács Peti", email: "peti@palrekord.local" },
-  { username: "nagy_bence", display_name: "Nagy Bence", email: "bence@palrekord.local" },
-  { username: "toth_adam", display_name: "Tóth Ádám", email: "adam@palrekord.local" },
-  { username: "szabo_anna", display_name: "Szabó Anna", email: "anna@palrekord.local" }
-].each_with_object({}) do |attrs, memo|
-  memo[attrs[:username]] = User.find_or_create_by!(username: attrs[:username]) do |user|
-    user.display_name = attrs[:display_name]
-    user.email = attrs[:email]
-    user.password = "password123"
-    user.password_confirmation = "password123"
-    user.role = "TAG"
-    user.is_active = true
-    user.confirmed_at = Time.current
-  end
-end
-
-# Kezdeti meghívókód új tagok regisztrációjához
-InviteCode.find_or_create_by!(code: "PAL-8F3K9A") do |invite|
-  invite.label = "Kezdeti baráti meghívókód"
-  invite.is_active = true
-  invite.created_by = admin
-end
-
-# Minta szezonális verseny
-Season.find_or_create_by!(name: "2026 Őszi Szezon") do |season|
-  season.starts_at = Time.zone.local(2026, 9, 1, 0, 0, 0)
-  season.ends_at = Time.zone.local(2026, 11, 30, 23, 59, 59)
-  season.created_by = admin
 end
 
 # Kezdő versenyszámok egyszerű, védhető verifikációs ajánlásokkal
@@ -156,6 +129,40 @@ sample_categories.each do |attrs|
   category.created_by ||= admin
   category.save!
   categories_by_name[attrs[:name]] = category
+end
+
+return unless !Rails.env.production? || ENV["SEED_SAMPLE_DATA"] == "true"
+
+# Minta tagok a kezdő ranglistához és bizonyítékokhoz
+sample_members = [
+  { username: "kovacs_peti", display_name: "Kovács Peti", email: "peti@palrekord.local" },
+  { username: "nagy_bence", display_name: "Nagy Bence", email: "bence@palrekord.local" },
+  { username: "toth_adam", display_name: "Tóth Ádám", email: "adam@palrekord.local" },
+  { username: "szabo_anna", display_name: "Szabó Anna", email: "anna@palrekord.local" }
+].each_with_object({}) do |attrs, memo|
+  memo[attrs[:username]] = User.find_or_create_by!(username: attrs[:username]) do |user|
+    user.display_name = attrs[:display_name]
+    user.email = attrs[:email]
+    user.password = "password123"
+    user.password_confirmation = "password123"
+    user.role = "TAG"
+    user.is_active = true
+    user.confirmed_at = Time.current
+  end
+end
+
+# Kezdeti meghívókód új tagok regisztrációjához
+InviteCode.find_or_create_by!(code: "PAL-8F3K9A") do |invite|
+  invite.label = "Kezdeti baráti meghívókód"
+  invite.is_active = true
+  invite.created_by = admin
+end
+
+# Minta szezonális verseny
+Season.find_or_create_by!(name: "2026 Őszi Szezon") do |season|
+  season.starts_at = Time.zone.local(2026, 9, 1, 0, 0, 0)
+  season.ends_at = Time.zone.local(2026, 11, 30, 23, 59, 59)
+  season.created_by = admin
 end
 
 # Minta rekordok és valódi, megnyitható verifikációs bizonyítékok minden kezdő kategóriához

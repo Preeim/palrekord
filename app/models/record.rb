@@ -4,6 +4,7 @@ class Record < ApplicationRecord
   include LeaderboardCacheInvalidatable
 
   STATUSES = %w[PENDING APPROVED REJECTED].freeze
+  MAX_SORT_VALUE = BigDecimal("999999999999.9999")
 
   belongs_to :user
   belongs_to :category
@@ -22,7 +23,12 @@ class Record < ApplicationRecord
   before_validation :normalize_and_compute_sort_value
 
   validates :value, presence: true, length: { maximum: 100 }
-  validates :sort_value, presence: true, numericality: true
+  validates :sort_value,
+    presence: true,
+    numericality: {
+      greater_than_or_equal_to: -MAX_SORT_VALUE,
+      less_than_or_equal_to: MAX_SORT_VALUE
+    }
   validates :achieved_at, presence: true
   validates :status, presence: true, inclusion: { in: STATUSES }
   validate :category_must_not_be_archived, if: -> { new_record? || category_id_changed? }

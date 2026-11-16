@@ -135,7 +135,7 @@
           <div class="verification-panel" data-proof-panel="LINK" style="margin-top: 10px;">
             <div class="form-group" style="margin-bottom: 0;">
               <%= af.label :file_path_or_url, "Videó vagy megosztott hivatkozás", class: "form-label" %>
-              <%= af.url_field :file_path_or_url, class: "form-control verification-url-input", placeholder: "https://..." %>
+              <%= af.url_field :file_path_or_url, value: (af.object.link? ? af.object.file_path_or_url : nil), class: "form-control verification-url-input", placeholder: "https://..." %>
               <div class="form-hint">
                 Használhatsz nem listázott YouTube Shorts, Google Fotók, Google Drive vagy Strava linket (http:// vagy https://).
               </div>
@@ -177,7 +177,33 @@
     var hintBox = document.getElementById("category-verification-hint-box");
     var hintText = document.getElementById("category-verification-hint-text");
     var widget = form.querySelector("[data-attachment-widget]");
-    if (!widget) return;
+
+    function getCategoryMeta() {
+      if (!categorySelect) return { recommendedType: "", hint: "" };
+      var selectedOption = categorySelect.options[categorySelect.selectedIndex];
+      return {
+        recommendedType: selectedOption ? (selectedOption.getAttribute("data-recommended-type") || "") : "",
+        hint: selectedOption ? (selectedOption.getAttribute("data-verification-hint") || "") : ""
+      };
+    }
+
+    function updateCategoryHintBox() {
+      if (!hintBox || !hintText) return;
+      var meta = getCategoryMeta();
+      if (meta.hint !== "" || meta.recommendedType !== "") {
+        hintText.textContent = meta.hint !== "" ? meta.hint : (meta.recommendedType + " formátum ajánlott ehhez a kategóriához.");
+        hintBox.style.display = "block";
+      } else {
+        hintBox.style.display = "none";
+      }
+    }
+
+    if (!widget) {
+      if (categorySelect) {
+        categorySelect.addEventListener("change", updateCategoryHintBox);
+      }
+      return;
+    }
 
     var fallbackWrap = widget.querySelector(".verification-select-fallback");
     var typeSelect = widget.querySelector(".verification-type-select");
@@ -231,29 +257,35 @@
       filePanel.style.display = "none";
       linkPanel.style.display = "none";
       textPanel.style.display = "none";
+      if (fileInput) fileInput.disabled = true;
+      if (urlInput) urlInput.disabled = true;
+      if (textInput) textInput.disabled = true;
 
       if (typeSelect.value === "IMAGE") {
         filePanel.style.display = "block";
+        if (fileInput) fileInput.disabled = false;
         fileLabel.textContent = "Fotó vagy képernyőkép feltöltése *";
         fileInput.setAttribute("accept", "image/png,image/jpeg,image/gif,image/webp");
         fileHint.textContent = "Engedélyezett: PNG, JPG, JPEG, GIF, WEBP (legfeljebb 10 MB). Mobilon közvetlenül fotózhatsz is.";
       } else if (typeSelect.value === "PDF") {
         filePanel.style.display = "block";
+        if (fileInput) fileInput.disabled = false;
         fileLabel.textContent = "PDF dokumentum kiválasztása *";
         fileInput.setAttribute("accept", "application/pdf");
         fileHint.textContent = "Engedélyezett: PDF fájl (legfeljebb 10 MB).";
       } else if (typeSelect.value === "LINK") {
         linkPanel.style.display = "block";
+        if (urlInput) urlInput.disabled = false;
       } else if (typeSelect.value === "TEXT") {
         textPanel.style.display = "block";
+        if (textInput) textInput.disabled = false;
       }
     }
 
     function syncCategorySuggestion(autoSwitchTab) {
       if (!categorySelect) return;
-      var selectedOption = categorySelect.options[categorySelect.selectedIndex];
-      var recommendedType = selectedOption ? (selectedOption.getAttribute("data-recommended-type") || "") : "";
-      var hint = selectedOption ? (selectedOption.getAttribute("data-verification-hint") || "") : "";
+      var meta = getCategoryMeta();
+      var recommendedType = meta.recommendedType;
 
       tabs.forEach(function(tab) {
         var tabType = tab.getAttribute("data-proof-type");
@@ -263,14 +295,7 @@
         if (tag) tag.style.display = isRec ? "inline-block" : "none";
       });
 
-      if (hintBox && hintText) {
-        if (hint !== "" || recommendedType !== "") {
-          hintText.textContent = hint !== "" ? hint : (recommendedType + " formátum ajánlott ehhez a kategóriához.");
-          hintBox.style.display = "block";
-        } else {
-          hintBox.style.display = "none";
-        }
-      }
+      updateCategoryHintBox();
 
       if (autoSwitchTab && !hasAnyPayload()) {
         applyTab(recommendedType, true);
@@ -315,9 +340,7 @@
 
     // Kezdő állapot beállítása
     var initialType = typeSelect.value;
+    applyTab(initialType, false);
     syncCategorySuggestion(initialType === "");
-    if (initialType !== "") {
-      applyTab(initialType, false);
-    }
   })();
 </script>

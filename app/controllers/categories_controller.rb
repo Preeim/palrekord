@@ -33,7 +33,8 @@ class CategoriesController < ApplicationController
     @category = Category.new(category_params)
     @category.created_by = current_user
 
-    if @category.save
+    saved = current_user.with_lock { @category.save }
+    if saved
       redirect_to @category, notice: "Versenyszám sikeresen létrehozva."
     else
       render :new, status: :unprocessable_entity

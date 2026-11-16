@@ -39,6 +39,7 @@ jobs:
         run: |
           bin/rails db:prepare
           bin/rails test
+          bin/rails test:system
 
   deploy:
     name: Automata Deploy (CD)

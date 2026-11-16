@@ -52,9 +52,9 @@ class UserJourneySystemTest < ApplicationSystemTestCase
     click_link "+ Új rekord"
     select "Fekvenyomás max (kg · Tört vagy egész szám (pl. 125.0))", from: "Versenyszám *"
     fill_in "Elért érték *", with: "110.5"
-    fill_in "Megjegyzés / tanúk", with: "Edzőteremben mérve"
-    select "Szöveges igazolás (TEXT)", from: "Melléklet típusa"
-    fill_in "Szöveges igazolás (TEXT esetén)", with: "Peti és Anna látta"
+    fill_in "Megjegyzés / jelenlévő tanúk", with: "Edzőteremben mérve"
+    select Attachment::FILE_TYPE_LABELS["TEXT"], from: "Melléklet típusa"
+    fill_in "Tanú-jegyzőkönyv / szöveges igazolás", with: "Peti és Anna látta"
     click_button "Rekord beküldése"
 
     assert_text "Rekord beküldve, adminisztrátori jóváhagyásra vár."

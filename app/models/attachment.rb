@@ -1,4 +1,5 @@
 require "fileutils"
+require "uri"
 
 class Attachment < ApplicationRecord
   FILE_TYPES = %w[IMAGE PDF TEXT LINK].freeze
@@ -27,12 +28,15 @@ class Attachment < ApplicationRecord
   before_validation :sanitize_inactive_payload_fields
   before_validation :set_uploaded_at
   before_validation :prepare_uploaded_file
+  before_save :track_replaced_file
   before_save :persist_uploaded_file
 
   validates :file_type, presence: true, inclusion: { in: FILE_TYPES }
   validates :uploaded_at, presence: true
   validate :validate_payload_by_type
 
+  after_save_commit :finalize_persisted_files
+  after_rollback :cleanup_newly_persisted_file
   after_destroy_commit :cleanup_stored_file
 
   def self.storage_root
@@ -98,7 +102,11 @@ class Attachment < ApplicationRecord
     case file_type
     when "IMAGE", "PDF"
       self.text_content = nil
-      if new_record? || uploaded_file.present? || !file_path_or_url.to_s.start_with?("uploads/")
+      if new_record? || uploaded_file.present?
+        self.file_path_or_url = nil
+      elsif %w[IMAGE PDF].include?(file_type_in_database) && file_path_or_url_in_database.to_s.start_with?("uploads/")
+        self.file_path_or_url = file_path_or_url_in_database
+      else
         self.file_path_or_url = nil
       end
     when "LINK"
@@ -144,7 +152,19 @@ class Attachment < ApplicationRecord
     self.file_path_or_url = "uploads/#{stored_filename}"
   end
 
+  def track_replaced_file
+    @replaced_file_path = nil
+    return if new_record?
+
+    if %w[IMAGE PDF].include?(file_type_in_database) &&
+       file_path_or_url_in_database.present? &&
+       (!file_attachment? || file_path_or_url != file_path_or_url_in_database)
+      @replaced_file_path = self.class.storage_root.join(File.basename(file_path_or_url_in_database))
+    end
+  end
+
   def persist_uploaded_file
+    @newly_persisted_file_path = nil
     return unless uploaded_file.present? && file_attachment? && file_path_or_url.present?
 
     FileUtils.mkdir_p(self.class.storage_root)
@@ -152,7 +172,30 @@ class Attachment < ApplicationRecord
 
     uploaded_file.rewind if uploaded_file.respond_to?(:rewind)
     File.binwrite(destination, uploaded_file.read)
+    @newly_persisted_file_path = destination
     self.uploaded_file = nil
+  end
+
+  def finalize_persisted_files
+    if @replaced_file_path.present? && @replaced_file_path != @newly_persisted_file_path && @replaced_file_path.exist?
+      File.delete(@replaced_file_path)
+    end
+  rescue StandardError
+    nil
+  ensure
+    @replaced_file_path = nil
+    @newly_persisted_file_path = nil
+  end
+
+  def cleanup_newly_persisted_file
+    if @newly_persisted_file_path.present? && @newly_persisted_file_path.exist?
+      File.delete(@newly_persisted_file_path)
+    end
+  rescue StandardError
+    nil
+  ensure
+    @newly_persisted_file_path = nil
+    @replaced_file_path = nil
   end
 
   def validate_payload_by_type
@@ -164,7 +207,7 @@ class Attachment < ApplicationRecord
     when "LINK"
       if file_path_or_url.blank?
         errors.add(:file_path_or_url, "hivatkozásnál kötelező megadni az URL-t")
-      elsif !file_path_or_url.match?(URI::DEFAULT_PARSER.make_regexp(%w[http https]))
+      elsif !valid_http_url?(file_path_or_url)
         errors.add(:file_path_or_url, "érvényes http:// vagy https:// URL kell legyen")
       end
     when "IMAGE", "PDF"
@@ -172,6 +215,16 @@ class Attachment < ApplicationRecord
         errors.add(:uploaded_file, "fájl feltöltése kötelező")
       end
     end
+  end
+
+  def valid_http_url?(raw_url)
+    str = raw_url.to_s
+    return false if str.blank? || str.match?(/\s|[[:cntrl:]]/)
+
+    uri = URI.parse(str)
+    (uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)) && uri.host.present?
+  rescue URI::InvalidURIError
+    false
   end
 
   def cleanup_stored_file

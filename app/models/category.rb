@@ -19,6 +19,7 @@ class Category < ApplicationRecord
   validates :recommended_file_type, inclusion: { in: Attachment::FILE_TYPES }, allow_blank: true
   validates :verification_hint, length: { maximum: 255 }, allow_blank: true
   validate :creator_must_have_monthly_quota, on: :create
+  validate :value_type_cannot_change_when_records_exist, on: :update
 
   scope :active, -> { where(is_archived: false) }
   scope :archived, -> { where(is_archived: true) }
@@ -79,5 +80,11 @@ class Category < ApplicationRecord
     limit = Setting.monthly_category_limit
     reset_date = created_by.next_category_quota_reset_date(reference_time).strftime("%Y-%m-%d")
     errors.add(:base, "Elérted a havi kategória-létrehozási kvótádat (0 / #{limit} elérhető ebben a hónapban). Következő nyitás: #{reset_date}.")
+  end
+
+  def value_type_cannot_change_when_records_exist
+    return unless value_type_changed? && records.exists?
+
+    errors.add(:value_type, "nem módosítható, amíg a versenyszámhoz tartoznak beküldött rekordok")
   end
 end

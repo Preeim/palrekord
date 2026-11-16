@@ -22,6 +22,21 @@ class CategoryTest < ActiveSupport::TestCase
     assert_not invalid.valid?
     assert invalid.errors[:value_type].present?
     assert invalid.errors[:sort_direction].present?
+
+    empty_cat = Category.create!(name: "Üres szám", unit: "db", value_type: "INT", sort_direction: "DESC")
+    assert empty_cat.update(value_type: "DOUBLE")
+
+    user = User.create!(
+      username: "vt_user",
+      display_name: "Típus Teszt",
+      password: "password123",
+      password_confirmation: "password123",
+      confirmed_at: Time.current
+    )
+    Record.create!(user: user, category: empty_cat, value: "10.5", achieved_at: Date.current)
+
+    assert_not empty_cat.update(value_type: "INT")
+    assert empty_cat.errors[:value_type].present?
   end
 
   test "formats display_record_value properly across types and units" do

@@ -20,3 +20,4 @@ test:
 production:
   <<: *default
   database: palrekord_production
+  password: <%= ENV.fetch("DB_PASSWORD") { ENV["PALREKORD_DATABASE_PASSWORD"] } %>

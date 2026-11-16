@@ -26,12 +26,16 @@
       <%= f.text_field :unit, class: "form-control", required: true, placeholder: "pl. mp, kg, db, perc" %>
     </div>
 
+    <% value_type_locked = category.persisted? && category.records.exists? %>
     <div class="form-group">
       <%= f.label :value_type, "Érték típusa *", class: "form-label" %>
       <%= f.select :value_type,
         [["Egész szám (INT)", "INT"], ["Törtszám (DOUBLE)", "DOUBLE"], ["Időtartam (TIME_DURATION)", "TIME_DURATION"], ["Dátum (DATE)", "DATE"]],
         {},
-        class: "form-control" %>
+        class: "form-control", disabled: value_type_locked %>
+      <% if value_type_locked %>
+        <div class="form-hint">Az érték típusa nem módosítható, amíg a versenyszámhoz tartoznak rekordok.</div>
+      <% end %>
     </div>
 
     <div class="form-group">

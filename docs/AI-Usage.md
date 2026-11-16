@@ -401,3 +401,52 @@ Ez a fájl az AI asszisztenssel végzett műveleteket és változtatásokat doku
   - `docs/Látványtervek/latvanyterv.md` (módosítva)
   - `docs/Tesztelés/tesztelesi_terv.md` (módosítva)
   - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-16 12:07] – Teljes projekt szintű Code Review elvégzése (`/requesting-code-review`)
+
+- **Prompt:** `/requesting-code-review Készits Code review -t a projekten.`
+- **Értelmezés:** A teljes PálRecord projektre kiterjedő kódfelülvizsgálat (Code Review) elvégzése a `requesting-code-review` skill és egy dedikált Senior Code Reviewer szubágens segítségével a specifikációk (`docs/`) és a megvalósított kód (`f2e576d..1dd215f`) összevetésével.
+- **Elvégzett műveletek:**
+  - Áttekintettem a `requesting-code-review` skill (`SKILL.md`, `code-reviewer.md`) útmutatóját és a git előzményeket (`f2e576d..1dd215f`, 123 érintett fájl).
+  - Indítottam egy csak olvasási jogú `Senior Code Reviewer` szubágenst (`c514918e-8fe9-4955-8c2f-c1589bd83a81`), amely rétegenként átvizsgálta az adatmodellt, a fiókkezelést és jogosultságokat, a `LeaderboardCalculator` pontszámítást, a verifikációs mellékleteket, az Admin felületet, a Súgó oldalt, a teszteket és a dokumentációt.
+  - Közvetlenül ellenőriztem a jelentésben szereplő fájlokat és sorhivatkozásokat, valamint PowerShell XML parserrel validáltam mind a 17 `.svg` fájl szerkezetét (lokális Ruby/MySQL CLI hiányában a Ruby tesztek statikusan kerültek ellenőrzésre).
+  - Összeállítottam a magyar nyelvű Code Review jelentést (erősségek, 2 kritikus, 7 fontos és 6 kisebb megállapítás, bírálaton kívül hagyott pontok, javaslatok és összegezés) és naplóztam a lépést.
+- **Módosított fájlok:**
+  - `docs/AI-Usage.md` (módosítva)
+
+
+## [2026-11-16 16:27] – Code Review kritikus és fontos hibáinak javítása (Issues #1–#9)
+
+- **Prompt:** `Igen, a kritikus és fontos pontokat javitsd ki.`
+- **Értelmezés:** A projekt Code Review során azonosított 2 kritikus és 7 fontos hiba javítása a modell-, kontroller-, nézet-, seed-, konfigurációs, teszt- és CI-rétegekben.
+- **Elvégzett műveletek:**
+  - **Kritikus #1 (`Attachment` Stored XSS URL-validáció):** A `app/models/attachment.rb` fájlban lecseréltem a horgonyozatlan `URI::DEFAULT_PARSER.make_regexp` ellenőrzést szigorú `URI.parse`-alapú `valid_http_url?` validációra (kizárva a `javascript:` / whitespace / hiányzó host értékeket).
+  - **Kritikus #2 (`UserJourneySystemTest` és CI):** Frissítettem a `test/system/user_journey_system_test.rb` űrlapcímkéit a jelenlegi nézetnek megfelelően, és hozzáadtam a `bin/rails test:system` futtatást a `.github/workflows/ci_cd.yml` fájlhoz.
+  - **Fontos #3 (Rejtett `<input type="url">` és `uploads/...` újrarenderelés):** Az `app/views/records/_form.html.erb` fájlban az `url_field` csak `LINK` típusnál kap kezdeti értéket, az `applyTab` JS függvény letiltja (`disabled = true`) az inaktív panelek mezőit, és meglévő melléklet mellett is bekötöttem a kategória-súgó frissítését.
+  - **Fontos #4 (`Record#sort_value` `DECIMAL(16,4)` túlcsordulás):** A `app/models/record.rb` modellben felvettem a `MAX_SORT_VALUE` (`±999999999999.9999`) numerikus tartomány-validációt.
+  - **Fontos #5 (Cache invalidációs versenyhelyzet):** A `app/models/concerns/leaderboard_cache_invalidatable.rb` concernben kiegészítettem a callbackeket `after_commit` és `after_rollback` hívásokkal.
+  - **Fontos #6 (`Attachment` fájl-életciklus és `uploads/` védelem):** Az `app/models/attachment.rb` fájlban megakadályoztam az önkényes `uploads/...` értékek beküldését fájlfeltöltés nélkül, továbbá `before_save :track_replaced_file`, `after_save_commit :finalize_persisted_files` és `after_rollback :cleanup_newly_persisted_file` segítségével gondoskodtam a lecserélt vagy visszagörgetett fizikai fájlok törléséről.
+  - **Fontos #7 (Éles seed és adatbázis-jelszó biztonság):** A `config/database.yml` `production` blokkja már nem esik vissza a `"password123"` jelszóra; a `db/seeds.rb` pedig éles környezetben véletlen jelszóval és `must_change_password: true` beállítással hozza létre a kezdő admint (ha nincs `SEED_ADMIN_PASSWORD`), a minta tagokat/rekordokat pedig fejlesztői környezetre vagy `SEED_SAMPLE_DATA=true` esetre korlátozza.
+  - **Fontos #8 (Havi kvóta versenyhelyzet):** A `app/controllers/categories_controller.rb` `create` művelete `current_user.with_lock` sorzárolás mellett menti a kategóriát.
+  - **Fontos #9 (`Category#value_type` védelme meglévő rekordoknál):** A `app/models/category.rb` validációja tiltja a `value_type` módosítását, ha a kategóriához már tartoznak rekordok, a `categories/_form.html.erb` és `admin/categories/_form.html.erb` nézetek pedig letiltják a mezőt és tájékoztató megjegyzést jelenítenek meg.
+  - **Tesztek bővítése:** Kiegészítettem a `test/models/attachment_test.rb`, `test/models/record_test.rb` és `test/models/category_test.rb` teszteket az új validációk és fájl-takarítási esetek ellenőrzésére. (Megjegyzés: lokális Ruby/MySQL CLI nem áll rendelkezésre ezen a Windows gépen, így a tesztek futtatása a CI-ban történik.)
+- **Módosított fájlok:**
+  - `app/models/attachment.rb` (módosítva)
+  - `app/models/record.rb` (módosítva)
+  - `app/models/category.rb` (módosítva)
+  - `app/models/concerns/leaderboard_cache_invalidatable.rb` (módosítva)
+  - `app/controllers/categories_controller.rb` (módosítva)
+  - `app/views/records/_form.html.erb` (módosítva)
+  - `app/views/categories/_form.html.erb` (módosítva)
+  - `app/views/admin/categories/_form.html.erb` (módosítva)
+  - `config/database.yml` (módosítva)
+  - `db/seeds.rb` (módosítva)
+  - `.github/workflows/ci_cd.yml` (módosítva)
+  - `test/system/user_journey_system_test.rb` (módosítva)
+  - `test/models/attachment_test.rb` (módosítva)
+  - `test/models/record_test.rb` (módosítva)
+  - `test/models/category_test.rb` (módosítva)
+  - `docs/AI-Usage.md` (módosítva)
+
+

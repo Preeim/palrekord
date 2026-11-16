@@ -43,6 +43,11 @@ class RecordTest < ActiveSupport::TestCase
     archived_rec = Record.new(user: @user, category: archived_cat, value: "10", achieved_at: Date.current)
     assert_not archived_rec.valid?
     assert archived_rec.errors[:category].present?
+
+    int_cat = Category.create!(name: "Nagy számok", unit: "db", value_type: "INT", sort_direction: "DESC")
+    overflow_rec = Record.new(user: @user, category: int_cat, value: "1000000000000", achieved_at: Date.current)
+    assert_not overflow_rec.valid?
+    assert overflow_rec.errors[:sort_value].present?
   end
 
   test "orders approved records by sort_direction, breaks ties by earlier created_at, and excludes inactive users" do

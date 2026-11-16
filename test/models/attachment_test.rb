@@ -32,8 +32,23 @@ class AttachmentTest < ActiveSupport::TestCase
     assert_not invalid_link.valid?
     assert invalid_link.errors[:file_path_or_url].present?
 
+    xss_with_https = Attachment.new(record: @record, file_type: "LINK", file_path_or_url: "javascript:alert('https://example.com')")
+    assert_not xss_with_https.valid?
+    assert xss_with_https.errors[:file_path_or_url].present?
+
+    missing_host_link = Attachment.new(record: @record, file_type: "LINK", file_path_or_url: "https://")
+    assert_not missing_host_link.valid?
+    assert missing_host_link.errors[:file_path_or_url].present?
+
+    tampered_upload = Attachment.new(record: @record, file_type: "IMAGE", file_path_or_url: "uploads/other.png")
+    assert_not tampered_upload.valid?
+    assert tampered_upload.errors[:uploaded_file].present?
+
     valid_link = Attachment.create!(record: @record, file_type: "LINK", file_path_or_url: "https://example.com/video")
     assert valid_link.link?
+
+    assert_not valid_link.update(file_type: "IMAGE", file_path_or_url: "uploads/other.png")
+    assert valid_link.errors[:uploaded_file].present?
   end
 
   test "validates IMAGE and PDF extensions and max file size" do
@@ -140,5 +155,67 @@ class AttachmentCleanupCommitTest < ActiveSupport::TestCase
 
     att.destroy!
     assert_not stored_path.exist?
+  end
+
+  test "removes replaced physical file on update commit and cleans up on rollback" do
+    user = User.create!(
+      username: "replaceuser",
+      display_name: "Csere Teszt",
+      password: "password123",
+      password_confirmation: "password123",
+      confirmed_at: Time.current
+    )
+    category = Category.create!(name: "Csere szám", unit: "db", value_type: "INT", sort_direction: "DESC")
+    record = Record.create!(user: user, category: category, value: "7", achieved_at: Date.current)
+
+    tmp1 = Tempfile.new([ "first", ".png" ])
+    tmp1.binmode
+    tmp1.write("png1")
+    tmp1.rewind
+    att = Attachment.create!(
+      record: record,
+      file_type: "IMAGE",
+      uploaded_file: Rack::Test::UploadedFile.new(tmp1.path, "image/png", original_filename: "first.png")
+    )
+    first_path = att.stored_file_pathname
+    assert first_path.exist?
+
+    # Replacing IMAGE with a new IMAGE deletes the old file after commit
+    tmp2 = Tempfile.new([ "second", ".png" ])
+    tmp2.binmode
+    tmp2.write("png2")
+    tmp2.rewind
+    att.update!(
+      file_type: "IMAGE",
+      uploaded_file: Rack::Test::UploadedFile.new(tmp2.path, "image/png", original_filename: "second.png")
+    )
+    second_path = att.stored_file_pathname
+    assert second_path.exist?
+    assert_not_equal first_path, second_path
+    assert_not first_path.exist?
+
+    # Switching IMAGE to LINK deletes the stored physical file after commit
+    att.update!(file_type: "LINK", file_path_or_url: "https://example.com/proof")
+    assert_not second_path.exist?
+
+    # Rolling back an attachment creation removes the newly written file
+    tmp3 = Tempfile.new([ "rollback", ".png" ])
+    tmp3.binmode
+    tmp3.write("png3")
+    tmp3.rewind
+    rollback_path = nil
+    ActiveRecord::Base.transaction do
+      rolled = Attachment.create!(
+        record: record,
+        file_type: "IMAGE",
+        uploaded_file: Rack::Test::UploadedFile.new(tmp3.path, "image/png", original_filename: "rollback.png")
+      )
+      rollback_path = rolled.stored_file_pathname
+      assert rollback_path.exist?
+      raise ActiveRecord::Rollback
+    end
+    assert_not rollback_path.exist?
+  ensure
+    [ tmp1, tmp2, tmp3 ].compact.each(&:close!)
   end
 end
